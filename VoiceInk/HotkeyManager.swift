@@ -53,7 +53,7 @@ class HotkeyManager: ObservableObject {
         }
     }
     
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "HotkeyManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "HotkeyManager")
     private var engine: ZivaEngine
     private var recorderUIManager: RecorderUIManager
     private var miniRecorderShortcutManager: MiniRecorderShortcutManager

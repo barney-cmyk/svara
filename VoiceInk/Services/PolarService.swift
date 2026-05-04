@@ -3,12 +3,12 @@ import IOKit
 import os
 
 class PolarService {
-    // Polar.sh integration is not used in Svara (Svara is free, no licenses).
+    // Polar.sh integration is not used in Neuron Flame (Neuron Flame is free, no licenses).
     // Placeholder organisation ID below — the codepath that calls Polar is never
     // wired up by default. Replaced from upstream to satisfy GitHub secret scanning.
     private let organizationId = "00000000-0000-0000-0000-000000000000"
     private let baseURL = "https://api.polar.sh"
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "PolarService")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "PolarService")
 
     private func createRequest(endpoint: String, method: String = "POST") -> URLRequest {
         let url = URL(string: "\(baseURL)\(endpoint)")!

@@ -49,13 +49,13 @@ struct OnboardingPermissionsView: View {
         ),
         OnboardingPermission(
             title: "Microphone Selection",
-            description: "Select the audio input device you want to use with Svara.",
+            description: "Select the audio input device you want to use with Neuron Flame.",
             icon: "headphones",
             type: .audioDeviceSelection
         ),
         OnboardingPermission(
             title: "Accessibility Access",
-            description: "Allow Svara to help you type anywhere in your Mac.",
+            description: "Allow Neuron Flame to help you type anywhere in your Mac.",
             icon: "accessibility",
             type: .accessibility
         ),
@@ -67,7 +67,7 @@ struct OnboardingPermissionsView: View {
         ),
         OnboardingPermission(
             title: "Keyboard Shortcut",
-            description: "Set up a keyboard shortcut to quickly access Svara from anywhere.",
+            description: "Set up a keyboard shortcut to quickly access Neuron Flame from anywhere.",
             icon: "keyboard",
             type: .keyboardShortcut
         )
@@ -125,7 +125,7 @@ struct OnboardingPermissionsView: View {
                                     
                                     if permissions[currentPermissionIndex].type == .screenRecording {
                                         InfoTip(
-                                            "When granted, Svara briefly captures the text on your active window so the AI knows what you're working on. This helps the model spell uncommon names correctly, match the formatting of surrounding text, and disambiguate homophones based on context. The capture happens only at the moment you stop dictating, the text is sent to the language model alongside your transcript, and nothing is written to disk or sent anywhere else. You can revoke this at any time in System Settings → Privacy & Security → Screen Recording. Svara works fine without it — accuracy just improves a bit when it's on.",
+                                            "When granted, Neuron Flame briefly captures the text on your active window so the AI knows what you're working on. This helps the model spell uncommon names correctly, match the formatting of surrounding text, and disambiguate homophones based on context. The capture happens only at the moment you stop dictating, the text is sent to the language model alongside your transcript, and nothing is written to disk or sent anywhere else. You can revoke this at any time in System Settings → Privacy & Security → Screen Recording. Neuron Flame works fine without it — accuracy just improves a bit when it's on.",
                                             learnMoreURL: "https://tryvoiceink.com/docs/contextual-awareness"
                                         )
                                     }

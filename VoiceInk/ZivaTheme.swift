@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Stitch-inspired design tokens for the Svara light/modern theme.
+/// Stitch-inspired design tokens for the Neuron Flame light/modern theme.
 /// Used app-wide to keep colors and accents consistent.
 enum ZivaTheme {
     // MARK: - Surfaces (light palette)

@@ -149,7 +149,7 @@ class ImportExportService {
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = [UTType.json]
             savePanel.nameFieldStringValue = "Ziva_AI_Settings_Backup.json"
-            savePanel.title = "Export Svara Settings"
+            savePanel.title = "Export Neuron Flame Settings"
             savePanel.message = "Choose a location to save your settings."
 
             DispatchQueue.main.async {
@@ -178,7 +178,7 @@ class ImportExportService {
         openPanel.canChooseFiles = true
         openPanel.canChooseDirectories = false
         openPanel.allowsMultipleSelection = false
-        openPanel.title = "Import Svara Settings"
+        openPanel.title = "Import Neuron Flame Settings"
         openPanel.message = "Choose a settings file to import. This will overwrite ALL settings (prompts, power modes, dictionary, general app settings)."
 
         DispatchQueue.main.async {
@@ -382,7 +382,7 @@ class ImportExportService {
         DispatchQueue.main.async {
             let alert = NSAlert()
             alert.messageText = "Import Successful"
-            alert.informativeText = message + "\n\nIMPORTANT: If you were using AI enhancement features, please make sure to reconfigure your API keys in the Enhancement section.\n\nIt is recommended to restart Svara for all changes to take full effect."
+            alert.informativeText = message + "\n\nIMPORTANT: If you were using AI enhancement features, please make sure to reconfigure your API keys in the Enhancement section.\n\nIt is recommended to restart Neuron Flame for all changes to take full effect."
             alert.alertStyle = .informational
             alert.addButton(withTitle: "OK")
             alert.addButton(withTitle: "Configure API Keys")

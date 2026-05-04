@@ -14,7 +14,7 @@ struct DictionarySettingsView: View {
         var description: String {
             switch self {
             case .spellings:
-                return "Add words to help Svara recognize them properly"
+                return "Add words to help Neuron Flame recognize them properly"
             case .replacements:
                 return "Automatically replace specific words/phrases with custom formatted text "
             }
@@ -52,7 +52,7 @@ struct DictionarySettingsView: View {
         CompactHeroSection(
             icon: "brain.filled.head.profile",
             title: "Dictionary Settings",
-            description: "Enhance Svara's transcription accuracy by teaching it your vocabulary",
+            description: "Enhance Neuron Flame's transcription accuracy by teaching it your vocabulary",
             maxDescriptionWidth: 500
         )
     }

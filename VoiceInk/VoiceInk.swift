@@ -47,10 +47,10 @@ struct ZivaApp: App {
             UserDefaults.standard.set(hasEnabledPowerModes, forKey: "powerModeUIFlag")
         }
 
-        let logger = Logger(subsystem: "com.zivastudio.svara", category: "Initialization")
+        let logger = Logger(subsystem: "com.neuronflame.app", category: "Initialization")
 
         // **Migration must run BEFORE container creation.** createPersistentContainer
-        // calls `appendingPathComponent("com.zivastudio.svara")` which materialises the
+        // calls `appendingPathComponent("com.neuronflame.app")` which materialises the
         // destination folder + an empty SQLite store. If migration runs after, the
         // destination already exists and the move is skipped, stranding the user's data.
         Self.migrateLegacyAppSupportFolderIfNeeded(logger: logger)
@@ -79,7 +79,7 @@ struct ZivaApp: App {
             DispatchQueue.main.async {
                 let alert = NSAlert()
                 alert.messageText = "Storage Warning"
-                alert.informativeText = "Svara couldn't access its storage location. Your transcriptions will not be saved between sessions."
+                alert.informativeText = "Neuron Flame couldn't access its storage location. Your transcriptions will not be saved between sessions."
                 alert.alertStyle = .warning
                 alert.addButton(withTitle: "OK")
                 alert.runModal()
@@ -114,7 +114,7 @@ struct ZivaApp: App {
 
         // 1. Create modelsDirectory URL
         let appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("com.zivastudio.svara")
+            .appendingPathComponent("com.neuronflame.app")
         let modelsDirectory = appSupportDirectory.appendingPathComponent("WhisperModels")
 
         // 2. Create model managers
@@ -193,7 +193,7 @@ struct ZivaApp: App {
     // MARK: - Legacy folder migration
 
     /// Walks the chain of legacy App Support folder names this product has had
-    /// (upstream VoiceInk → Ziva AI → Svara) and brings the user's data forward
+    /// (upstream VoiceInk → Ziva AI → Neuron Flame) and brings the user's data forward
     /// to the current location. Runs synchronously during init, before any other
     /// code touches the new folder. Each step is a no-op if its source is missing
     /// or its destination already exists, so the order is safe to re-run.
@@ -205,8 +205,9 @@ struct ZivaApp: App {
         // a user who skipped a build still ends up at the latest path.
         let migrationChain: [(String, String)] = [
             ("com.prakashjoshipax.VoiceInk", "com.zivaai.app"),         // upstream → Ziva AI
-            ("com.zivaai.app",                "com.zivastudio.svara"),  // Ziva AI → Svara
-            ("com.zivastudio.swara",          "com.zivastudio.svara")   // brief Swara phase → Svara
+            ("com.zivaai.app",                "com.zivastudio.svara"), // Ziva AI → Svara (interim)
+            ("com.zivastudio.svara",          "com.neuronflame.app"),  // Svara → Neuron Flame (current)
+            ("com.zivastudio.swara",          "com.neuronflame.app")   // typo'd Swara folder → Neuron Flame
         ]
 
         for (oldName, newName) in migrationChain {
@@ -229,7 +230,7 @@ struct ZivaApp: App {
         do {
             // Create app-specific Application Support directory URL
             let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("com.zivastudio.svara", isDirectory: true)
+                .appendingPathComponent("com.neuronflame.app", isDirectory: true)
 
             // Create the directory if it doesn't exist
             try? FileManager.default.createDirectory(at: appSupportURL, withIntermediateDirectories: true)
@@ -253,7 +254,7 @@ struct ZivaApp: App {
             #if LOCAL_BUILD
             let dictionaryCloudKit: ModelConfiguration.CloudKitDatabase = .none
             #else
-            let dictionaryCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.zivastudio.svara")
+            let dictionaryCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.neuronflame.app")
             #endif
             let dictionaryConfig = ModelConfiguration(
                 "dictionary",
@@ -267,7 +268,7 @@ struct ZivaApp: App {
             #if LOCAL_BUILD
             let statsCloudKit: ModelConfiguration.CloudKitDatabase = .none
             #else
-            let statsCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.zivastudio.svara")
+            let statsCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.neuronflame.app")
             #endif
             let statsConfig = ModelConfiguration(
                 "stats",
@@ -339,7 +340,7 @@ struct ZivaApp: App {
                         if containerInitializationFailed {
                             let alert = NSAlert()
                             alert.messageText = "Critical Storage Error"
-                            alert.informativeText = "Svara cannot initialize its storage system. The app cannot continue.\n\nPlease try reinstalling the app or contact support if the issue persists."
+                            alert.informativeText = "Neuron Flame cannot initialize its storage system. The app cannot continue.\n\nPlease try reinstalling the app or contact support if the issue persists."
                             alert.alertStyle = .critical
                             alert.addButton(withTitle: "Quit")
                             alert.runModal()
@@ -390,7 +391,7 @@ struct ZivaApp: App {
                     .environmentObject(enhancementService)
                     .frame(minWidth: 880, minHeight: 780)
                     .background(WindowAccessor { window in
-                        if window.identifier == nil || window.identifier != NSUserInterfaceItemIdentifier("com.zivastudio.svara.onboardingWindow") {
+                        if window.identifier == nil || window.identifier != NSUserInterfaceItemIdentifier("com.neuronflame.app.onboardingWindow") {
                             WindowManager.shared.configureOnboardingPanel(window)
                         }
                     })

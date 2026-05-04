@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Troubleshooting — Neuron Flame Docs</title>
+<meta name="description" content="Hotkey not firing, no paste, permissions reset after rebuild, model download stuck — solutions for the most common Neuron Flame issues." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html" class="active">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Troubleshooting</h1>
+    <p>Most issues have a quick fix. Search this page for your symptom; if you don't find it, open an issue on <a href="https://github.com/barney-cmyk/svara/issues">GitHub</a>.</p>
+
+    <h2>Hotkey doesn't fire</h2>
+    <p>Causes, in order of likelihood:</p>
+    <ol>
+      <li><strong>Another app claimed the same shortcut.</strong> Check System Settings → Keyboard → Keyboard Shortcuts for conflicts. Spotlight, Raycast, and macOS dictation are common culprits.</li>
+      <li><strong>Input Monitoring not granted.</strong> Modifier-only hotkeys (like Right Option) need it. Grant in System Settings → Privacy &amp; Security → Input Monitoring.</li>
+      <li><strong>Accessibility permission revoked.</strong> Re-grant in System Settings → Privacy &amp; Security → Accessibility.</li>
+      <li><strong>The hotkey field didn't capture properly.</strong> Re-record it in Settings → Hotkeys.</li>
+    </ol>
+
+    <h2>Recording works but text doesn't paste</h2>
+    <p>Almost always Accessibility permission. Open System Settings → Privacy &amp; Security → Accessibility, ensure Neuron Flame is listed and toggled on. If it's listed but still failing:</p>
+    <ol>
+      <li>Toggle it off, then on.</li>
+      <li>Quit and reopen Neuron Flame.</li>
+    </ol>
+    <p>If it's still failing:</p>
+    <pre><code>tccutil reset Accessibility com.neuronflame.app</code></pre>
+    <p>Then quit, reopen, and re-grant when prompted.</p>
+
+    <h2 id="tcc-reset">Permissions reset after every rebuild</h2>
+    <p>Symptom: you build the app from source, and macOS forgets all your permissions every time.</p>
+    <p>Cause: ad-hoc code signing (the default for free local builds) generates a new signature every build, and macOS treats each one as a different app.</p>
+    <p>Fix: Neuron Flame's <code>make local</code> uses a <em>stable</em> self-signed certificate called <code>Ziva AI Developer</code> in your login Keychain. The cert is created once and re-used forever, so permissions stick across rebuilds. If you've blown away your login Keychain or the cert was deleted, the Makefile will recreate it on the next build.</p>
+    <p>If you accidentally have a different cert in <code>LocalBuild.xcconfig</code>, fix it back to <code>Ziva AI Developer</code> and rebuild.</p>
+
+    <h2>Audio appears empty / silent transcripts</h2>
+    <p>Causes:</p>
+    <ol>
+      <li>Wrong input device. macOS sometimes routes audio to a Bluetooth device or a virtual mic. Open System Settings → Sound → Input and confirm your physical mic is selected.</li>
+      <li>Mic permission denied. System Settings → Privacy &amp; Security → Microphone, toggle Neuron Flame on.</li>
+      <li>Mic gain too low. Speak directly into the mic; check the input level in System Settings → Sound → Input while speaking.</li>
+    </ol>
+
+    <h2>Model download stuck or corrupted</h2>
+    <p>Symptoms: progress bar at 0% or 99%, transcription says "model failed to load".</p>
+    <ol>
+      <li>Click <strong>Cancel</strong> on the model row.</li>
+      <li>Quit Neuron Flame.</li>
+      <li>Run:
+        <pre><code>rm -rf ~/Library/Application\ Support/com.neuronflame.app/Models/[model-name]/</code></pre>
+      </li>
+      <li>Reopen and click Download again.</li>
+    </ol>
+
+    <h2>App won't open: "damaged" or "from an unidentified developer"</h2>
+    <p>This is the self-signing message. Right-click the app → <strong>Open</strong> → <strong>Open</strong>. macOS will remember the choice.</p>
+    <p>If macOS Sequoia or later refuses even with right-click → Open:</p>
+    <ol>
+      <li>Open System Settings → Privacy &amp; Security.</li>
+      <li>Scroll to the bottom — you'll see "Neuron Flame was blocked from use".</li>
+      <li>Click <strong>Open Anyway</strong>.</li>
+    </ol>
+
+    <h2>Sparkle update fails</h2>
+    <p>Sparkle requires the new build's signature to match the EdDSA public key embedded in the running build. If you're running a hand-compiled build, Sparkle will refuse signed-by-someone-else updates as a security measure.</p>
+    <p>To get back on the official update channel: download a fresh DMG from <a href="https://github.com/barney-cmyk/svara/releases">GitHub Releases</a> and replace your installed copy.</p>
+
+    <h2>App opens then crashes immediately</h2>
+    <p>Almost always a corrupted SwiftData store from an interrupted upgrade. Move (don't delete — keep a backup) the Application Support folder:</p>
+    <pre><code>mv ~/Library/Application\ Support/com.neuronflame.app ~/Desktop/com.neuronflame.app.broken</code></pre>
+    <p>Reopen Neuron Flame. It will start fresh.</p>
+    <p>To recover transcripts from the moved folder, look in <code>com.neuronflame.app.broken/default.store</code> — that's the SwiftData file. If you want help recovering it, attach it to a GitHub issue (it doesn't contain audio, just transcribed text + metadata).</p>
+
+    <h2>AI Enhancement returns errors / nothing</h2>
+    <p>If the LLM call fails for any reason — rate limit, expired key, network issue — Neuron Flame falls back to the raw transcript automatically. You always get something pasted; you never get an error string in your document.</p>
+    <p>To see what went wrong, open the History tab → click the failed entry. If it's a configuration issue, the AI Models tab will show the error inline.</p>
+
+    <h2>I'm getting stray <code>&lt;TRANSCRIPT&gt;</code> tags in my output</h2>
+    <p>Neuron Flame strips the wrapper artifacts (<code>&lt;TRANSCRIPT&gt;</code>, <code>&lt;CLIPBOARD_CONTEXT&gt;</code>, etc.) from LLM responses automatically. If you see them anyway, you're on an older build — update to latest.</p>
+
+    <h2>Still stuck?</h2>
+    <p>Open an issue on <a href="https://github.com/barney-cmyk/svara/issues">GitHub</a> with:</p>
+    <ul>
+      <li>Your macOS version.</li>
+      <li>Mac model (Apple Silicon vs. Intel).</li>
+      <li>Neuron Flame version (Settings → About).</li>
+      <li>What you did, what you expected, what happened instead.</li>
+      <li>Any console output (Console.app, filter for "neuronflame").</li>
+    </ul>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -5,7 +5,7 @@ import OSLog
 class TranscriptionAutoCleanupService {
     static let shared = TranscriptionAutoCleanupService()
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "TranscriptionAutoCleanupService")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "TranscriptionAutoCleanupService")
     private var modelContext: ModelContext?
 
     private let keyIsEnabled = "IsTranscriptionCleanupEnabled"
@@ -15,7 +15,7 @@ class TranscriptionAutoCleanupService {
 
     private var recordingsDirectory: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("com.zivastudio.svara")
+            .appendingPathComponent("com.neuronflame.app")
             .appendingPathComponent("Recordings")
     }
 

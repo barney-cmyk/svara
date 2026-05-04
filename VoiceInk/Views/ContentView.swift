@@ -55,7 +55,7 @@ struct VisualEffectView: NSViewRepresentable {
 }
 
 struct ContentView: View {
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "ContentView")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "ContentView")
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var engine: ZivaEngine
@@ -90,7 +90,7 @@ struct ContentView: View {
                                 .cornerRadius(8)
                         }
 
-                        Text("Svara")
+                        Text("Neuron Flame")
                             .font(.system(size: 14, weight: .semibold))
 
                         if case .licensed = licenseViewModel.licenseState {
@@ -121,7 +121,7 @@ struct ContentView: View {
                 // on the right pane (alongside Model Performance + Copy System Info).
             }
             .listStyle(.sidebar)
-            .navigationTitle("Svara")
+            .navigationTitle("Neuron Flame")
             .navigationSplitViewColumnWidth(210)
         } detail: {
             if let selectedView = selectedView {

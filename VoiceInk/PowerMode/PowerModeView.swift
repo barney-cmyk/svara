@@ -80,7 +80,7 @@ struct PowerModeView: View {
                                     .foregroundColor(.primary)
                                 
                                 InfoTip(
-                                    "Power Mode lets Svara apply different transcription settings depending on which app or website you're using. Each Power Mode can pin a specific AI model, custom prompt, language, and even a custom paste-shortcut. When the active app changes, Svara automatically swaps to the matching mode — so dictating into Slack uses casual chat formatting, dictating into Mail uses email tone, and dictating into your code editor uses verbatim mode. Add a new mode by clicking the + button, choose what triggers it (an app bundle ID or a website URL), and set the configuration.",
+                                    "Power Mode lets Neuron Flame apply different transcription settings depending on which app or website you're using. Each Power Mode can pin a specific AI model, custom prompt, language, and even a custom paste-shortcut. When the active app changes, Neuron Flame automatically swaps to the matching mode — so dictating into Slack uses casual chat formatting, dictating into Mail uses email tone, and dictating into your code editor uses verbatim mode. Add a new mode by clicking the + button, choose what triggers it (an app bundle ID or a website URL), and set the configuration.",
                                     learnMoreURL: "https://tryvoiceink.com/docs/power-mode"
                                 )
                             }
@@ -157,7 +157,7 @@ struct PowerModeView: View {
                                                         .font(.system(size: 20, weight: .medium))
                                                         .foregroundColor(.primary)
                                                     
-                                                    Text("Create first power mode to automate your Svara workflow based on apps/website you are using")
+                                                    Text("Create first power mode to automate your Neuron Flame workflow based on apps/website you are using")
                                                         .font(.system(size: 14))
                                                         .foregroundColor(.secondary)
                                                         .multilineTextAlignment(.center)

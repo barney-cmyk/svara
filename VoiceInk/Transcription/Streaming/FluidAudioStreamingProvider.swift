@@ -5,7 +5,7 @@ import os
 /// Agreement-based on-device streaming transcription using FluidAudio ASR.
 final class FluidAudioStreamingProvider: StreamingTranscriptionProvider {
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "FluidAudioStreaming")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "FluidAudioStreaming")
     private let fluidAudioService: FluidAudioTranscriptionService
     private var eventsContinuation: AsyncStream<StreamingTranscriptionEvent>.Continuation?
 

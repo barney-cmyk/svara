@@ -33,8 +33,8 @@ struct DashboardPromotionsSection: View {
                 if shouldShowUpgradePromotion {
                     DashboardPromotionCard(
                         badge: "30% OFF",
-                        title: "Unlock Svara Pro For Less",
-                        message: "Share Svara on your socials, and instantly unlock a 30% discount on Svara Pro.",
+                        title: "Unlock Neuron Flame Pro For Less",
+                        message: "Share Neuron Flame on your socials, and instantly unlock a 30% discount on Neuron Flame Pro.",
                         accentSymbol: "megaphone.fill",
                         glowColor: Color(red: 0.08, green: 0.48, blue: 0.85),
                         actionTitle: "Share & Unlock",
@@ -47,8 +47,8 @@ struct DashboardPromotionsSection: View {
                 if shouldShowAffiliatePromotion {
                     DashboardPromotionCard(
                         badge: "AFFILIATE 30%",
-                        title: "Earn With The Svara Affiliate Program",
-                        message: "Share Svara with friends or your audience and receive 30% on every referral that upgrades.",
+                        title: "Earn With The Neuron Flame Affiliate Program",
+                        message: "Share Neuron Flame with friends or your audience and receive 30% on every referral that upgrades.",
                         accentSymbol: "link.badge.plus",
                         glowColor: Color(red: 0.08, green: 0.48, blue: 0.85),
                         actionTitle: "Explore Affiliate",

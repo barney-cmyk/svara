@@ -6,7 +6,7 @@ class HistoryWindowController: NSObject, NSWindowDelegate {
     static let shared = HistoryWindowController()
 
     private var historyWindow: NSWindow?
-    private let windowIdentifier = NSUserInterfaceItemIdentifier("com.zivastudio.svara.historyWindow")
+    private let windowIdentifier = NSUserInterfaceItemIdentifier("com.neuronflame.app.historyWindow")
     private let windowAutosaveName = NSWindow.FrameAutosaveName("ZivaHistoryWindowFrame")
 
     private override init() {
@@ -46,7 +46,7 @@ class HistoryWindowController: NSObject, NSWindowDelegate {
         )
 
         window.contentViewController = hostingController
-        window.title = "Svara — History"
+        window.title = "Neuron Flame — History"
         window.identifier = windowIdentifier
         window.delegate = self
         window.titlebarAppearsTransparent = true

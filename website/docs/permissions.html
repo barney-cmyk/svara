@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Permissions — Neuron Flame Docs</title>
+<meta name="description" content="Why Neuron Flame needs Microphone and Accessibility permissions on macOS, what each one is used for, and how to grant or reset them." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html" class="active">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Permissions</h1>
+    <p>Neuron Flame needs two macOS permissions, plus one optional permission for richer AI enhancement. Here's exactly what each one does and why.</p>
+
+    <h2>Microphone (required)</h2>
+    <p>Used to capture your voice. Without it, there's nothing to transcribe. Audio buffers are processed entirely on-device by the local Whisper or Parakeet model and discarded immediately after — they're never written to disk unless you explicitly save a recording from the History tab.</p>
+
+    <h3>How to grant</h3>
+    <ol>
+      <li>Open <strong>System Settings → Privacy &amp; Security → Microphone</strong>.</li>
+      <li>Toggle <strong>Neuron Flame</strong> on.</li>
+      <li>Quit and reopen Neuron Flame (macOS requires a restart for new mic grants).</li>
+    </ol>
+
+    <h2>Accessibility (required)</h2>
+    <p>Used to paste your transcript at the cursor. macOS treats "send keystrokes to other apps" as accessibility-class — it's the same permission a screen reader uses. Without it, Neuron Flame can transcribe but cannot deliver the result.</p>
+
+    <h3>How to grant</h3>
+    <ol>
+      <li>Open <strong>System Settings → Privacy &amp; Security → Accessibility</strong>.</li>
+      <li>Click the <strong>+</strong> button.</li>
+      <li>Navigate to <code>/Applications/Neuron Flame.app</code> and add it.</li>
+      <li>Toggle it on.</li>
+    </ol>
+
+    <div class="callout-box warn">
+      <p><strong>If you rebuild from source:</strong> Accessibility grants are tied to the app's code signature. We use a stable self-signed cert called <code>Ziva AI Developer</code> so that the same identity persists across rebuilds and Sparkle updates — your one-time grant should stick. If it ever resets, see <a href="/docs/troubleshooting.html#tcc-reset">Troubleshooting → Permissions reset after rebuild</a>.</p>
+    </div>
+
+    <h2>Screen Recording (optional)</h2>
+    <p>Used <em>only</em> by the optional <strong>Window Context</strong> feature inside AI Enhancement. When enabled, Neuron Flame captures the title and URL (or document name) of the frontmost window and passes it to your chosen LLM as extra context — so the model knows you're, say, replying to an email vs. drafting a Slack message vs. editing Swift code.</p>
+    <ul>
+      <li>This is <strong>off by default</strong>.</li>
+      <li>The captured context is <strong>never written to disk</strong>.</li>
+      <li>It's only sent to the LLM you've configured (your choice — Gemini, OpenAI, Anthropic, Ollama, local CLI, etc.).</li>
+      <li>If you don't enable AI Enhancement, this permission is never used.</li>
+    </ul>
+
+    <h2>Input Monitoring (sometimes)</h2>
+    <p>If you choose a hotkey that uses a modifier key only (like <kbd>Right Option</kbd>), macOS may also ask for Input Monitoring. This lets the global hotkey work even when other apps have keyboard focus. Same place: <strong>System Settings → Privacy &amp; Security → Input Monitoring</strong>.</p>
+
+    <h2>What happens if I deny something?</h2>
+    <table>
+      <tr><th>Denied</th><th>Effect</th></tr>
+      <tr><td>Microphone</td><td>Recording fails. Status banner shows red mic icon.</td></tr>
+      <tr><td>Accessibility</td><td>Transcription works, but text won't paste. It still appears in the History tab.</td></tr>
+      <tr><td>Screen Recording</td><td>Window-context AI enhancement is silently skipped. Plain transcript still works.</td></tr>
+      <tr><td>Input Monitoring</td><td>Modifier-only hotkeys may not fire reliably. Use a chord (cmd+shift+...) instead.</td></tr>
+    </table>
+
+    <h2>Reset all permissions</h2>
+    <p>If something is misbehaving and you want a clean slate:</p>
+    <pre><code>tccutil reset All com.neuronflame.app</code></pre>
+    <p>Then quit and reopen Neuron Flame. Every permission prompt will fire fresh.</p>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

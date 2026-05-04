@@ -3,7 +3,7 @@ import AppKit
 import Carbon
 import os
 
-private let logger = Logger(subsystem: "com.zivastudio.svara", category: "CursorPaster")
+private let logger = Logger(subsystem: "com.neuronflame.app", category: "CursorPaster")
 
 class CursorPaster {
     private typealias ClipboardSnapshot = [(NSPasteboard.PasteboardType, Data)]

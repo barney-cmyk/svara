@@ -16,7 +16,7 @@ class FluidAudioModelManager: ObservableObject {
     var onModelDeleted: ((String) -> Void)?
     var onModelsChanged: (() -> Void)?
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "FluidAudioModelManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "FluidAudioModelManager")
 
     // Add new Fluid Audio models here when support is added.
     private static let modelVersionMap: [String: AsrModelVersion] = [

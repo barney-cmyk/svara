@@ -41,12 +41,12 @@ struct LicenseManagementView: View {
                     .onAppear { pulse = true }
             }
 
-            Text("Svara by **Ziva Studio** — voice-to-text at the speed of thought.")
+            Text("Neuron Flame by **Ziva Studio** — voice-to-text at the speed of thought.")
                 .font(.system(size: 14))
                 .foregroundStyle(ZivaTheme.onSurfaceVariant)
                 .lineSpacing(3)
 
-            Text("Named after my daughter Ziva. *Svara* is Sanskrit for the tone — the note that turns sound into meaning. That's exactly what this app captures.")
+            Text("Named after my daughter Ziva. *Neuron Flame* is Sanskrit for the tone — the note that turns sound into meaning. That's exactly what this app captures.")
                 .font(.system(size: 13))
                 .foregroundStyle(ZivaTheme.onSurfaceVariant.opacity(0.85))
                 .lineSpacing(4)
@@ -177,7 +177,7 @@ struct LicenseManagementView: View {
                 }
             }
 
-            Text("Svara is free to use, share, and modify. If it's earned a place in your daily routine, you can send a small thank-you via PayPal. No obligation — never has been, never will be.")
+            Text("Neuron Flame is free to use, share, and modify. If it's earned a place in your daily routine, you can send a small thank-you via PayPal. No obligation — never has been, never will be.")
                 .font(.system(size: 14))
                 .foregroundStyle(ZivaTheme.onSurfaceVariant)
                 .lineSpacing(5)
@@ -185,7 +185,7 @@ struct LicenseManagementView: View {
 
             HStack(spacing: 10) {
                 Button {
-                    let url = URL(string: "https://www.paypal.com/donate/?business=barney%40theaussiesharmas.com.au&item_name=Svara+thank-you&currency_code=AUD")!
+                    let url = URL(string: "https://www.paypal.com/donate/?business=barney%40theaussiesharmas.com.au&item_name=Neuron+Flame+thank-you&currency_code=AUD")!
                     NSWorkspace.shared.open(url)
                 } label: {
                     HStack(spacing: 8) {

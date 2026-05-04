@@ -8,8 +8,8 @@ import os
 final class KeychainService {
     static let shared = KeychainService()
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "KeychainService")
-    private let service = "com.zivastudio.svara"
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "KeychainService")
+    private let service = "com.neuronflame.app"
 
     #if LOCAL_BUILD
     private let defaults = UserDefaults.standard

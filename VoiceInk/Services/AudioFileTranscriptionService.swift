@@ -12,7 +12,7 @@ class AudioTranscriptionService: ObservableObject {
     private let modelContext: ModelContext
     private let enhancementService: AIEnhancementService?
     private let promptDetectionService = PromptDetectionService()
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "AudioTranscriptionService")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "AudioTranscriptionService")
     private let serviceRegistry: TranscriptionServiceRegistry
 
     enum TranscriptionError: Error {
@@ -66,7 +66,7 @@ class AudioTranscriptionService: ObservableObject {
             let audioAsset = AVURLAsset(url: url)
             let duration = CMTimeGetSeconds(try await audioAsset.load(.duration))
             let recordingsDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("com.zivastudio.svara")
+                .appendingPathComponent("com.neuronflame.app")
                 .appendingPathComponent("Recordings")
             
             let fileName = "retranscribed_\(UUID().uuidString).wav"

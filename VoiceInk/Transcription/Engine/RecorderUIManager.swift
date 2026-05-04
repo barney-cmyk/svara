@@ -41,7 +41,7 @@ class RecorderUIManager: ObservableObject {
     private weak var engine: ZivaEngine?
     private var recorder: Recorder?
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "RecorderUIManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "RecorderUIManager")
 
     init() {}
 

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Start — Neuron Flame Docs</title>
+<meta name="description" content="Install Neuron Flame, grant permissions, set a hotkey, and transcribe your first thought — all in 60 seconds." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html" class="active">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Quick Start</h1>
+    <p>From zero to talking in under a minute. Here's the whole flow.</p>
+
+    <h2>1. Download &amp; install</h2>
+    <ol>
+      <li>Grab the latest <code>.dmg</code> from <a href="https://github.com/barney-cmyk/svara/releases">GitHub Releases</a>.</li>
+      <li>Open the DMG and drag <strong>Neuron Flame</strong> into your <code>Applications</code> folder.</li>
+      <li><strong>First launch:</strong> right-click Neuron Flame → <strong>Open</strong> → <strong>Open</strong>. (One-time only — the app is self-signed, not Apple-notarized.)</li>
+    </ol>
+
+    <div class="callout-box info">
+      <p><strong>Why right-click?</strong> Apple notarisation costs $99/year per developer. To keep Neuron Flame free, we self-sign instead. macOS will remember your choice — every future launch is normal double-click.</p>
+    </div>
+
+    <h2>2. Grant permissions</h2>
+    <p>Neuron Flame needs two macOS permissions to work. It will prompt for both on first launch:</p>
+    <ul>
+      <li><strong>Microphone</strong> — to hear your voice.</li>
+      <li><strong>Accessibility</strong> — to paste the transcript at your cursor in any app.</li>
+    </ul>
+    <p>If you accidentally dismiss either prompt, open <strong>System Settings → Privacy &amp; Security</strong> and add Neuron Flame manually. See the full <a href="/docs/permissions.html">Permissions guide</a> if anything goes sideways.</p>
+
+    <h2>3. Pick a transcription model</h2>
+    <p>Open the <strong>AI Models</strong> tab. The default is <strong>Parakeet V2</strong>:</p>
+    <ul>
+      <li>474 MB</li>
+      <li>English only</li>
+      <li>Fastest option on Apple Silicon (uses the Neural Engine)</li>
+    </ul>
+    <p>If you need other languages, pick a Whisper model. Smaller is faster; larger is more accurate. <strong>Whisper Small</strong> (244 MB) is a great middle ground for most non-English speakers.</p>
+
+    <h2>4. Set your hotkey</h2>
+    <p>Open <strong>Settings → Hotkeys</strong>. Click into the <strong>Push-to-Talk</strong> field and press your chosen key combination.</p>
+    <p>Most people use:</p>
+    <ul>
+      <li><kbd>Right Option</kbd> — easy to hold while typing</li>
+      <li><kbd>F5</kbd> — replaces the unused macOS dictation key</li>
+      <li><kbd>⌃⌥</kbd> + <kbd>Space</kbd> — distinctive chord</li>
+    </ul>
+
+    <h2>5. Speak</h2>
+    <p>Click anywhere in any app — Mail, Slack, Notes, your terminal, your browser, anywhere. Then:</p>
+    <ol>
+      <li><strong>Hold</strong> your hotkey.</li>
+      <li><strong>Speak</strong> a sentence. The recorder pill appears at the bottom of your screen.</li>
+      <li><strong>Release.</strong> Your words appear at the cursor.</li>
+    </ol>
+
+    <div class="callout-box">
+      <p><strong>You're done.</strong> That's the whole app. The rest of the docs are for when you want more — per-app behaviour, AI cleanup, custom dictionary, etc.</p>
+    </div>
+
+    <h2>What's next?</h2>
+    <ul>
+      <li><a href="/docs/ai-enhancement.html">AI Enhancement</a> — polish the transcript with your favourite LLM.</li>
+      <li><a href="/docs/power-mode.html">Power Mode</a> — different settings for Slack vs. Mail vs. Xcode.</li>
+      <li><a href="/docs/shortcuts.html">Hotkeys</a> — paste-only mode, hands-free toggle, more.</li>
+    </ul>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -6,7 +6,7 @@ import OSLog
 final class SessionMetricMigrationService {
     static let shared = SessionMetricMigrationService()
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "SessionMetricMigrationService")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "SessionMetricMigrationService")
     private let completionKey = "HasCompletedStatsMigration"
     private(set) var isRunning = false
 

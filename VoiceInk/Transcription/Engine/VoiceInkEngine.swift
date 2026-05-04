@@ -27,7 +27,7 @@ class ZivaEngine: NSObject, ObservableObject {
     let enhancementService: AIEnhancementService?
     private let pipeline: TranscriptionPipeline
 
-    let logger = Logger(subsystem: "com.zivastudio.svara", category: "ZivaEngine")
+    let logger = Logger(subsystem: "com.neuronflame.app", category: "ZivaEngine")
 
     init(
         modelContext: ModelContext,
@@ -41,7 +41,7 @@ class ZivaEngine: NSObject, ObservableObject {
         self.enhancementService = enhancementService
 
         let appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("com.zivastudio.svara")
+            .appendingPathComponent("com.neuronflame.app")
         self.recordingsDirectory = appSupportDirectory.appendingPathComponent("Recordings")
 
         self.serviceRegistry = TranscriptionServiceRegistry(

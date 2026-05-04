@@ -87,7 +87,7 @@ class BrowserURLService {
     static let shared = BrowserURLService()
     
     private let logger = Logger(
-        subsystem: "com.zivastudio.svara",
+        subsystem: "com.neuronflame.app",
         category: "browser.applescript"
     )
     

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Custom Models — Neuron Flame Docs</title>
+<meta name="description" content="Compare Whisper and Parakeet, install community Whisper models, or point Neuron Flame at any OpenAI-compatible transcription endpoint." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html" class="active">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Custom Models</h1>
+    <p>Neuron Flame supports two local model families and any OpenAI-compatible cloud transcription endpoint. Pick what fits your hardware, language, and accuracy needs.</p>
+
+    <h2>Parakeet V2 (default)</h2>
+    <ul>
+      <li><strong>Made by:</strong> NVIDIA, ported to Apple Silicon by FluidAudio.</li>
+      <li><strong>Size:</strong> 474 MB</li>
+      <li><strong>Languages:</strong> English only</li>
+      <li><strong>Speed:</strong> Fastest. Runs on the Apple Neural Engine.</li>
+      <li><strong>Accuracy:</strong> Excellent for English, comparable to Whisper Medium.</li>
+      <li><strong>Best for:</strong> English speakers on Apple Silicon Macs.</li>
+    </ul>
+
+    <h2>Whisper family</h2>
+    <p>OpenAI's Whisper, ported to <code>whisper.cpp</code> by Georgi Gerganov. Multiple sizes:</p>
+    <table>
+      <tr><th>Model</th><th>Size</th><th>Speed</th><th>Accuracy</th><th>Languages</th></tr>
+      <tr><td>Tiny</td><td>78 MB</td><td>Fastest</td><td>Lowest</td><td>100+</td></tr>
+      <tr><td>Base</td><td>148 MB</td><td>Very fast</td><td>Good</td><td>100+</td></tr>
+      <tr><td>Small</td><td>244 MB</td><td>Fast</td><td>Better</td><td>100+</td></tr>
+      <tr><td>Medium</td><td>770 MB</td><td>Moderate</td><td>Great</td><td>100+</td></tr>
+      <tr><td>Large v3</td><td>1.6 GB</td><td>Slower</td><td>Best</td><td>100+</td></tr>
+      <tr><td>Large v3 Turbo</td><td>815 MB</td><td>Fast</td><td>Excellent</td><td>100+</td></tr>
+    </table>
+
+    <p>The <strong>Turbo</strong> variant is a special case: it's a distilled Large with comparable accuracy at half the size and twice the speed. Often the right choice if Parakeet's English-only is a dealbreaker.</p>
+
+    <h2>Downloading a Whisper model</h2>
+    <ol>
+      <li>Open the <strong>AI Models</strong> tab.</li>
+      <li>Find the model in the list.</li>
+      <li>Click <strong>Download</strong>. Progress shows in the row.</li>
+      <li>Once complete, click <strong>Use this model</strong>.</li>
+    </ol>
+    <p>Models live in <code>~/Library/Application Support/com.neuronflame.app/Models/</code>. You can delete unused ones to reclaim space.</p>
+
+    <h2>Custom OpenAI-compatible endpoints</h2>
+    <p>Want to use a hosted Whisper API (e.g. Groq's blazing-fast Whisper Large), a self-hosted Whisper server, or any other endpoint that speaks OpenAI's <code>/v1/audio/transcriptions</code> protocol? Add it as a <strong>Custom Cloud Model</strong>.</p>
+    <ol>
+      <li>AI Models tab → <strong>+ Add Custom Provider</strong>.</li>
+      <li>Enter a name (e.g. "Groq Whisper").</li>
+      <li>Base URL — e.g. <code>https://api.groq.com/openai/v1</code>.</li>
+      <li>API key.</li>
+      <li>Model name — e.g. <code>whisper-large-v3-turbo</code>.</li>
+      <li>Save and select.</li>
+    </ol>
+
+    <div class="callout-box info">
+      <p><strong>When to use cloud transcription:</strong> mainly when you want Whisper Large quality without the local compute cost. Groq is currently the speed champion. For privacy-sensitive work, stick with local — Parakeet on Apple Silicon is competitive with Whisper Large in real-world use.</p>
+    </div>
+
+    <h2>Picking the right model — quick guide</h2>
+    <ul>
+      <li><strong>English, Apple Silicon:</strong> Parakeet V2.</li>
+      <li><strong>English, Intel Mac:</strong> Whisper Small or Turbo.</li>
+      <li><strong>Other languages, accuracy matters:</strong> Whisper Large v3 Turbo.</li>
+      <li><strong>Other languages, speed matters:</strong> Whisper Small.</li>
+      <li><strong>Heavy accent or noisy environment:</strong> Whisper Medium minimum, ideally Large.</li>
+      <li><strong>Long-form content (lectures, interviews):</strong> Whisper Large via Groq cloud — fast and accurate.</li>
+    </ul>
+
+    <h2>Custom dictionary</h2>
+    <p>Independent of the model, the <strong>Custom Dictionary</strong> lets you correct transcribed text by matching patterns and replacing with your preferred spelling. It runs <em>after</em> transcription but <em>before</em> AI enhancement, so:</p>
+    <ul>
+      <li>The model can mishear "Ziva" as "Zeeva" — your dictionary catches it.</li>
+      <li>Your AI enhancement prompt sees the corrected text, so it doesn't have to guess about your jargon.</li>
+    </ul>
+    <p>Common entries:</p>
+    <ul>
+      <li>Proper nouns the model gets wrong (your name, your kids' names, your company).</li>
+      <li>Technical jargon (TypeScript, Kubernetes, Yjs).</li>
+      <li>Spelling preferences (organisation vs. organization).</li>
+    </ul>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

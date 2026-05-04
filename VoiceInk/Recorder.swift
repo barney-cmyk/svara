@@ -6,7 +6,7 @@ import os
 @MainActor
 class Recorder: NSObject, ObservableObject {
     private var recorder: CoreAudioRecorder?
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "Recorder")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "Recorder")
     private let deviceManager = AudioDeviceManager.shared
     private var deviceSwitchObserver: NSObjectProtocol?
     private var isReconfiguring = false
@@ -14,9 +14,9 @@ class Recorder: NSObject, ObservableObject {
     private let playbackController = PlaybackController.shared
     @Published var audioMeter = AudioMeter(averagePower: 0, peakPower: 0)
     private var audioMeterUpdateTimer: DispatchSourceTimer?
-    private let audioMeterQueue = DispatchQueue(label: "com.zivastudio.svara.audiometer", qos: .userInteractive)
+    private let audioMeterQueue = DispatchQueue(label: "com.neuronflame.app.audiometer", qos: .userInteractive)
     /// Dedicated serial queue for hardware setup.
-    private let audioSetupQueue = DispatchQueue(label: "com.zivastudio.svara.audioSetup", qos: .userInitiated)
+    private let audioSetupQueue = DispatchQueue(label: "com.neuronflame.app.audioSetup", qos: .userInitiated)
     private var audioMuteTask: Task<Void, Never>?
     private var audioRestorationTask: Task<Void, Never>?
     private let smoothedValuesLock = NSLock()

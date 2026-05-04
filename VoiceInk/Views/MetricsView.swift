@@ -30,7 +30,7 @@ struct MetricsView: View {
                 .padding()
             } else if case .trialExpired = licenseViewModel.licenseState {
                 TrialMessageView(
-                    message: "Your trial has expired. Upgrade to continue using Svara",
+                    message: "Your trial has expired. Upgrade to continue using Neuron Flame",
                     type: .expired,
                     onAddLicenseKey: {
                         // Also allow navigation from expired state

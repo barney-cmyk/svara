@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Enhancement — Neuron Flame Docs</title>
+<meta name="description" content="Pipe raw transcripts through Gemini, OpenAI, Anthropic, Ollama, or any local CLI to fix grammar, format as email, prettify code, or apply your own custom prompts." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html" class="active">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>AI Enhancement</h1>
+    <p>The raw transcript is just the beginning. AI Enhancement passes it through a language model with a prompt of your choice — to fix grammar, reformat for email, condense rambling, prettify code, translate, summarise, or anything else you can describe in a system prompt.</p>
+
+    <div class="callout-box info">
+      <p><strong>It's optional.</strong> Neuron Flame works perfectly fine without it. Enhancement is a layer on top — turn it on only when you want polish.</p>
+    </div>
+
+    <h2>Supported providers</h2>
+    <table>
+      <tr><th>Provider</th><th>Models</th><th>Where it runs</th></tr>
+      <tr><td>Google Gemini</td><td>Flash, Pro, Flash Lite</td><td>Google cloud</td></tr>
+      <tr><td>OpenAI</td><td>GPT-4o, GPT-4o-mini, etc.</td><td>OpenAI cloud</td></tr>
+      <tr><td>Anthropic</td><td>Claude 3.5 Sonnet, Haiku</td><td>Anthropic cloud</td></tr>
+      <tr><td>Ollama</td><td>Llama, Mistral, Qwen, anything local</td><td>Your Mac</td></tr>
+      <tr><td>Groq</td><td>Llama 3.3, Mixtral</td><td>Groq cloud (fast)</td></tr>
+      <tr><td>Custom OpenAI-compatible</td><td>Any URL + model name</td><td>Wherever you point it</td></tr>
+      <tr><td>Local CLI</td><td>Any executable</td><td>Your Mac</td></tr>
+    </table>
+
+    <h2>Setting up</h2>
+    <ol>
+      <li>Open the <strong>AI Models</strong> tab.</li>
+      <li>Choose a provider.</li>
+      <li>Paste your API key (Gemini and Anthropic offer generous free tiers).</li>
+      <li>Pick a model from the dropdown.</li>
+      <li>Toggle <strong>Enable AI Enhancement</strong> on.</li>
+    </ol>
+    <p>That's it. Every transcription now flows through the model before being pasted.</p>
+
+    <h2>Prompts</h2>
+    <p>Neuron Flame ships with a curated set of prompts:</p>
+    <ul>
+      <li><strong>Default</strong> — light cleanup. Fixes grammar, removes filler words, keeps your voice.</li>
+      <li><strong>Email</strong> — formats as a professional email with greeting and sign-off.</li>
+      <li><strong>Chat</strong> — short, casual, no formality.</li>
+      <li><strong>Notes</strong> — bullet-formatted summary.</li>
+      <li><strong>Code</strong> — preserves identifiers, fixes only natural-language portions.</li>
+    </ul>
+    <p>You can edit these or create your own. Each prompt has a system message and an optional user-message template — both support variables like <code>{{transcript}}</code>, <code>{{clipboard}}</code>, and <code>{{window_context}}</code>.</p>
+
+    <h2>Context-aware enhancement</h2>
+    <p>Two optional toggles make the model smarter:</p>
+    <ul>
+      <li><strong>Clipboard context</strong> — the model sees what's currently on your clipboard. Useful for "make this paragraph more formal" or "summarise the article I just copied".</li>
+      <li><strong>Window context</strong> — the model sees the title and URL of the frontmost window. Useful for "reply to this email" or "comment on this PR".</li>
+    </ul>
+    <p>Both are off by default. Both are processed locally and sent only to the model you've configured. Neither is ever written to disk.</p>
+
+    <h2>What happens if it fails?</h2>
+    <p>If the LLM call fails — rate limit, network blip, invalid key, anything — Neuron Flame falls back to the <strong>raw transcript</strong>. You always get something pasted; you never get an error string in your document. The History tab shows the raw transcript only (the failed enhancement is not stored).</p>
+
+    <h2>Custom prompts</h2>
+    <p>The prompt editor uses Markdown for the system message. Variables you can reference:</p>
+    <ul>
+      <li><code>{{transcript}}</code> — the raw text from Whisper/Parakeet (with your custom dictionary applied).</li>
+      <li><code>{{clipboard}}</code> — current clipboard text (only if Clipboard Context is enabled).</li>
+      <li><code>{{window_context}}</code> — frontmost app + window title + URL (only if Window Context is enabled).</li>
+      <li><code>{{custom_vocabulary}}</code> — your custom dictionary entries (handy for prompts that need to know specific spellings).</li>
+    </ul>
+    <p>The wrapper artifacts (<code>&lt;TRANSCRIPT&gt;</code> tags etc.) are stripped from the model's reply automatically — even if it tries to echo them back, they won't end up in your text.</p>
+
+    <h2>Privacy notes</h2>
+    <ul>
+      <li>If you use a cloud LLM, your transcript leaves your Mac and goes to that provider. That's the trade-off.</li>
+      <li>If you use Ollama or a local CLI, nothing leaves your Mac — you get the polish without the privacy cost.</li>
+      <li>API keys are stored in your macOS Keychain. Neuron Flame never logs or transmits them.</li>
+    </ul>
+    <p>See the full <a href="/docs/privacy.html">Privacy doc</a> for the complete data-flow diagram.</p>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -3,7 +3,7 @@ import os
 
 class PromptDetectionService {
     private let logger = Logger(
-        subsystem: "com.zivastudio.svara",
+        subsystem: "com.neuronflame.app",
         category: "promptdetection"
     )
     

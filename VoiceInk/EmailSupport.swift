@@ -4,7 +4,7 @@ import AppKit
 
 struct EmailSupport {
     private static let supportEmailAddress = "barney@theaussiesharmas.com.au"
-    private static let supportEmailSubject = "Svara Support Request"
+    private static let supportEmailSubject = "Neuron Flame Support Request"
 
     static func generateSupportEmailBody() -> String {
         let systemInfo = SystemInfoService.shared.getSystemInfoString()

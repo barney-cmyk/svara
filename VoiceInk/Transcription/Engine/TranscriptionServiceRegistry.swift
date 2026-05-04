@@ -8,7 +8,7 @@ class TranscriptionServiceRegistry {
     private weak var modelProvider: (any WhisperModelProvider)?
     private let modelsDirectory: URL
     private let modelContext: ModelContext
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "TranscriptionServiceRegistry")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "TranscriptionServiceRegistry")
 
     private(set) lazy var localTranscriptionService = WhisperTranscriptionService(
         modelsDirectory: modelsDirectory,

@@ -19,7 +19,7 @@ class LicenseViewModel: ObservableObject {
 
     private let trialPeriodDays = 7
     private let polarService = PolarService()
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "LicenseViewModel")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "LicenseViewModel")
     private let userDefaults = UserDefaults.standard
     private let licenseManager = LicenseManager.shared
 
@@ -88,7 +88,7 @@ class LicenseViewModel: ObservableObject {
     }
     
     func openPurchaseLink() {
-        if let url = URL(string: "https://swara.so") {
+        if let url = URL(string: "https://neuronflame.com") {
             NSWorkspace.shared.open(url)
         }
     }

@@ -10,7 +10,7 @@ class TranscriptionModelManager: ObservableObject {
     private weak var whisperModelManager: WhisperModelManager?
     private weak var fluidAudioModelManager: FluidAudioModelManager?
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "TranscriptionModelManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "TranscriptionModelManager")
 
     init(whisperModelManager: WhisperModelManager, fluidAudioModelManager: FluidAudioModelManager) {
         self.whisperModelManager = whisperModelManager

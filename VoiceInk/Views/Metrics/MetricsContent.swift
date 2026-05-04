@@ -3,7 +3,7 @@ import SwiftData
 import os
 
 struct MetricsContent: View {
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "MetricsContent")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "MetricsContent")
     let modelContext: ModelContext
     let licenseState: LicenseViewModel.LicenseState
 
@@ -253,7 +253,7 @@ struct MetricsContent: View {
                 icon: "mic.fill",
                 title: "Sessions Recorded",
                 value: "\(totalCount)",
-                detail: "Svara sessions",
+                detail: "Neuron Flame sessions",
                 color: .purple
             )
 
@@ -271,7 +271,7 @@ struct MetricsContent: View {
                 value: averageWordsPerMinute > 0
                     ? String(format: "%.1f", averageWordsPerMinute)
                     : "–",
-                detail: "Svara vs. typing",
+                detail: "Neuron Flame vs. typing",
                 color: .yellow
             )
             

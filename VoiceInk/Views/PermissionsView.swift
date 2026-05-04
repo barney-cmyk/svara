@@ -219,7 +219,7 @@ struct PermissionsView: View {
                 CompactHeroSection(
                     icon: "shield.lefthalf.filled",
                     title: "App Permissions",
-                    description: "Svara requires the following permissions to function properly"
+                    description: "Neuron Flame requires the following permissions to function properly"
                 )
                 
                 // Permission Cards
@@ -228,7 +228,7 @@ struct PermissionsView: View {
                     PermissionCard(
                         icon: "keyboard",
                         title: "Keyboard Shortcut",
-                        description: "Set up a keyboard shortcut to use Svara anywhere",
+                        description: "Set up a keyboard shortcut to use Neuron Flame anywhere",
                         isGranted: hotkeyManager.selectedHotkey1 != .none,
                         buttonTitle: "Configure Shortcut",
                         buttonAction: {
@@ -245,7 +245,7 @@ struct PermissionsView: View {
                     PermissionCard(
                         icon: "mic",
                         title: "Microphone Access",
-                        description: "Allow Svara to record your voice for transcription",
+                        description: "Allow Neuron Flame to record your voice for transcription",
                         isGranted: permissionManager.audioPermissionStatus == .authorized,
                         buttonTitle: permissionManager.audioPermissionStatus == .notDetermined ? "Request Permission" : "Open System Settings",
                         buttonAction: {
@@ -264,7 +264,7 @@ struct PermissionsView: View {
                     PermissionCard(
                         icon: "hand.raised",
                         title: "Accessibility Access",
-                        description: "Allow Svara to paste transcribed text directly at your cursor position",
+                        description: "Allow Neuron Flame to paste transcribed text directly at your cursor position",
                         isGranted: permissionManager.isAccessibilityEnabled,
                         buttonTitle: "Open System Settings",
                         buttonAction: {
@@ -273,14 +273,14 @@ struct PermissionsView: View {
                             }
                         },
                         checkPermission: { permissionManager.checkAccessibilityPermissions() },
-                        infoTipMessage: "Svara uses Accessibility permissions to paste the transcribed text directly into other applications at your cursor's position. This allows for a seamless dictation experience across your Mac."
+                        infoTipMessage: "Neuron Flame uses Accessibility permissions to paste the transcribed text directly into other applications at your cursor's position. This allows for a seamless dictation experience across your Mac."
                     )
                     
                     // Screen Recording Permission
                     PermissionCard(
                         icon: "rectangle.on.rectangle",
                         title: "Screen Recording Access",
-                        description: "Allow Svara to understand context from your screen for transcript Enhancement",
+                        description: "Allow Neuron Flame to understand context from your screen for transcript Enhancement",
                         isGranted: permissionManager.isScreenRecordingEnabled,
                         buttonTitle: "Request Permission",
                         buttonAction: {
@@ -291,7 +291,7 @@ struct PermissionsView: View {
                             }
                         },
                         checkPermission: { permissionManager.checkScreenRecordingPermission() },
-                        infoTipMessage: "When granted, Svara briefly captures the text on your active window so the AI knows what you're working on. This helps the model spell uncommon names correctly, match the formatting of surrounding text, and disambiguate homophones based on context. The capture happens only at the moment you stop dictating, the text is sent to the language model alongside your transcript, and nothing is written to disk or sent anywhere else. You can revoke this at any time in System Settings → Privacy & Security → Screen Recording. Svara works fine without it — accuracy just improves a bit when it's on.",
+                        infoTipMessage: "When granted, Neuron Flame briefly captures the text on your active window so the AI knows what you're working on. This helps the model spell uncommon names correctly, match the formatting of surrounding text, and disambiguate homophones based on context. The capture happens only at the moment you stop dictating, the text is sent to the language model alongside your transcript, and nothing is written to disk or sent anywhere else. You can revoke this at any time in System Settings → Privacy & Security → Screen Recording. Neuron Flame works fine without it — accuracy just improves a bit when it's on.",
                         infoTipLink: "https://tryvoiceink.com/docs/contextual-awareness"
                     )
                 }

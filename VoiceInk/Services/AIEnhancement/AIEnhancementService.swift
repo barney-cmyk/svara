@@ -11,7 +11,7 @@ enum EnhancementPrompt {
 
 @MainActor
 class AIEnhancementService: ObservableObject {
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "AIEnhancementService")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "AIEnhancementService")
 
     @Published var isEnhancementEnabled: Bool {
         didSet {

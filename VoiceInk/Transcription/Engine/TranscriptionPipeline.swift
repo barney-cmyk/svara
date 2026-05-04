@@ -11,7 +11,7 @@ class TranscriptionPipeline {
     private let serviceRegistry: TranscriptionServiceRegistry
     private let enhancementService: AIEnhancementService?
     private let promptDetectionService = PromptDetectionService()
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "TranscriptionPipeline")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "TranscriptionPipeline")
 
     var licenseViewModel: LicenseViewModel
 
@@ -203,7 +203,7 @@ class TranscriptionPipeline {
            transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             if case .trialExpired = licenseViewModel.licenseState {
                 textToPaste = """
-                    Your trial has expired. Upgrade to Svara Pro at swara.so
+                    Your trial has expired. Upgrade to Neuron Flame Pro at swara.so
                     \n\(textToPaste)
                     """
             }

@@ -1,6 +1,6 @@
 <div align="center">
   <img src="VoiceInk/Assets.xcassets/AppIcon.appiconset/256-mac.png" width="180" height="180" />
-  <h1>Svara</h1>
+  <h1>Neuron Flame</h1>
   <p><i>Voice-to-text at the speed of thought.</i></p>
 
   [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -10,9 +10,9 @@
 
 ---
 
-**Svara** is a private, on-device voice-to-text dictation app for macOS, by **[Ziva Studio](https://swara.so)**. Hold a hotkey, speak, release — your words appear at the cursor in whatever app you're in. Designed for people who think faster than they type.
+**Neuron Flame** is a private, on-device voice-to-text dictation app for macOS, by **[Ziva Studio](https://neuronflame.com)**. Hold a hotkey, speak, release — your words appear at the cursor in whatever app you're in. Designed for people who think faster than they type.
 
-> *Svara* (Sanskrit: स्वर) — the tone, the note that turns sound into meaning. Named after my daughter, Ziva.
+> *Neuron Flame* (Sanskrit: स्वर) — the tone, the note that turns sound into meaning. Named after my daughter, Ziva.
 > — Barney Sharma
 
 ## What it does
@@ -29,8 +29,8 @@
 ## Install
 
 1. Download the latest `.dmg` from [Releases](https://github.com/barney-cmyk/svara/releases)
-2. Open the DMG → drag Svara to Applications
-3. **First launch**: right-click Svara → Open → Open (one-time, because the app is self-signed not Apple-notarized)
+2. Open the DMG → drag Neuron Flame to Applications
+3. **First launch**: right-click Neuron Flame → Open → Open (one-time, because the app is self-signed not Apple-notarized)
 4. Grant Microphone + Accessibility when prompted
 5. Pick a model on the AI Models tab — **Parakeet V2** is the default (474 MB, English-only, fastest)
 6. Set your hotkey on the Settings tab
@@ -43,7 +43,7 @@ That's it. Hold the hotkey, speak, release.
 git clone https://github.com/barney-cmyk/svara.git
 cd svara
 brew install cmake     # required by whisper.cpp
-make local             # builds in ~/Downloads/Svara.app
+make local             # builds in ~/Downloads/Neuron Flame.app
 ```
 
 Requires Xcode 26+ for the macOS 26 SDK (Liquid Glass APIs).
@@ -57,7 +57,7 @@ Requires Xcode 26+ for the macOS 26 SDK (Liquid Glass APIs).
 
 ## Credits
 
-Svara is built on [VoiceInk](https://github.com/Beingpax/VoiceInk) by [Pax (Beingpax)](https://github.com/Beingpax) — an excellent open-source voice-to-text foundation. If this app saves you time, please consider [tipping the upstream maintainer](https://buymeacoffee.com/beingpax) — without their work, none of this would exist.
+Neuron Flame is built on [VoiceInk](https://github.com/Beingpax/VoiceInk) by [Pax (Beingpax)](https://github.com/Beingpax) — an excellent open-source voice-to-text foundation. If this app saves you time, please consider [tipping the upstream maintainer](https://buymeacoffee.com/beingpax) — without their work, none of this would exist.
 
 Other dependencies:
 - [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — local speech-to-text inference

@@ -9,7 +9,7 @@ final class CoreAudioRecorder: @unchecked Sendable {
 
     // MARK: - Properties
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "CoreAudioRecorder")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "CoreAudioRecorder")
 
     private var audioUnit: AudioUnit?
     private var audioFile: ExtAudioFileRef?

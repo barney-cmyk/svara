@@ -4,8 +4,8 @@ import OSLog
 final class LogExporter {
     static let shared = LogExporter()
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "LogExporter")
-    private let subsystem = "com.zivastudio.svara"
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "LogExporter")
+    private let subsystem = "com.neuronflame.app"
     private let maxSessionsToKeep = 3
     private let sessionsKey = "logExporter.sessionStartDates.v1"
 
@@ -53,7 +53,7 @@ final class LogExporter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 
-        logLines.append("=== Svara Diagnostic Logs ===")
+        logLines.append("=== Neuron Flame Diagnostic Logs ===")
         logLines.append("Export Date: \(dateFormatter.string(from: Date()))")
         logLines.append("Subsystem: \(subsystem)")
         logLines.append("Total Sessions: \(sessionStartDates.count)")

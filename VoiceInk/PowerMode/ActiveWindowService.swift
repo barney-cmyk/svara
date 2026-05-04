@@ -9,7 +9,7 @@ class ActiveWindowService: ObservableObject {
     private let browserURLService = BrowserURLService.shared
 
     private let logger = Logger(
-        subsystem: "com.zivastudio.svara",
+        subsystem: "com.neuronflame.app",
         category: "browser.detection"
     )
 

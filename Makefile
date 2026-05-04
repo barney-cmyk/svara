@@ -60,13 +60,17 @@ local: check setup
 		build
 	@APP_PATH="$(LOCAL_DERIVED_DATA)/Build/Products/Debug/VoiceInk.app" && \
 	if [ -d "$$APP_PATH" ]; then \
-		echo "Copying VoiceInk.app to ~/Downloads..."; \
-		rm -rf "$$HOME/Downloads/VoiceInk.app"; \
-		ditto "$$APP_PATH" "$$HOME/Downloads/VoiceInk.app"; \
-		xattr -cr "$$HOME/Downloads/VoiceInk.app"; \
+		echo "Renaming bundle to Neuron Flame.app..."; \
+		DEST="$$HOME/Downloads/Neuron Flame.app"; \
+		rm -rf "$$DEST"; \
+		ditto "$$APP_PATH" "$$DEST"; \
+		xattr -cr "$$DEST"; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleName 'Neuron Flame'" "$$DEST/Contents/Info.plist" 2>/dev/null || /usr/libexec/PlistBuddy -c "Add :CFBundleName string 'Neuron Flame'" "$$DEST/Contents/Info.plist"; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'Neuron Flame'" "$$DEST/Contents/Info.plist" 2>/dev/null || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string 'Neuron Flame'" "$$DEST/Contents/Info.plist"; \
+		codesign --force --sign "Ziva AI Developer" --entitlements $(CURDIR)/VoiceInk/VoiceInk.local.entitlements --deep "$$DEST" 2>/dev/null || codesign --force --sign - --entitlements $(CURDIR)/VoiceInk/VoiceInk.local.entitlements --deep "$$DEST"; \
 		echo ""; \
-		echo "Build complete! App saved to: ~/Downloads/VoiceInk.app"; \
-		echo "Run with: open ~/Downloads/VoiceInk.app"; \
+		echo "Build complete! App saved to: ~/Downloads/Neuron Flame.app"; \
+		echo "Run with: open '$$HOME/Downloads/Neuron Flame.app'"; \
 		echo ""; \
 		echo "Limitations of local builds:"; \
 		echo "  - No iCloud dictionary sync"; \
@@ -78,17 +82,20 @@ local: check setup
 
 # Run application
 run:
-	@if [ -d "$$HOME/Downloads/VoiceInk.app" ]; then \
+	@if [ -d "$$HOME/Downloads/Neuron Flame.app" ]; then \
+		echo "Opening ~/Downloads/Neuron Flame.app..."; \
+		open "$$HOME/Downloads/Neuron Flame.app"; \
+	elif [ -d "$$HOME/Downloads/VoiceInk.app" ]; then \
 		echo "Opening ~/Downloads/VoiceInk.app..."; \
 		open "$$HOME/Downloads/VoiceInk.app"; \
 	else \
-		echo "Looking for VoiceInk.app in DerivedData..."; \
-		APP_PATH=$$(find "$$HOME/Library/Developer/Xcode/DerivedData" -name "VoiceInk.app" -type d | head -1) && \
+		echo "Looking for app in DerivedData..."; \
+		APP_PATH=$$(find "$(LOCAL_DERIVED_DATA)" "$$HOME/Library/Developer/Xcode/DerivedData" -name "VoiceInk.app" -type d 2>/dev/null | head -1) && \
 		if [ -n "$$APP_PATH" ]; then \
 			echo "Found app at: $$APP_PATH"; \
 			open "$$APP_PATH"; \
 		else \
-			echo "VoiceInk.app not found. Please run 'make build' or 'make local' first."; \
+			echo "App not found. Please run 'make local' first."; \
 			exit 1; \
 		fi; \
 	fi

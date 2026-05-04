@@ -73,7 +73,7 @@ class WhisperModelManager: ObservableObject {
     /// TranscriptionModelManager can rebuild allAvailableModels.
     var onModelsChanged: (() -> Void)?
 
-    let logger = Logger(subsystem: "com.zivastudio.svara", category: "WhisperModelManager")
+    let logger = Logger(subsystem: "com.neuronflame.app", category: "WhisperModelManager")
 
     init(modelsDirectory: URL) {
         self.modelsDirectory = modelsDirectory

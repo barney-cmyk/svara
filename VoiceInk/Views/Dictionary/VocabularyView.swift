@@ -46,7 +46,7 @@ struct VocabularyView: View {
         VStack(alignment: .leading, spacing: 20) {
             GroupBox {
                 Label {
-                    Text("Add words to help Svara recognize them properly. (Requires AI enhancement)")
+                    Text("Add words to help Neuron Flame recognize them properly. (Requires AI enhancement)")
                         .font(.system(size: 12))
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

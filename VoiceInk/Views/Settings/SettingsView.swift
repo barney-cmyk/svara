@@ -245,7 +245,7 @@ struct SettingsView: View {
             } header: {
                 Text("Privacy")
             } footer: {
-                Text("Control how Svara handles your transcription data and audio recordings.")
+                Text("Control how Neuron Flame handles your transcription data and audio recordings.")
             }
 
             // MARK: - Backup

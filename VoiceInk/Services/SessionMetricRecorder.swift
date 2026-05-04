@@ -3,7 +3,7 @@ import SwiftData
 import OSLog
 
 enum SessionMetricRecorder {
-    private static let logger = Logger(subsystem: "com.zivastudio.svara", category: "SessionMetricRecorder")
+    private static let logger = Logger(subsystem: "com.neuronflame.app", category: "SessionMetricRecorder")
     private static let source = "recorder"
 
     @discardableResult

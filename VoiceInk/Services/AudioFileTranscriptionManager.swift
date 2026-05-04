@@ -19,7 +19,7 @@ class AudioTranscriptionManager: ObservableObject {
     private var processingTask: Task<Void, Never>?
     private var processingGeneration: UInt64 = 0
     private let audioProcessor = AudioProcessor()
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "AudioTranscriptionManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "AudioTranscriptionManager")
 
     private init() {}
 
@@ -141,7 +141,7 @@ class AudioTranscriptionManager: ObservableObject {
             let duration = CMTimeGetSeconds(try await audioAsset.load(.duration))
 
             let recordingsDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("com.zivastudio.svara")
+                .appendingPathComponent("com.neuronflame.app")
                 .appendingPathComponent("Recordings")
 
             let fileName = "transcribed_\(UUID().uuidString).wav"

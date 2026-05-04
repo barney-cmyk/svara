@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotkeys & Shortcuts — Neuron Flame Docs</title>
+<meta name="description" content="Configure push-to-talk, hands-free toggle, paste-only mode, and chord shortcuts for Neuron Flame." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html" class="active">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Hotkeys &amp; Shortcuts</h1>
+    <p>Neuron Flame is hotkey-first. Pick combinations that fit your hands; configure them all from <strong>Settings → Hotkeys</strong>.</p>
+
+    <h2>Push-to-Talk (the main one)</h2>
+    <p>Hold the key while you speak; release when you're done. The transcript pastes at your cursor.</p>
+    <ul>
+      <li><kbd>Right Option</kbd> — most popular. Doesn't conflict with anything.</li>
+      <li><kbd>F5</kbd> — replaces macOS's old dictation key.</li>
+      <li><kbd>fn</kbd> — convenient on MacBooks.</li>
+      <li><kbd>⌃⌥</kbd> + <kbd>Space</kbd> — distinctive chord, no conflicts.</li>
+    </ul>
+
+    <div class="callout-box">
+      <p><strong>Tip.</strong> Modifier-only hotkeys (like Right Option alone) require Input Monitoring permission. Chords (modifier + letter) usually don't.</p>
+    </div>
+
+    <h2>Hands-Free Toggle</h2>
+    <p>Tap once to start recording; tap again to stop. Useful for longer thoughts where you don't want to hold a key.</p>
+    <p>Common choice: <kbd>F6</kbd> or <kbd>⌃⌥⌘</kbd> + <kbd>D</kbd>.</p>
+
+    <h2>Cancel Recording</h2>
+    <p>Pressed during a recording, throws away the audio without transcribing. Useful when you've started speaking and changed your mind.</p>
+    <p>Default: <kbd>Escape</kbd> while the recorder pill is visible.</p>
+
+    <h2>Open Mini Recorder</h2>
+    <p>Show the recorder pill without recording. Useful for checking which Power Mode profile is active.</p>
+
+    <h2>Toggle AI Enhancement</h2>
+    <p>Quickly turn enhancement on/off without opening Settings. Useful when you want raw text for one transcription only.</p>
+
+    <h2>Toggle Power Mode</h2>
+    <p>Master switch — turn the whole per-app profile system on or off.</p>
+
+    <h2>Paste Last Transcription</h2>
+    <p>Paste the most recent transcript again, without re-recording. Useful if you accidentally clicked away before it pasted.</p>
+
+    <h2>Open History</h2>
+    <p>Jump straight to the History tab. Default: <kbd>⌃⌥⌘</kbd> + <kbd>H</kbd>.</p>
+
+    <h2>Conflicts</h2>
+    <p>If your hotkey doesn't fire, another app may have claimed it first. Check <strong>System Settings → Keyboard → Keyboard Shortcuts</strong> for conflicts. Common offenders:</p>
+    <ul>
+      <li>Spotlight (<kbd>⌘</kbd> + <kbd>Space</kbd>)</li>
+      <li>Raycast / Alfred</li>
+      <li>The macOS dictation toggle (still uses <kbd>fn</kbd> if you haven't disabled it in Settings → Keyboard → Dictation)</li>
+    </ul>
+
+    <h2>Macros</h2>
+    <p>Power-user trick: combine Neuron Flame with a tool like Karabiner-Elements or BetterTouchTool to bind push-to-talk to physical buttons (e.g. a foot pedal, a Stream Deck, or your trackpad's force-click). Bind the external trigger to send your Neuron Flame hotkey, and you're set.</p>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

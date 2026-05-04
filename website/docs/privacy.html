@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy — Neuron Flame Docs</title>
+<meta name="description" content="Where your data lives, what leaves your Mac, and exactly when. Neuron Flame is private by default, with optional cloud features that you control completely." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html" class="active">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Privacy</h1>
+    <p>Voice data is the most personal data there is. Neuron Flame treats it that way — every default keeps your audio and transcripts on your Mac. The only exceptions are features you opt into explicitly, with API keys you provide, sending data to providers you choose.</p>
+
+    <h2>The short version</h2>
+    <ul>
+      <li><strong>Audio:</strong> never leaves your Mac. Period.</li>
+      <li><strong>Transcripts:</strong> stay on your Mac unless you turn on AI Enhancement with a cloud LLM.</li>
+      <li><strong>Telemetry:</strong> none. No analytics, no crash reports, no phone-home, no ping-the-server-on-launch.</li>
+      <li><strong>Update checks:</strong> Sparkle pings GitHub for a new version. That's the only outbound network traffic from a default install.</li>
+    </ul>
+
+    <h2>Where data lives</h2>
+    <table>
+      <tr><th>Data</th><th>Location</th><th>Purpose</th></tr>
+      <tr><td>Recorded audio</td><td>RAM only (default) or <code>~/Library/Application Support/com.neuronflame.app/Recordings/</code> (if you opt to keep recordings)</td><td>Transcription input</td></tr>
+      <tr><td>Transcripts</td><td>SwiftData local database in App Support</td><td>History, search, retry-paste</td></tr>
+      <tr><td>API keys</td><td>macOS Keychain</td><td>Cloud LLM authentication</td></tr>
+      <tr><td>Custom dictionary &amp; prompts</td><td>SwiftData local database</td><td>Personalisation</td></tr>
+      <tr><td>Power Mode profiles</td><td>SwiftData local database</td><td>Per-app behaviour</td></tr>
+      <tr><td>Whisper / Parakeet models</td><td><code>~/Library/Application Support/com.neuronflame.app/Models/</code></td><td>Local transcription</td></tr>
+    </table>
+
+    <h2>What leaves your Mac (and when)</h2>
+    <p>Default install, all toggles off:</p>
+    <ul>
+      <li>Sparkle update check on launch (HTTPS GET to <code>raw.githubusercontent.com</code>).</li>
+      <li>Whisper/Parakeet model downloads when you click Download (HTTPS to Hugging Face / GitHub).</li>
+      <li>Nothing else.</li>
+    </ul>
+
+    <p>If you turn on <strong>AI Enhancement</strong> with a cloud LLM:</p>
+    <ul>
+      <li>Each transcript is sent to your chosen provider over HTTPS.</li>
+      <li>The system + user message and the resulting reply pass between you and the provider.</li>
+      <li>The provider's privacy policy applies to anything they retain. We can't speak for them — pick one you trust.</li>
+      <li>Use Ollama or a local CLI if you want enhancement without anything leaving your Mac.</li>
+    </ul>
+
+    <p>If you turn on <strong>Clipboard Context</strong> (off by default):</p>
+    <ul>
+      <li>Your current clipboard text is included in the LLM request.</li>
+      <li>Same destination, same provider policy.</li>
+      <li>Never written to disk.</li>
+    </ul>
+
+    <p>If you turn on <strong>Window Context</strong> (off by default):</p>
+    <ul>
+      <li>The frontmost window's title and URL (if browser) are included in the LLM request.</li>
+      <li>Same destination, same provider policy.</li>
+      <li>Never written to disk.</li>
+    </ul>
+
+    <h2>What we never collect</h2>
+    <ul>
+      <li>Crash reports.</li>
+      <li>Usage analytics.</li>
+      <li>Feature toggles you've enabled.</li>
+      <li>Your microphone gain or mic model.</li>
+      <li>How often you use the app.</li>
+      <li>Your IP address.</li>
+      <li>Anything, basically. We don't run a server.</li>
+    </ul>
+
+    <h2>Third-party network calls</h2>
+    <p>By default, Neuron Flame talks to:</p>
+    <ul>
+      <li><strong>raw.githubusercontent.com</strong> — Sparkle update feed (<code>appcast.xml</code>).</li>
+      <li><strong>github.com</strong> — when you click Download to update.</li>
+      <li><strong>huggingface.co</strong> — only when you download a Whisper model.</li>
+    </ul>
+    <p>Anything else is opt-in:</p>
+    <ul>
+      <li><strong>Your chosen LLM provider</strong> — only if AI Enhancement is on and configured.</li>
+      <li><strong>Your chosen cloud transcription provider</strong> — only if you've added one.</li>
+    </ul>
+
+    <h2>Deleting your data</h2>
+    <p>To wipe Neuron Flame's local state without uninstalling the app:</p>
+    <pre><code>rm -rf ~/Library/Application\ Support/com.neuronflame.app/</code></pre>
+    <p>This removes recordings, transcripts, custom dictionary, prompts, and Power Mode profiles. Models too — you'll need to re-download.</p>
+    <p>To remove the API keys from Keychain: open Keychain Access, search for "neuronflame" or "ziva", delete entries.</p>
+
+    <h2>Open source &amp; auditable</h2>
+    <p>Neuron Flame is open source under GPL-3.0. The full source is on <a href="https://github.com/barney-cmyk/svara">GitHub</a>. If you don't trust our description of what's happening, read the code — every network call is searchable, every persistence path is documented, every permission check is explicit.</p>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

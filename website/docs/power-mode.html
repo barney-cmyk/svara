@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Power Mode — Neuron Flame Docs</title>
+<meta name="description" content="Auto-swap Neuron Flame settings per app — different model, prompt, and dictionary for Slack vs. Mail vs. Xcode. Set it once, forget it." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara/releases" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <aside class="docs-side">
+    <h5>Getting Started</h5>
+<a href="/docs/">Overview</a>
+<a href="/docs/quick-start.html">Quick Start</a>
+<a href="/docs/permissions.html">Permissions</a>
+<h5>Features</h5>
+<a href="/docs/ai-enhancement.html">AI Enhancement</a>
+<a href="/docs/power-mode.html" class="active">Power Mode</a>
+<a href="/docs/shortcuts.html">Hotkeys & Shortcuts</a>
+<a href="/docs/custom-models.html">Custom Models</a>
+<h5>Learn More</h5>
+<a href="/docs/privacy.html">Privacy</a>
+<a href="/docs/troubleshooting.html">Troubleshooting</a>
+<a href="/support.html">Support</a>
+  </aside>
+  <article class="docs-content">
+
+    <h1>Power Mode</h1>
+    <p>Power Mode swaps Neuron Flame's behaviour automatically based on which app you're in. Slack should be casual. Mail should be professional. Your code editor should be verbatim. Set up the rules once; Neuron Flame does the right thing forever.</p>
+
+    <h2>What Power Mode controls</h2>
+    <p>Each Power Mode profile can override:</p>
+    <ul>
+      <li><strong>Transcription model</strong> — e.g. Whisper Large for accuracy in Mail, Parakeet for speed in Slack.</li>
+      <li><strong>AI Enhancement on/off</strong> — turn polish off for raw thoughts in Notes; turn it on for Mail.</li>
+      <li><strong>Enhancement prompt</strong> — different prompt per app. Email tone vs. chat tone vs. code tone.</li>
+      <li><strong>Custom dictionary</strong> — load a different word-replacement set per app (your code project's identifiers, your client's brand spellings, etc.).</li>
+      <li><strong>Auto-paste</strong> — paste at cursor (default), or copy to clipboard only.</li>
+    </ul>
+
+    <h2>Creating a profile</h2>
+    <ol>
+      <li>Open the <strong>Power Mode</strong> tab.</li>
+      <li>Click <strong>+ New Profile</strong>.</li>
+      <li>Give it a name and an emoji (the emoji shows in the recorder pill so you know which mode is active).</li>
+      <li>Add one or more <strong>triggers</strong>:
+        <ul>
+          <li><strong>App</strong> — match the frontmost application bundle ID. Most common.</li>
+          <li><strong>URL</strong> — match the current browser URL. Useful for distinguishing GitHub vs. email-in-browser vs. Notion.</li>
+        </ul>
+      </li>
+      <li>Configure the overrides for this profile.</li>
+      <li>Save.</li>
+    </ol>
+
+    <h2>Example profiles</h2>
+
+    <h3>📨 Email mode</h3>
+    <ul>
+      <li><strong>Triggers:</strong> Mail.app, Outlook, Spark</li>
+      <li><strong>Prompt:</strong> Format as a professional email with a friendly greeting and clear sign-off. Fix grammar.</li>
+      <li><strong>Model:</strong> Whisper Medium (accuracy matters more than speed)</li>
+    </ul>
+
+    <h3>💬 Chat mode</h3>
+    <ul>
+      <li><strong>Triggers:</strong> Slack, Discord, Messages, WhatsApp</li>
+      <li><strong>Prompt:</strong> Casual tone. Keep it short. Fix obvious typos but don't formalise.</li>
+      <li><strong>Model:</strong> Parakeet V2 (speed matters)</li>
+    </ul>
+
+    <h3>💻 Code mode</h3>
+    <ul>
+      <li><strong>Triggers:</strong> Xcode, VS Code, JetBrains, Cursor, Zed</li>
+      <li><strong>Enhancement:</strong> OFF</li>
+      <li><strong>Custom dictionary:</strong> "code-vocab" (loaded with project-specific identifiers)</li>
+      <li><strong>Auto-paste:</strong> ON — paste verbatim at cursor.</li>
+    </ul>
+
+    <h3>📝 Note-taking mode</h3>
+    <ul>
+      <li><strong>Triggers:</strong> Notes, Obsidian, Bear, Notion</li>
+      <li><strong>Prompt:</strong> Format as bullet points where appropriate. Preserve my voice.</li>
+      <li><strong>Model:</strong> Whisper Small</li>
+    </ul>
+
+    <h3>🎤 Verbatim mode</h3>
+    <ul>
+      <li><strong>Triggers:</strong> any document or transcription work</li>
+      <li><strong>Enhancement:</strong> OFF</li>
+      <li><strong>Custom dictionary:</strong> only proper-noun corrections</li>
+    </ul>
+
+    <h2>Priority &amp; fallback</h2>
+    <p>If multiple profiles match (e.g. you have a Slack profile and a separate "in browser" profile, and Slack is open in a browser tab), the most specific trigger wins:</p>
+    <ol>
+      <li>App + URL match</li>
+      <li>URL-only match</li>
+      <li>App-only match</li>
+      <li>Default profile (no triggers)</li>
+    </ol>
+    <p>If nothing matches, your global settings apply.</p>
+
+    <h2>Knowing which profile is active</h2>
+    <p>The recorder pill shows the active profile's emoji. Hover for the name. The status banner on the dashboard also shows it.</p>
+
+    <h2>Quick toggle</h2>
+    <p>Want to disable Power Mode temporarily without deleting profiles? There's a master toggle on the Power Mode tab. Or assign a hotkey to <strong>Toggle Power Mode</strong> in <a href="/docs/shortcuts.html">Hotkeys</a>.</p>
+    
+  </article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/barney-cmyk/svara/releases">Download</a>
+      <a href="https://github.com/barney-cmyk/svara">Source</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/Beingpax/VoiceInk">Built on VoiceInk</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+
+</body>
+</html>

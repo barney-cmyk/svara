@@ -233,7 +233,7 @@ struct ModelManagementView: View {
                             .buttonStyle(.plain)
 
                             InfoTip(
-                                "If you've fine-tuned your own Whisper model (with whisper.cpp or via a community release), you can plug it into Svara here. Click Choose File and pick the .bin file — Svara loads it as a local model. Useful for accents the stock models struggle with, technical jargon, or to reproduce a specific voice profile. Only ggml-format .bin files are supported (the format whisper.cpp produces). Larger custom models give better accuracy but use more RAM.",
+                                "If you've fine-tuned your own Whisper model (with whisper.cpp or via a community release), you can plug it into Neuron Flame here. Click Choose File and pick the .bin file — Neuron Flame loads it as a local model. Useful for accents the stock models struggle with, technical jargon, or to reproduce a specific voice profile. Only ggml-format .bin files are supported (the format whisper.cpp produces). Larger custom models give better accuracy but use more RAM.",
                                 learnMoreURL: "https://tryvoiceink.com/docs/custom-local-whisper-models"
                             )
                             .help("Read more about custom local models")

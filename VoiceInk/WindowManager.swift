@@ -5,11 +5,11 @@ import OSLog
 class WindowManager: NSObject {
     static let shared = WindowManager()
 
-    private static let mainWindowIdentifier = NSUserInterfaceItemIdentifier("com.zivastudio.svara.mainWindow")
-    private static let onboardingWindowIdentifier = NSUserInterfaceItemIdentifier("com.zivastudio.svara.onboardingWindow")
+    private static let mainWindowIdentifier = NSUserInterfaceItemIdentifier("com.neuronflame.app.mainWindow")
+    private static let onboardingWindowIdentifier = NSUserInterfaceItemIdentifier("com.neuronflame.app.onboardingWindow")
     private static let mainWindowAutosaveName = NSWindow.FrameAutosaveName("ZivaMainWindowFrame")
 
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "WindowManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "WindowManager")
     private weak var mainWindow: NSWindow?
     private var didApplyInitialPlacement = false
 
@@ -32,7 +32,7 @@ class WindowManager: NSObject {
         window.titleVisibility = .hidden
         window.backgroundColor = .windowBackgroundColor
         window.isReleasedWhenClosed = false
-        window.title = "Svara"
+        window.title = "Neuron Flame"
         window.collectionBehavior = [.fullScreenPrimary]
         window.level = .normal
         window.isOpaque = true
@@ -58,7 +58,7 @@ class WindowManager: NSObject {
         window.backgroundColor = .clear
         window.isReleasedWhenClosed = false
         window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        window.title = "Svara"
+        window.title = "Neuron Flame"
         window.isOpaque = false
         window.minSize = NSSize(width: 900, height: 780)
         window.makeKeyAndOrderFront(nil)

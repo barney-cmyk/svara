@@ -239,7 +239,7 @@ struct MenuBarView: View {
             
             Divider()
 
-            Button("Quit Svara") {
+            Button("Quit Neuron Flame") {
                 NSApplication.shared.terminate(nil)
             }
         }

@@ -4,7 +4,7 @@ import AppKit
 import OSLog
 
 class MenuBarManager: ObservableObject {
-    private let logger = Logger(subsystem: "com.zivastudio.svara", category: "MenuBarManager")
+    private let logger = Logger(subsystem: "com.neuronflame.app", category: "MenuBarManager")
     @Published var isMenuBarOnly: Bool {
         didSet {
             UserDefaults.standard.set(isMenuBarOnly, forKey: "IsMenuBarOnly")
