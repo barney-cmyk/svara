@@ -20,10 +20,30 @@ PROVISIONING_PROFILE_SPECIFIER =
 // Add LOCAL_BUILD compilation flag so Swift code can use #if LOCAL_BUILD
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LOCAL_BUILD
 
+// Disable hardened runtime for local builds. macOS 26 (Tahoe) tightened the
+// rules so that hardened-runtime processes refuse to load non-platform dylibs
+// whose Team ID doesn't match the main binary's. With our self-signed cert
+// ("Ziva AI Developer") TeamIdentifier is "not set" on every component, but
+// dyld still rejects them as mismatched. Hardened runtime is only required
+// for notarised App Store distribution, not local-use builds — turning it
+// off lets the dylib load. Symptom if re-enabled: app crashes immediately at
+// launch with "Library not loaded: @rpath/VoiceInk.debug.dylib" + "different
+// Team IDs" in the diagnostic report.
+ENABLE_HARDENED_RUNTIME = NO
+OTHER_CODE_SIGN_FLAGS = $(inherited)
+
 // NOTE: We tried setting PRODUCT_NAME=Neuron Flame here so Xcode would emit the
 // executable as "MacOS/Neuron Flame" directly. That broke the build because xcconfig
 // settings propagate to SPM dependencies (MediaRemoteAdapter conflicts).
 // Instead the executable stays named "VoiceInk" inside the bundle — macOS
 // surfaces (Dock, Finder, Screen Recording, Accessibility) display CFBundleName
-// from Info.plist, which we set to "Neuron Flame" post-build. The internal filename
-// is only visible in Activity Monitor and inside the bundle.
+// and CFBundleDisplayName, which we set to "Neuron Flame" via the
+// INFOPLIST_KEY_* build settings below. The internal filename is only visible in
+// Activity Monitor and inside the bundle.
+
+// Override the project-level INFOPLIST_KEY_CFBundleDisplayName ("VoiceInk").
+// Combined with CFBundleName/CFBundleDisplayName entries in the source Info.plist,
+// this lets the Dock, Finder, About panel, Screen Recording prompts, and the
+// TCC Accessibility/Microphone entries all surface "Neuron Flame".
+INFOPLIST_KEY_CFBundleDisplayName = Neuron Flame
+INFOPLIST_KEY_CFBundleName = Neuron Flame
