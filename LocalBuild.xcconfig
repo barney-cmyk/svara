@@ -1,0 +1,29 @@
+// LocalBuild.xcconfig
+// Build configuration for local/unsigned builds (no Apple Developer certificate required).
+// Used by `make local` — does NOT affect Debug or Release configurations.
+
+// Stable self-signed identity (lives in login keychain).
+// Using a stable identity instead of ad-hoc "-" means TCC permissions
+// (Accessibility, Microphone, etc.) survive across rebuilds and Sparkle updates,
+// because every build carries the same Authority. One-time grant, sticks forever.
+// Cert name in the login keychain is "Ziva AI Developer" — created during the
+// pre-Svara naming pass. Don't change this without rotating the cert; doing so
+// would also reset every TCC permission the app has accumulated.
+CODE_SIGN_IDENTITY = Ziva AI Developer
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM =
+PROVISIONING_PROFILE_SPECIFIER =
+
+// Entitlements are set via absolute path in the Makefile command line
+// (relative paths break SPM package targets that resolve from their own source root)
+
+// Add LOCAL_BUILD compilation flag so Swift code can use #if LOCAL_BUILD
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) LOCAL_BUILD
+
+// NOTE: We tried setting PRODUCT_NAME=Svara here so Xcode would emit the
+// executable as "MacOS/Svara" directly. That broke the build because xcconfig
+// settings propagate to SPM dependencies (MediaRemoteAdapter conflicts).
+// Instead the executable stays named "VoiceInk" inside the bundle — macOS
+// surfaces (Dock, Finder, Screen Recording, Accessibility) display CFBundleName
+// from Info.plist, which we set to "Svara" post-build. The internal filename
+// is only visible in Activity Monitor and inside the bundle.
