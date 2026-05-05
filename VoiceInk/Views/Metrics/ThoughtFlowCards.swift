@@ -214,72 +214,103 @@ struct ThoughtFlowCard: View {
             // Pulse traverses left → right linearly
             let pulseX = leftX + (rightX - leftX) * progress
 
-            ZStack {
-                // Connecting line through icon centers
-                Path { p in
-                    p.move(to: CGPoint(x: leftX + 14, y: iconY))
-                    p.addLine(to: CGPoint(x: rightX - 14, y: iconY))
-                }
-                .stroke(ZivaTheme.outlineVariant, lineWidth: 1.5)
+            // Wrap the three node circles + the latency capsules in a single
+            // GlassEffectContainer so they share one refraction sample and
+            // morph cohesively when the layout animates. This is what gives
+            // the row that "real glass" feel inspired by Apple's WWDC25 demos.
+            GlassGroup(spacing: 10) {
+                ZStack {
+                    // Connecting line through icon centers
+                    Path { p in
+                        p.move(to: CGPoint(x: leftX + 14, y: iconY))
+                        p.addLine(to: CGPoint(x: rightX - 14, y: iconY))
+                    }
+                    .stroke(ZivaTheme.outlineVariant, lineWidth: 1.5)
 
-                // Latency annotation: ~600 ms between Thought and Voice
-                Text("~600 ms")
-                    .font(.system(size: 9, weight: .semibold, design: .rounded))
-                    .foregroundStyle(ZivaTheme.onSurfaceVariant)
-                    .padding(.horizontal, 5)
-                    .padding(.vertical, 1)
-                    .background(Capsule().fill(ZivaTheme.surfaceContainerLowest))
-                    .position(x: (leftX + midX) / 2, y: iconY - 12)
+                    // Latency annotation: ~600 ms between Thought and Voice
+                    latencyChip("~600 ms")
+                        .position(x: (leftX + midX) / 2, y: iconY - 12)
 
-                // Latency annotation: ~100 ms between Voice and Text
-                Text("~100 ms")
-                    .font(.system(size: 9, weight: .semibold, design: .rounded))
-                    .foregroundStyle(ZivaTheme.onSurfaceVariant)
-                    .padding(.horizontal, 5)
-                    .padding(.vertical, 1)
-                    .background(Capsule().fill(ZivaTheme.surfaceContainerLowest))
-                    .position(x: (midX + rightX) / 2, y: iconY - 12)
+                    // Latency annotation: ~100 ms between Voice and Text
+                    latencyChip("~100 ms")
+                        .position(x: (midX + rightX) / 2, y: iconY - 12)
 
-                // Trail behind the pulse (fading)
-                ForEach(0..<6, id: \.self) { i in
-                    let trailFraction = max(progress - Double(i) * 0.04, 0)
-                    let x = leftX + (rightX - leftX) * trailFraction
+                    // Trail behind the pulse (fading)
+                    ForEach(0..<6, id: \.self) { i in
+                        let trailFraction = max(progress - Double(i) * 0.04, 0)
+                        let x = leftX + (rightX - leftX) * trailFraction
+                        Circle()
+                            .fill(ZivaTheme.primary.opacity(0.5 - Double(i) * 0.08))
+                            .frame(width: 8 - CGFloat(i), height: 8 - CGFloat(i))
+                            .position(x: x, y: iconY)
+                    }
+
+                    // Bright pulse
                     Circle()
-                        .fill(ZivaTheme.primary.opacity(0.5 - Double(i) * 0.08))
-                        .frame(width: 8 - CGFloat(i), height: 8 - CGFloat(i))
-                        .position(x: x, y: iconY)
+                        .fill(ZivaTheme.primary)
+                        .frame(width: 10, height: 10)
+                        .position(x: pulseX, y: iconY)
+                        .shadow(color: ZivaTheme.primary.opacity(0.6), radius: 6)
+
+                    // Three nodes — icon centered on iconY, label below at labelY.
+                    // Active node = the one the pulse is currently nearest to,
+                    // so the glass tints brand-blue as the pulse passes through.
+                    let activeIndex = Int(round(progress * 2))
+                    nodeIcon(icon: "brain.head.profile", x: leftX,  y: iconY, isActive: activeIndex == 0)
+                    nodeIcon(icon: "waveform",           x: midX,   y: iconY, isActive: activeIndex == 1)
+                    nodeIcon(icon: "text.alignleft",     x: rightX, y: iconY, isActive: activeIndex == 2)
+
+                    nodeLabel(text: "Thought", x: leftX, y: labelY)
+                    nodeLabel(text: "Voice",   x: midX,  y: labelY)
+                    nodeLabel(text: "Text",    x: rightX, y: labelY)
                 }
-
-                // Bright pulse
-                Circle()
-                    .fill(ZivaTheme.primary)
-                    .frame(width: 10, height: 10)
-                    .position(x: pulseX, y: iconY)
-                    .shadow(color: ZivaTheme.primary.opacity(0.6), radius: 6)
-
-                // Three nodes — icon centered on iconY, label below at labelY
-                nodeIcon(icon: "brain.head.profile", x: leftX, y: iconY)
-                nodeIcon(icon: "waveform", x: midX, y: iconY)
-                nodeIcon(icon: "text.alignleft", x: rightX, y: iconY)
-
-                nodeLabel(text: "Thought", x: leftX, y: labelY)
-                nodeLabel(text: "Voice", x: midX, y: labelY)
-                nodeLabel(text: "Text", x: rightX, y: labelY)
             }
         }
     }
 
-    private func nodeIcon(icon: String, x: CGFloat, y: CGFloat) -> some View {
-        ZStack {
-            Circle()
-                .fill(ZivaTheme.surfaceContainerLowest)
-                .overlay(Circle().strokeBorder(ZivaTheme.primary, lineWidth: 1.5))
-                .frame(width: 28, height: 28)
-            Image(systemName: icon)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(ZivaTheme.primary)
-        }
-        .position(x: x, y: y)
+    /// Latency chip ("~600 ms") rendered as a Liquid-Glass capsule. Sits above
+    /// the connecting line between two nodes.
+    private func latencyChip(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 9, weight: .semibold, design: .rounded))
+            .foregroundStyle(ZivaTheme.onSurface)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .adaptiveGlass(in: Capsule())
+            .overlay(
+                Capsule().strokeBorder(ZivaTheme.outlineVariant.opacity(0.5), lineWidth: 0.5)
+            )
+    }
+
+    /// One Thought/Voice/Text node — a Liquid-Glass disc with a brand-tinted
+    /// SF Symbol inside. When the travelling pulse is closest to this node,
+    /// the disc takes a subtle primary tint so the user can read the flow as
+    /// "thought →  voice → text" rather than three identical circles.
+    private func nodeIcon(icon: String, x: CGFloat, y: CGFloat, isActive: Bool) -> some View {
+        Image(systemName: icon)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(isActive ? ZivaTheme.primary : ZivaTheme.onSurface.opacity(0.78))
+            .frame(width: 28, height: 28)
+            .adaptiveGlass(
+                in: Circle(),
+                tint: isActive ? ZivaTheme.primary.opacity(0.35) : nil,
+                interactive: false
+            )
+            .overlay(
+                Circle()
+                    .strokeBorder(
+                        isActive ? ZivaTheme.primary.opacity(0.7) : ZivaTheme.outlineVariant,
+                        lineWidth: isActive ? 1.5 : 1
+                    )
+            )
+            .shadow(
+                color: isActive ? ZivaTheme.primary.opacity(0.35) : .black.opacity(0.05),
+                radius: isActive ? 6 : 2,
+                y: isActive ? 0 : 1
+            )
+            .scaleEffect(isActive ? 1.08 : 1.0)
+            .animation(.spring(response: 0.35, dampingFraction: 0.75), value: isActive)
+            .position(x: x, y: y)
     }
 
     private func nodeLabel(text: String, x: CGFloat, y: CGFloat) -> some View {

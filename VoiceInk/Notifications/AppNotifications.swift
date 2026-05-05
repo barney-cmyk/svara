@@ -19,4 +19,7 @@ extension Notification.Name {
     static let enhancementToggleChanged = Notification.Name("enhancementToggleChanged")
     static let openFileForTranscription = Notification.Name("openFileForTranscription")
     static let audioDeviceSwitchRequired = Notification.Name("audioDeviceSwitchRequired")
+    /// Open the slide-in Model Performance panel on the Dashboard. Posted by the
+    /// sidebar button so the action can live anywhere in the chrome.
+    static let openModelPerformancePanel = Notification.Name("openModelPerformancePanel")
 }

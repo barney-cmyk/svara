@@ -80,8 +80,11 @@ struct ContentView: View {
         NavigationSplitView {
             List(selection: $selectedView) {
                 Section {
-                    // App Header
-                    HStack(spacing: 6) {
+                    // App Header — icon + wordmark only. PREMIUM badge intentionally
+                    // removed: Neuron Flame is free, the badge took horizontal space
+                    // away from the wordmark, and "All systems go" / live AI status
+                    // sit immediately below now.
+                    HStack(spacing: 8) {
                         if let appIcon = NSImage(named: "AppIcon") {
                             Image(nsImage: appIcon)
                                 .resizable()
@@ -92,20 +95,22 @@ struct ContentView: View {
 
                         Text("Neuron Flame")
                             .font(.system(size: 14, weight: .semibold))
+                            .lineLimit(1)
+                            .truncationMode(.tail)
 
-                        if case .licensed = licenseViewModel.licenseState {
-                            Text("PREMIUM")
-                                .font(.system(size: 9, weight: .heavy))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color.blue)
-                                .cornerRadius(4)
-                        }
-
-                        Spacer()
+                        Spacer(minLength: 0)
                     }
                     .padding(.vertical, 4)
+                }
+
+                // Live system status — pills live in the sidebar so they're
+                // visible from any tab (not just Dashboard). Compact mode stacks
+                // them vertically to fit the 210pt column.
+                Section {
+                    SystemStatusBanner(compact: true)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                 }
 
                 ForEach(visibleViewTypes) { viewType in
@@ -117,8 +122,33 @@ struct ContentView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                // System status pills moved to the unified Liquid Glass bottom bar
-                // on the right pane (alongside Model Performance + Copy System Info).
+
+                // Sidebar utilities — moved here from the Dashboard's bottom bar
+                // to free up vertical real estate for the metric cards. The
+                // Model Performance button posts a notification that
+                // MetricsContent listens for, so the panel still slides in
+                // from the Dashboard pane regardless of where the button lives.
+                Section {
+                    SidebarUtilityButton(
+                        icon: "gauge",
+                        label: "Model Performance",
+                        help: "View transcription and enhancement model performance"
+                    ) {
+                        NotificationCenter.default.post(
+                            name: .openModelPerformancePanel,
+                            object: nil
+                        )
+                        selectedView = .metrics
+                    }
+                    .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 4, trailing: 0))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+
+                    SidebarCopySystemInfoButton()
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                }
             }
             .listStyle(.sidebar)
             .navigationTitle("Neuron Flame")
@@ -216,6 +246,93 @@ private struct SidebarItemView: View {
         .contentShape(Rectangle())
         .padding(.vertical, 8)
         .padding(.horizontal, 2)
+    }
+}
+
+/// Generic Liquid-Glass utility button for the sidebar's bottom section.
+/// Looks like the nav rows but is wrapped in glass to read as an action,
+/// not a tab.
+private struct SidebarUtilityButton: View {
+    let icon: String
+    let label: String
+    let help: String
+    let action: () -> Void
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 13, weight: .semibold))
+                    .frame(width: 18)
+                    .foregroundStyle(ZivaTheme.primary)
+                Text(label)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(ZivaTheme.onSurface)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.plain)
+        .adaptiveGlass(in: Capsule(), interactive: true)
+        .overlay(
+            Capsule().strokeBorder(ZivaTheme.outlineVariant.opacity(0.4), lineWidth: 0.5)
+        )
+        .scaleEffect(isHovered ? 1.02 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovered)
+        .onHover { isHovered = $0 }
+        .help(help)
+        .padding(.horizontal, 4)
+    }
+}
+
+/// Sidebar variant of Copy System Info — same behaviour as the dashboard
+/// version, sized for the 210pt sidebar column with a Liquid-Glass capsule.
+private struct SidebarCopySystemInfoButton: View {
+    @State private var isCopied: Bool = false
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: copy) {
+            HStack(spacing: 10) {
+                Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
+                    .font(.system(size: 13, weight: .semibold))
+                    .frame(width: 18)
+                    .foregroundStyle(isCopied
+                        ? Color(red: 0.13, green: 0.55, blue: 0.27)
+                        : ZivaTheme.primary)
+                    .contentTransition(.symbolEffect(.replace))
+                Text(isCopied ? "Copied!" : "Copy System Info")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(ZivaTheme.onSurface)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isCopied)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.plain)
+        .adaptiveGlass(in: Capsule(), interactive: true)
+        .overlay(
+            Capsule().strokeBorder(ZivaTheme.outlineVariant.opacity(0.4), lineWidth: 0.5)
+        )
+        .scaleEffect(isCopied ? 1.04 : (isHovered ? 1.02 : 1.0))
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isCopied)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovered)
+        .onHover { isHovered = $0 }
+        .help("Copy diagnostic info to share when reporting an issue")
+        .padding(.horizontal, 4)
+    }
+
+    private func copy() {
+        SystemInfoService.shared.copySystemInfoToClipboard()
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { isCopied = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { isCopied = false }
+        }
     }
 }
 

@@ -50,10 +50,11 @@ struct MetricsContent: View {
 
                     FooterAffirmationCard()
 
-                    // Unified bottom bar — full-width Liquid Glass strip with
-                    // status pills on the left and action buttons on the right.
-                    footerActionsView
-                        .frame(maxWidth: .infinity)
+                    // System status pills + action buttons (Model Performance,
+                    // Copy System Info) used to live here as a Liquid-Glass
+                    // bottom bar. They've been promoted into the sidebar so
+                    // the dashboard has more vertical breathing room and the
+                    // status is visible from every tab, not just this one.
                 }
                 .padding(.vertical, 18)
                 .padding(.horizontal, 28)
@@ -68,6 +69,12 @@ struct MetricsContent: View {
             metricsTask?.cancel()
             metricsTask = Task {
                 await loadMetricsEfficiently()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openModelPerformancePanel)) { _ in
+            // Sidebar's Model Performance button posts this — slide the panel in.
+            withAnimation(.smooth(duration: 0.3)) {
+                isModelStatsPanelPresented = true
             }
         }
         .onDisappear {
@@ -285,43 +292,14 @@ struct MetricsContent: View {
         }
     }
 
-    /// Unified Liquid Glass bottom bar.
-    /// Left side: live system status (mic / accessibility / hotkey) + active AI provider.
-    /// Right side: action buttons (Model Performance + Copy System Info).
-    /// Wrapped in a single GlassEffectContainer so refraction is shared and the
-    /// pills morph cohesively when status changes.
-    private var footerActionsView: some View {
-        GlassGroup(spacing: 12) {
-            HStack(spacing: 10) {
-                // System status — pills at left
-                SystemStatusBanner(compact: false)
-                    .layoutPriority(1)
+    // footerActionsView and the inline CopySystemInfoButton were previously
+    // a Liquid-Glass strip at the bottom of the dashboard. Both moved into
+    // the sidebar (see ContentView.swift → SidebarUtilityButton +
+    // SidebarCopySystemInfoButton) to free up vertical space for the metric
+    // cards. The Model Performance panel is now triggered via the
+    // .openModelPerformancePanel notification posted from the sidebar.
 
-                Spacer(minLength: 16)
 
-                // Action buttons — at right
-                Button(action: {
-                    withAnimation(.smooth(duration: 0.3)) { isModelStatsPanelPresented = true }
-                }) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "gauge")
-                        Text("Model Performance")
-                    }
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .foregroundStyle(ZivaTheme.onSurface)
-                }
-                .buttonStyle(.plain)
-                .adaptiveGlass(in: Capsule(), interactive: true)
-                .help("View transcription and enhancement model performance")
-
-                CopySystemInfoButton()
-            }
-            .padding(.horizontal, 6)
-        }
-    }
-    
     private var formattedTimeSaved: String {
         let formatted = Formatters.formattedDuration(timeSaved, style: .full, fallback: "Time savings coming soon")
         return formatted
@@ -400,42 +378,4 @@ private enum Formatters {
     }
 }
 
-private struct CopySystemInfoButton: View {
-    @State private var isCopied: Bool = false
-
-    var body: some View {
-        Button(action: {
-            copySystemInfo()
-        }) {
-            HStack(spacing: 8) {
-                Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
-                    .rotationEffect(.degrees(isCopied ? 360 : 0))
-                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isCopied)
-
-                Text(isCopied ? "Copied!" : "Copy System Info")
-                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isCopied)
-            }
-            .font(.system(size: 13, weight: .medium))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(Capsule().fill(.thinMaterial))
-        }
-        .buttonStyle(.plain)
-        .scaleEffect(isCopied ? 1.1 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isCopied)
-    }
-
-    private func copySystemInfo() {
-        SystemInfoService.shared.copySystemInfoToClipboard()
-
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            isCopied = true
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                isCopied = false
-            }
-        }
-    }
-}
+// CopySystemInfoButton moved to ContentView.swift as SidebarCopySystemInfoButton.
