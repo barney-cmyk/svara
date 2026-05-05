@@ -57,9 +57,8 @@ Requires Xcode 26+ for the macOS 26 SDK (Liquid Glass APIs).
 
 ## Credits
 
-Neuron Flame is built on [VoiceInk](https://github.com/Beingpax/VoiceInk) by [Pax (Beingpax)](https://github.com/Beingpax) — an excellent open-source voice-to-text foundation. If this app saves you time, please consider [tipping the upstream maintainer](https://buymeacoffee.com/beingpax) — without their work, none of this would exist.
+Neuron Flame is a fork of an upstream open-source voice-to-text project — the original copyright notice is preserved in [LICENSE](LICENSE) per GPL-3 terms. Open-source dependencies:
 
-Other dependencies:
 - [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — local speech-to-text inference
 - [FluidAudio](https://github.com/FluidInference/FluidAudio) — NVIDIA Parakeet on Apple Neural Engine
 - [Sparkle](https://github.com/sparkle-project/Sparkle) — auto-update framework
@@ -67,7 +66,7 @@ Other dependencies:
 
 ## License
 
-GPL-3.0, inherited from VoiceInk. See [LICENSE](LICENSE).
+GPL-3.0. See [LICENSE](LICENSE) for the full text and the original upstream copyright notice.
 
 If you distribute the binary, you must also make this source available — that's what GPL-3 requires, and it's why this repository is public.
 

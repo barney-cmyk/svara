@@ -8,9 +8,14 @@ final class LicenseManager {
     private let keychain = KeychainService.shared
     private let logger = Logger(subsystem: "com.neuronflame.app", category: "LicenseManager")
 
-    private let licenseKeyIdentifier = "voiceink.license.key"
-    private let trialStartDateIdentifier = "voiceink.license.trialStartDate"
-    private let activationIdIdentifier = "voiceink.license.activationId"
+    // Keychain identifiers. Neuron Flame ships free (no licensing), so these
+    // are retained only because LicenseManager.swift is on the type graph.
+    // Renamed off the legacy prefix; existing users will simply start with
+    // an empty license state, which is harmless since the gated codepaths
+    // are never invoked.
+    private let licenseKeyIdentifier = "neuronflame.license.key"
+    private let trialStartDateIdentifier = "neuronflame.license.trialStartDate"
+    private let activationIdIdentifier = "neuronflame.license.activationId"
 
     private init() {}
 

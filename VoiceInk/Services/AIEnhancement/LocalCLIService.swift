@@ -18,11 +18,11 @@ enum LocalCLITemplate: String, CaseIterable, Identifiable {
     var commandTemplate: String {
         switch self {
         case .pi:
-            return "pi -ne -ns -p --no-tools --system-prompt \"$VOICEINK_SYSTEM_PROMPT\" \"$VOICEINK_USER_PROMPT\""
+            return "pi -ne -ns -p --no-tools --system-prompt \"$NEURONFLAME_SYSTEM_PROMPT\" \"$NEURONFLAME_USER_PROMPT\""
         case .claude:
-            return "claude -p \"$VOICEINK_FULL_PROMPT\""
+            return "claude -p \"$NEURONFLAME_FULL_PROMPT\""
         case .codex:
-            return "TMPFILE=$(mktemp) && codex exec --skip-git-repo-check --output-last-message \"$TMPFILE\" \"$VOICEINK_FULL_PROMPT\" > /dev/null 2>&1 && cat \"$TMPFILE\" && rm \"$TMPFILE\""
+            return "TMPFILE=$(mktemp) && codex exec --skip-git-repo-check --output-last-message \"$TMPFILE\" \"$NEURONFLAME_FULL_PROMPT\" > /dev/null 2>&1 && cat \"$TMPFILE\" && rm \"$TMPFILE\""
         }
     }
 }
@@ -119,9 +119,9 @@ final class LocalCLIService {
 
                 var environment = ProcessInfo.processInfo.environment
                 environment["PATH"] = Self.preferredPATH(fallback: environment["PATH"])
-                environment["VOICEINK_SYSTEM_PROMPT"] = systemPrompt
-                environment["VOICEINK_USER_PROMPT"] = userPrompt
-                environment["VOICEINK_FULL_PROMPT"] = fullPrompt
+                environment["NEURONFLAME_SYSTEM_PROMPT"] = systemPrompt
+                environment["NEURONFLAME_USER_PROMPT"] = userPrompt
+                environment["NEURONFLAME_FULL_PROMPT"] = fullPrompt
                 process.environment = environment
 
                 let inputPipe = Pipe()
@@ -205,7 +205,7 @@ final class LocalCLIService {
         process.executableURL = URL(fileURLWithPath: "/bin/zsh")
         process.arguments = [
             "-ilc",
-            "echo __VOICEINK_PATH_START__; print -r -- $PATH; echo __VOICEINK_PATH_END__"
+            "echo __NEURONFLAME_PATH_START__; print -r -- $PATH; echo __NEURONFLAME_PATH_END__"
         ]
 
         let stdoutPipe = Pipe()
@@ -234,8 +234,8 @@ final class LocalCLIService {
         }
 
         let output = String(data: stdoutPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-        let startMarker = "__VOICEINK_PATH_START__"
-        let endMarker = "__VOICEINK_PATH_END__"
+        let startMarker = "__NEURONFLAME_PATH_START__"
+        let endMarker = "__NEURONFLAME_PATH_END__"
 
         guard let startRange = output.range(of: startMarker),
               let endRange = output.range(of: endMarker, range: startRange.upperBound..<output.endIndex)

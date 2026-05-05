@@ -81,7 +81,7 @@ struct PowerModeView: View {
                                 
                                 InfoTip(
                                     "Power Mode lets Neuron Flame apply different transcription settings depending on which app or website you're using. Each Power Mode can pin a specific AI model, custom prompt, language, and even a custom paste-shortcut. When the active app changes, Neuron Flame automatically swaps to the matching mode — so dictating into Slack uses casual chat formatting, dictating into Mail uses email tone, and dictating into your code editor uses verbatim mode. Add a new mode by clicking the + button, choose what triggers it (an app bundle ID or a website URL), and set the configuration.",
-                                    learnMoreURL: "https://tryvoiceink.com/docs/power-mode"
+                                    learnMoreURL: "https://neuronflame.com/docs/power-mode.html"
                                 )
                             }
                             

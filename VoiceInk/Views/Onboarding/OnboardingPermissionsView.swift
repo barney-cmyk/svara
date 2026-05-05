@@ -126,7 +126,7 @@ struct OnboardingPermissionsView: View {
                                     if permissions[currentPermissionIndex].type == .screenRecording {
                                         InfoTip(
                                             "When granted, Neuron Flame briefly captures the text on your active window so the AI knows what you're working on. This helps the model spell uncommon names correctly, match the formatting of surrounding text, and disambiguate homophones based on context. The capture happens only at the moment you stop dictating, the text is sent to the language model alongside your transcript, and nothing is written to disk or sent anywhere else. You can revoke this at any time in System Settings → Privacy & Security → Screen Recording. Neuron Flame works fine without it — accuracy just improves a bit when it's on.",
-                                            learnMoreURL: "https://tryvoiceink.com/docs/contextual-awareness"
+                                            learnMoreURL: "https://neuronflame.com/docs/ai-enhancement.html"
                                         )
                                     }
                                 }

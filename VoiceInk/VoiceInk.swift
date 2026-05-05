@@ -192,22 +192,25 @@ struct ZivaApp: App {
 
     // MARK: - Legacy folder migration
 
-    /// Walks the chain of legacy App Support folder names this product has had
-    /// (upstream VoiceInk → Ziva AI → Neuron Flame) and brings the user's data forward
-    /// to the current location. Runs synchronously during init, before any other
-    /// code touches the new folder. Each step is a no-op if its source is missing
-    /// or its destination already exists, so the order is safe to re-run.
+    /// Walks the chain of historical App Support folder names this product has
+    /// shipped under and brings the user's data forward to the current location.
+    /// Runs synchronously during init, before any other code touches the new
+    /// folder. Each step is a no-op if its source is missing or its destination
+    /// already exists, so the order is safe to re-run.
     private static func migrateLegacyAppSupportFolderIfNeeded(logger: Logger) {
         let fm = FileManager.default
         guard let appSupport = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
 
-        // Each step: (oldFolderName, newFolderName). Run in chronological order so
-        // a user who skipped a build still ends up at the latest path.
+        // Each step: (oldFolderName, newFolderName). Run in chronological order
+        // so a user who skipped a release still ends up at the latest path.
+        // The strings are kept verbatim as legacy folder identifiers — they're
+        // not branding, they're just what `~/Library/Application Support/<id>/`
+        // happened to be called in earlier shipped builds.
         let migrationChain: [(String, String)] = [
-            ("com.prakashjoshipax.VoiceInk", "com.zivaai.app"),         // upstream → Ziva AI
-            ("com.zivaai.app",                "com.zivastudio.svara"), // Ziva AI → Svara (interim)
-            ("com.zivastudio.svara",          "com.neuronflame.app"),  // Svara → Neuron Flame (current)
-            ("com.zivastudio.swara",          "com.neuronflame.app")   // typo'd Swara folder → Neuron Flame
+            ("com.prakashjoshipax.VoiceInk", "com.zivaai.app"),        // pre-Ziva folder
+            ("com.zivaai.app",                "com.zivastudio.svara"), // Ziva AI era
+            ("com.zivastudio.svara",          "com.neuronflame.app"),  // interim
+            ("com.zivastudio.swara",          "com.neuronflame.app")   // tolerant of a misspelling
         ]
 
         for (oldName, newName) in migrationChain {

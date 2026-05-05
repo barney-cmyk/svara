@@ -421,7 +421,7 @@ struct PowerModeSection: View {
                 isEnabled: toggleBinding,
                 label: "Power Mode",
                 infoMessage: "Power Mode automatically applies different transcription settings depending on which app or website you're using. Each mode can specify its own AI model, custom prompt, language, and paste behaviour — so dictating into Slack uses casual chat formatting and dictating into Mail uses email tone, automatically. Configure modes from the Power Mode tab in the sidebar.",
-                infoURL: "https://tryvoiceink.com/docs/power-mode"
+                infoURL: "https://neuronflame.com/docs/power-mode.html"
             ) {
                 Toggle(isOn: $powerModePersistSettings) {
                     HStack(spacing: 4) {

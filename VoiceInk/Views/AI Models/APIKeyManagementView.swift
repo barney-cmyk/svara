@@ -211,7 +211,7 @@ struct APIKeyManagementView: View {
                         aiService.updateLocalCLITimeoutSeconds(newValue)
                     }
 
-                    Text("Environment variables available: VOICEINK_SYSTEM_PROMPT, VOICEINK_USER_PROMPT, VOICEINK_FULL_PROMPT. Neuron Flame also writes VOICEINK_FULL_PROMPT to stdin for every command.")
+                    Text("Environment variables available: NEURONFLAME_SYSTEM_PROMPT, NEURONFLAME_USER_PROMPT, NEURONFLAME_FULL_PROMPT. Neuron Flame also writes NEURONFLAME_FULL_PROMPT to stdin for every command.")
                         .font(.caption)
                         .foregroundColor(.secondary)
 

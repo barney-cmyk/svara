@@ -234,7 +234,7 @@ struct ModelManagementView: View {
 
                             InfoTip(
                                 "If you've fine-tuned your own Whisper model (with whisper.cpp or via a community release), you can plug it into Neuron Flame here. Click Choose File and pick the .bin file — Neuron Flame loads it as a local model. Useful for accents the stock models struggle with, technical jargon, or to reproduce a specific voice profile. Only ggml-format .bin files are supported (the format whisper.cpp produces). Larger custom models give better accuracy but use more RAM.",
-                                learnMoreURL: "https://tryvoiceink.com/docs/custom-local-whisper-models"
+                                learnMoreURL: "https://neuronflame.com/docs/custom-models.html"
                             )
                             .help("Read more about custom local models")
                         }

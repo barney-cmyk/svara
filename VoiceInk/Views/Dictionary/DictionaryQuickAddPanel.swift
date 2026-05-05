@@ -252,7 +252,7 @@ struct DictionaryQuickAddView: View {
             Image(systemName: "character.book.closed.fill")
                 .font(.system(size: 14))
                 .foregroundStyle(.secondary)
-            TextField("", text: $wordInput, prompt: Text("e.g. Prakash, Neuron Flame").foregroundColor(.secondary))
+            TextField("", text: $wordInput, prompt: Text("e.g. Ziva, Kubernetes, Yjs").foregroundColor(.secondary))
                 .textFieldStyle(.roundedBorder)
                 .font(.system(size: 14))
                 .focused($focusedField, equals: .word)

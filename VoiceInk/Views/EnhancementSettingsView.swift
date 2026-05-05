@@ -46,7 +46,7 @@ struct EnhancementSettingsView: View {
                         Text("Enable Enhancement")
                         InfoTip(
                             "AI enhancement runs your raw transcript through a large language model that polishes grammar, removes filler words, and reformats the text to match a specific style — emails, chat messages, summaries, code comments, etc. Configure your provider (OpenAI, Anthropic, Gemini, Ollama, or any OpenAI-compatible endpoint) under AI Models, then pick or write a prompt that defines the style. Each transcript is enhanced once, locally cached, and pasted at the cursor. If the model fails (rate limit, network), you'll see a warning and the raw transcript is pasted instead — never lost.",
-                            learnMoreURL: "https://tryvoiceink.com/docs/enhancements-configuring-models"
+                            learnMoreURL: "https://neuronflame.com/docs/ai-enhancement.html"
                         )
                     }
                 }

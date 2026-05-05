@@ -57,14 +57,17 @@ class NotchRecorderPanel: KeyablePanel {
                let right = screen.auxiliaryTopRightArea?.width {
                 return screen.frame.width - left - right
             }
-            return 180
+            return 200
         }()
 
-        let maxSideExpansion: CGFloat = 110
-        let sideMargin: CGFloat = 10
+        // Match NotchRecorderView's transcript-state side expansion (130pt) +
+        // generous margin so the recording halo (which blurs ~18pt outward
+        // from the pill) doesn't clip at the panel edge.
+        let maxSideExpansion: CGFloat = 130
+        let sideMargin: CGFloat = 30
         let totalWidth = notchWidth + (maxSideExpansion + sideMargin) * 2
 
-        let maxContentHeight: CGFloat = 200
+        let maxContentHeight: CGFloat = 220
         let xPosition = screen.frame.midX - (totalWidth / 2)
         let yPosition = screen.frame.maxY - maxContentHeight
 

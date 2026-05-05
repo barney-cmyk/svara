@@ -6,7 +6,11 @@ import os
 class RecorderUIManager: ObservableObject {
     @Published var miniRecorderError: String?
 
-    @Published var recorderType: String = UserDefaults.standard.string(forKey: "RecorderType") ?? "mini" {
+    // Default to "notch" — the top-of-screen Dynamic-Island-style recorder.
+    // First-run users land on a recorder that sits in the notch / menu-bar area
+    // rather than floating at the bottom of the screen, which integrates more
+    // naturally with the physical hardware notch on modern Macs.
+    @Published var recorderType: String = UserDefaults.standard.string(forKey: "RecorderType") ?? "notch" {
         didSet {
             if isMiniRecorderVisible {
                 if oldValue == "notch" {
