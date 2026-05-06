@@ -1,0 +1,21 @@
+# Serve DMG files with the correct MIME type so browsers offer "Save as…"
+# rather than trying to render them inline as text.
+AddType application/x-apple-diskimage .dmg
+
+# Cache rules — static assets can be cached aggressively, HTML should
+# revalidate so site updates surface immediately.
+<FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(css|png|jpg|jpeg|svg|webp|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+
+<FilesMatch "\.dmg$">
+    Header set Cache-Control "public, max-age=86400"
+    Header set Content-Disposition "attachment"
+</FilesMatch>
+
+# Pretty 404s
+ErrorDocument 404 /404.html
