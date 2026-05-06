@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="canonical" href="https://neuronflame.com/" />
+<meta name="google-site-verification" content="mLWSfc0qSPZB0kGX6txR1nKYLsQzfmt_AGbaVZE1gyA" />
 <title>Neuron Flame — Voice-to-text at the speed of thought</title>
 <meta name="description" content="A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release — your words appear at the cursor. 100% local. No telemetry. Built for people who think faster than they type." />
 <meta name="theme-color" content="#0a0712" />
@@ -15,12 +17,19 @@
 <meta property="og:url" content="https://neuronflame.com/" />
 <meta property="og:title" content="Neuron Flame — Voice-to-text at the speed of thought" />
 <meta property="og:description" content="Private, on-device voice-to-text for macOS. Hold a hotkey, speak, release — your words appear wherever your cursor is." />
-<meta property="og:image" content="https://neuronflame.com/assets/icon.png" />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Neuron Flame — Voice-to-text for macOS" />
 <meta name="twitter:description" content="Private, on-device voice dictation. Hold a hotkey, speak, release." />
-<meta name="twitter:image" content="https://neuronflame.com/assets/icon.png" />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS.","image":"https://neuronflame.com/assets/icon.png"}</script>
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
 </head>
 <body>
 
@@ -29,7 +38,7 @@
     <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#how">How it works</a>
+      <a href="#compare">Compare</a>
       <a href="/docs/">Docs</a>
       <a href="/support.html">Support</a>
       <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
@@ -154,8 +163,86 @@
       <h2>Your voice never leaves the Mac.</h2>
       <p>All transcription is local by default. Optional cloud LLMs run only if you supply an API key. Optional clipboard or window-context capture is processed locally and sent only to the model you chose. No telemetry. No analytics. No phone-home. Ever.</p>
       <div style="margin-top: 24px;">
-        <a class="btn btn-secondary" href="/docs/privacy.html">Read the privacy promise →</a>
+        <a class="btn btn-secondary" href="/privacy/on-device-dictation.html">Read the privacy promise →</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">Compare</div>
+      <h2 class="section-title">Switching from something else?</h2>
+      <p class="section-sub">Honest comparisons against the apps people consider before landing here.</p>
+    </div>
+    <div class="docs-hub-grid">
+      <a class="doc-card" href="/alternatives/wispr-flow.html">
+        <div class="doc-card-icon">🌬️</div>
+        <h3>vs Wispr Flow</h3>
+        <p>$15/month, cloud round-trip, polished. We're free and on-device.</p>
+      </a>
+      <a class="doc-card" href="/alternatives/superwhisper.html">
+        <div class="doc-card-icon">⚡</div>
+        <h3>vs SuperWhisper</h3>
+        <p>Same on-device approach. We're open-source and ship Parakeet V2.</p>
+      </a>
+      <a class="doc-card" href="/alternatives/macwhisper.html">
+        <div class="doc-card-icon">📼</div>
+        <h3>vs MacWhisper</h3>
+        <p>They're great at file transcription. We're built for live dictation.</p>
+      </a>
+      <a class="doc-card" href="/alternatives/voiceink.html">
+        <div class="doc-card-icon">🪶</div>
+        <h3>vs VoiceInk</h3>
+        <p>Neuron Flame is a fork with a Liquid-Glass redesign and Parakeet default.</p>
+      </a>
+      <a class="doc-card" href="/alternatives/apple-dictation.html">
+        <div class="doc-card-icon">🍎</div>
+        <h3>vs Apple Dictation</h3>
+        <p>What macOS Dictation should be — better hotkeys, dictionary, AI cleanup.</p>
+      </a>
+      <a class="doc-card" href="/parakeet-mac.html">
+        <div class="doc-card-icon">🦜</div>
+        <h3>Parakeet on Mac</h3>
+        <p>NVIDIA's English ASR model, ANE-optimised. The default in Neuron Flame.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="use-cases" style="background: var(--bg-elev); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">Built for</div>
+      <h2 class="section-title">Who Neuron Flame fits.</h2>
+    </div>
+    <div class="docs-hub-grid">
+      <a class="doc-card" href="/use-cases/developers.html">
+        <div class="doc-card-icon">⌨️</div>
+        <h3>Developers</h3>
+        <p>Code-mode dictionary, Power Mode for editors, dictate commits and reviews.</p>
+      </a>
+      <a class="doc-card" href="/use-cases/writers.html">
+        <div class="doc-card-icon">✍️</div>
+        <h3>Writers</h3>
+        <p>Drafts at thinking speed. Voice-preserving AI cleanup. Per-app personalities.</p>
+      </a>
+      <a class="doc-card" href="/use-cases/accessibility.html">
+        <div class="doc-card-icon">🤲</div>
+        <h3>Accessibility</h3>
+        <p>RSI-friendly, dyslexia-friendly, hands-free. On-device by default.</p>
+      </a>
+      <a class="doc-card" href="/whisper-mac-gui.html">
+        <div class="doc-card-icon">🐳</div>
+        <h3>Whisper on Mac</h3>
+        <p>Full Whisper family bundled with whisper.cpp + a UI. No build steps.</p>
+      </a>
+      <a class="doc-card" href="/privacy/on-device-dictation.html">
+        <div class="doc-card-icon">🔒</div>
+        <h3>Private dictation</h3>
+        <p>Zero telemetry. Local-by-default. Open source under GPL-3.</p>
+      </a>
     </div>
   </div>
 </section>
@@ -231,10 +318,20 @@
       <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
     </div>
     <div class="footer-col">
-      <h5>Product</h5>
-      <a href="#features">Features</a>
-      <a href="/downloads/Neuron%20Flame.dmg">Download</a>
-      <a href="https://github.com/barney-cmyk/svara">Source</a>
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
     </div>
     <div class="footer-col">
       <h5>Docs</h5>
@@ -246,6 +343,7 @@
     <div class="footer-col">
       <h5>About</h5>
       <a href="/support.html">Support</a>
+      <a href="/privacy/on-device-dictation.html">Privacy promise</a>
       <a href="https://github.com/barney-cmyk/svara">Source code</a>
       <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
     </div>

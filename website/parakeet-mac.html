@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Run NVIDIA Parakeet V2 on macOS — Neuron Flame</title>
+<meta name="description" content="Parakeet V2 is NVIDIA's English-only ASR model, optimised for the Apple Neural Engine via FluidAudio. Neuron Flame ships it as the default — fastest on-device English transcription on Apple Silicon." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/parakeet-mac.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/parakeet-mac.html" />
+<meta property="og:title" content="Run NVIDIA Parakeet V2 on macOS — Neuron Flame" />
+<meta property="og:description" content="Parakeet V2 is NVIDIA's English-only ASR model, optimised for the Apple Neural Engine via FluidAudio. Neuron Flame ships it as the default — fastest on-device English transcription on Apple Silicon." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Run NVIDIA Parakeet V2 on macOS — Neuron Flame" />
+<meta name="twitter:description" content="Parakeet V2 is NVIDIA's English-only ASR model, optimised for the Apple Neural Engine via FluidAudio. Neuron Flame ships it as the default — fastest on-device English transcription on Apple Silicon." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Parakeet on Mac","item":"https://neuronflame.com/parakeet-mac.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Parakeet V2 work on Intel Macs?","acceptedAnswer":{"@type":"Answer","text":"FluidAudio's Parakeet V2 implementation targets the Apple Neural Engine, which is Apple Silicon only. On Intel Macs, Neuron Flame falls back to Whisper variants. Functionally identical UX, just no ANE acceleration."}},{"@type":"Question","name":"Will my dictation be less accurate than Whisper?","acceptedAnswer":{"@type":"Answer","text":"For clear English speech, Parakeet V2 is within ~1% word-error-rate of Whisper Large v3 \u2014 essentially indistinguishable in practice. For very noisy audio, heavy accents, or technical jargon, Whisper Large is still the more accurate choice."}},{"@type":"Question","name":"Can I run Parakeet on my own without Neuron Flame?","acceptedAnswer":{"@type":"Answer","text":"Absolutely \u2014 FluidAudio is an open-source library you can integrate into your own Swift app. Neuron Flame just packages it with a UI, recorder, dictionary, and AI enhancement layer."}},{"@type":"Question","name":"Why is Parakeet English-only?","acceptedAnswer":{"@type":"Answer","text":"It was trained primarily on English speech and works best on what it knows. NVIDIA has multilingual variants (Parakeet RNN-T XL etc.) that the FluidAudio team may port in future."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <span aria-current="page">Parakeet on Mac</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>Parakeet V2 on Apple Silicon</span>
+  <h1 class="display compact">Parakeet V2,<br/>on <span class="gradient-text">your Apple Neural Engine.</span></h1>
+  <p class="lede">NVIDIA's Parakeet V2 model is one of the fastest English ASR models on the planet. The FluidAudio team ported it to the Apple Neural Engine. Neuron Flame ships it bundled, set as the default, ready to go in 60 seconds.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="container narrow long-body">
+  <h2>Why Parakeet beats Whisper for English on Mac</h2>
+  <table class="compare-table">
+    <thead><tr><th></th><th class="us">Parakeet V2 (default)</th><th>Whisper Large v3</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Languages</th><td class="us">English only</td><td>100+</td></tr>
+      <tr><th scope="row">Hardware</th><td class="us">Apple Neural Engine</td><td>GPU (Metal)</td></tr>
+      <tr><th scope="row">Speed (M2)</th><td class="us">~7× faster than realtime</td><td>~2× faster than realtime</td></tr>
+      <tr><th scope="row">Accuracy (English)</th><td class="us">Within 1% WER of Whisper Large</td><td>Best in class</td></tr>
+      <tr><th scope="row">Size on disk</th><td class="us">474 MB</td><td>1.6 GB</td></tr>
+    </tbody>
+  </table>
+  <h2>What ships in Neuron Flame</h2>
+  <ul>
+    <li><strong>FluidAudio's Parakeet V2 port</strong> — wired up to the recorder pipeline, Power Mode, custom dictionary, and AI enhancement.</li>
+    <li><strong>Auto-prewarm</strong> — model loaded on app launch so the first dictation is as fast as the hundredth.</li>
+    <li><strong>Default model on first run</strong> — no model picker dance for the 80% of users who only need English.</li>
+  </ul>
+  <h2>When to switch off Parakeet</h2>
+  <p>Parakeet V2 is English-only. If you dictate in any other language, switch to a Whisper variant on the AI Models tab — same UI, same workflow. You can keep both installed and toggle between them per-language need.</p>
+  <h2>What if you don't have Apple Silicon?</h2>
+  <p>Parakeet via FluidAudio runs on Apple Silicon Macs. On Intel Macs, Neuron Flame falls back to Whisper variants. The whole UX is identical; you just won't get Parakeet's speed advantage.</p>
+  <h2>The credit</h2>
+  <p>Parakeet was made by NVIDIA. The Apple Silicon port is by the FluidAudio team — open source on <a href="https://github.com/FluidInference/FluidAudio">GitHub</a>. Neuron Flame just provides the UX wrapper. Both projects deserve more attention than they currently get.</p>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">The fastest local English transcription on Mac.</h2>
+  <p class="section-sub">Free, ANE-optimised, default in Neuron Flame.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Does Parakeet V2 work on Intel Macs?</summary><p>FluidAudio's Parakeet V2 implementation targets the Apple Neural Engine, which is Apple Silicon only. On Intel Macs, Neuron Flame falls back to Whisper variants. Functionally identical UX, just no ANE acceleration.</p></details><details><summary>Will my dictation be less accurate than Whisper?</summary><p>For clear English speech, Parakeet V2 is within ~1% word-error-rate of Whisper Large v3 — essentially indistinguishable in practice. For very noisy audio, heavy accents, or technical jargon, Whisper Large is still the more accurate choice.</p></details><details><summary>Can I run Parakeet on my own without Neuron Flame?</summary><p>Absolutely — FluidAudio is an open-source library you can integrate into your own Swift app. Neuron Flame just packages it with a UI, recorder, dictionary, and AI enhancement layer.</p></details><details><summary>Why is Parakeet English-only?</summary><p>It was trained primarily on English speech and works best on what it knows. NVIDIA has multilingual variants (Parakeet RNN-T XL etc.) that the FluidAudio team may port in future.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>

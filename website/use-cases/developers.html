@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voice-to-text for developers on macOS — dictate code, commits, and reviews</title>
+<meta name="description" content="Neuron Flame for software engineers: hands-free coding with custom dictionaries for your project's identifiers, Power Mode profiles for Cursor/VS Code/Xcode, and AI enhancement that knows the difference between code and prose." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/use-cases/developers.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/use-cases/developers.html" />
+<meta property="og:title" content="Voice-to-text for developers on macOS — dictate code, commits, and reviews" />
+<meta property="og:description" content="Neuron Flame for software engineers: hands-free coding with custom dictionaries for your project's identifiers, Power Mode profiles for Cursor/VS Code/Xcode, and AI enhancement that knows the difference between code and prose." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Voice-to-text for developers on macOS — dictate code, commits, and reviews" />
+<meta name="twitter:description" content="Neuron Flame for software engineers: hands-free coding with custom dictionaries for your project's identifiers, Power Mode profiles for Cursor/VS Code/Xcode, and AI enhancement that knows the difference between code and prose." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Use cases","item":"https://neuronflame.com/use-cases/developers.html"},{"@type":"ListItem","position":3,"name":"Developers","item":"https://neuronflame.com/use-cases/developers.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it understand code?","acceptedAnswer":{"@type":"Answer","text":"It transcribes whatever you say verbatim if you turn AI Enhancement off. The custom dictionary catches identifiers Whisper would otherwise mangle. For the prose around code (commit messages, comments, docs), AI Enhancement with the right prompt produces excellent output."}},{"@type":"Question","name":"Will it work with Vim/Emacs?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 paste-at-cursor works in any text-receiving app, including terminal-based editors. Some Vim users bind a leader-key combination to drop into insert mode + trigger Neuron Flame for one-shot dictation."}},{"@type":"Question","name":"Can I use my Claude/Cursor subscription for AI enhancement?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 there's a Local CLI mode that runs `claude -p \"$NEURONFLAME_FULL_PROMPT\"` for cleanup. Same for `pi` (the Pi CLI), `codex`, or any custom command. You can also use Anthropic's API directly with your existing key."}},{"@type":"Question","name":"Does Power Mode swap fast enough between apps?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 profile detection runs on the frontmost-app change notification, well before you have time to press the hotkey. Cmd-Tab to a new app, hold the key, the right profile is already active."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <a href="/use-cases/developers.html">Use cases</a> <span class="sep">›</span> <span aria-current="page">Developers</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>For developers</span>
+  <h1 class="display compact">Dictate <span class="gradient-text">code, commits,</span><br/>and code reviews.</h1>
+  <p class="lede">Most dictation apps treat code like prose and butcher it. Neuron Flame's Power Mode lets you load a different dictionary and prompt per editor — verbatim mode in Cursor, comment-formatting in your code review tool, professional tone for the GitHub issue you're filing about it.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="container narrow long-body">
+  <h2>The developer's dictation problem</h2>
+  <p>Standard dictation apps assume you're writing emails. They auto-capitalise. They add full stops. They "correct" "Yjs" to "yes". They turn "console.log" into "console dot log" or just give up. The mismatch makes most engineers stop trying after a week.</p>
+  <h2>What Neuron Flame does differently</h2>
+  <p><strong>Custom dictionary built for code.</strong> Add your project's identifiers — class names, libraries, internal jargon — once, and they transcribe correctly forever. <code>Kubernetes</code>, <code>SwiftData</code>, <code>tRPC</code>, your codebase's specific function names. The dictionary runs <em>before</em> any AI enhancement, so the model sees your spellings.</p>
+  <p><strong>Power Mode for editors.</strong> Set up a profile that triggers on Cursor, VS Code, Xcode, JetBrains, Zed — whatever you use. The profile turns AI enhancement OFF (verbatim mode), loads your code dictionary, and tells the model: "this is code, don't add punctuation".</p>
+  <p><strong>Different mode for everything else.</strong> When you switch from Cursor to Slack, Power Mode swaps to your chat profile — casual, light grammar fixes, no formality. Switch to Mail, your email profile kicks in. Switch to a GitHub issue, your professional profile. Set it up once.</p>
+  <h2>Workflow examples</h2>
+  <h3>Writing commit messages</h3>
+  <p>Power Mode profile triggered by your terminal. AI Enhancement on, prompt: "Format as a Conventional Commits message. Subject line under 50 chars, imperative mood. Body explains why, not what." Hold hotkey, ramble about what you just did, release. Polished commit message at the cursor.</p>
+  <h3>Code review comments</h3>
+  <p>Power Mode triggered by GitHub or your code review tool. AI Enhancement prompt: "Diplomatic engineering tone. Suggest, don't dictate. Preserve any code references verbatim — anything in backticks stays untouched." Speaking critique is faster than typing it diplomatically.</p>
+  <h3>Doc strings</h3>
+  <p>In your editor, Power Mode = verbatim. Add code-mode dictionary entries for the doc style you use (Google-style? RST?). Speak naturally — "this function takes a request object and returns a promise" — and let the prompt template wrap it in your project's docstring format.</p>
+  <h3>Pair-programming narration</h3>
+  <p>If you screen-share or pair-program, dictating commentary as you code can be faster than typing it. Live transcript preview lets your collaborator follow along.</p>
+  <h2>The setup that works</h2>
+  <ol>
+    <li><a href="/downloads/Neuron%20Flame.dmg">Install Neuron Flame</a>, grant permissions.</li>
+    <li>Pick a hotkey that doesn't conflict with your editor's modal commands. Right Option works well.</li>
+    <li>Open the Dictionary tab; add your top 30 project-specific identifiers.</li>
+    <li>Open Power Mode; create profiles for: editor (verbatim), terminal (commit-style), Slack (chat), Mail (email).</li>
+    <li>Connect an LLM under AI Models — many devs already pay for Claude or GPT, plug it in.</li>
+  </ol>
+  <p>Total setup is under 10 minutes. From there, your hands stay on the keyboard, your voice handles the prose, and the dictation gets out of the way.</p>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">Code with your hands. Comment with your voice.</h2>
+  <p class="section-sub">Free, on-device, designed for engineers.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Does it understand code?</summary><p>It transcribes whatever you say verbatim if you turn AI Enhancement off. The custom dictionary catches identifiers Whisper would otherwise mangle. For the prose around code (commit messages, comments, docs), AI Enhancement with the right prompt produces excellent output.</p></details><details><summary>Will it work with Vim/Emacs?</summary><p>Yes — paste-at-cursor works in any text-receiving app, including terminal-based editors. Some Vim users bind a leader-key combination to drop into insert mode + trigger Neuron Flame for one-shot dictation.</p></details><details><summary>Can I use my Claude/Cursor subscription for AI enhancement?</summary><p>Yes — there's a Local CLI mode that runs `claude -p "$NEURONFLAME_FULL_PROMPT"` for cleanup. Same for `pi` (the Pi CLI), `codex`, or any custom command. You can also use Anthropic's API directly with your existing key.</p></details><details><summary>Does Power Mode swap fast enough between apps?</summary><p>Yes — profile detection runs on the frontmost-app change notification, well before you have time to press the hotkey. Cmd-Tab to a new app, hold the key, the right profile is already active.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>

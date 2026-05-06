@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neuron Flame vs MacWhisper — free dictation with the same local pipeline</title>
+<meta name="description" content="MacWhisper is a paid Mac Whisper transcriber. Neuron Flame is free, also runs Whisper locally, and adds push-to-talk dictation, Parakeet V2, AI enhancement, and a Dynamic-Island recorder. Here's how they compare." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/alternatives/macwhisper.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/alternatives/macwhisper.html" />
+<meta property="og:title" content="Neuron Flame vs MacWhisper — free dictation with the same local pipeline" />
+<meta property="og:description" content="MacWhisper is a paid Mac Whisper transcriber. Neuron Flame is free, also runs Whisper locally, and adds push-to-talk dictation, Parakeet V2, AI enhancement, and a Dynamic-Island recorder. Here's how they compare." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Neuron Flame vs MacWhisper — free dictation with the same local pipeline" />
+<meta name="twitter:description" content="MacWhisper is a paid Mac Whisper transcriber. Neuron Flame is free, also runs Whisper locally, and adds push-to-talk dictation, Parakeet V2, AI enhancement, and a Dynamic-Island recorder. Here's how they compare." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Alternatives","item":"https://neuronflame.com/alternatives/wispr-flow.html"},{"@type":"ListItem","position":3,"name":"MacWhisper","item":"https://neuronflame.com/alternatives/macwhisper.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should I use Neuron Flame or MacWhisper?","acceptedAnswer":{"@type":"Answer","text":"Both, probably. MacWhisper for transcribing existing audio files (interviews, podcasts, lectures). Neuron Flame for dictating into apps as you work. They overlap a little \u2014 Neuron Flame can transcribe audio files too \u2014 but the primary jobs are different."}},{"@type":"Question","name":"Can Neuron Flame transcribe a folder of MP3s?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 drop them onto the Transcribe Audio tab and they queue up. Output goes into the History database where you can search and export. For heavy batch work with diarisation and editing, MacWhisper is the more specialised tool."}},{"@type":"Question","name":"Can I share Whisper models between the apps?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 Whisper .bin files are interchangeable. Neuron Flame's models folder is ~/Library/Application Support/com.neuronflame.app/Models/."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <a href="/alternatives/wispr-flow.html">Alternatives</a> <span class="sep">›</span> <span aria-current="page">MacWhisper</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>MacWhisper alternative</span>
+  <h1 class="display compact">MacWhisper for transcription.<br/>Neuron Flame for <span class="gradient-text">dictation.</span></h1>
+  <p class="lede">They're often listed side-by-side, but they solve different problems. MacWhisper is brilliant at transcribing audio files. Neuron Flame is built for live push-to-talk dictation while you work — different use case, different UI, same underlying Whisper power.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="compare-table-section">
+  <div class="narrow">
+    <h2>Side by side</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="us">Neuron Flame</th>
+          <th>Alternative</th>
+        </tr>
+      </thead>
+      <tbody><tr><th scope="row">Primary use case</th><td class="us">Live dictation while typing</td><td>Transcribing audio files</td></tr><tr><th scope="row">Push-to-talk hotkey</th><td class="us">Yes — global, paste at cursor</td><td>No (record-then-transcribe)</td></tr><tr><th scope="row">Audio file transcription</th><td class="us">Yes</td><td>Yes (the headline feature)</td></tr><tr><th scope="row">Price</th><td class="us">Free, GPL-3</td><td>Paid (Pro tier)</td></tr><tr><th scope="row">On-device</th><td class="us">Yes</td><td>Yes</td></tr><tr><th scope="row">Parakeet V2</th><td class="us">Yes</td><td>No</td></tr><tr><th scope="row">AI enhancement</th><td class="us">Multi-provider, prompt templates</td><td>Limited</td></tr><tr><th scope="row">Per-app behaviour</th><td class="us">Power Mode profiles</td><td>N/A — different use case</td></tr><tr><th scope="row">Live transcript preview</th><td class="us">Yes</td><td>N/A</td></tr></tbody>
+    </table>
+  </div>
+</section>
+<section class="container narrow long-body">
+  <h2>The honest take</h2>
+  <p>MacWhisper is excellent at what it does. If your job is transcribing podcasts, interviews, lectures, or meeting recordings — buy MacWhisper. The batch transcription UX is mature and the developer ships consistently.</p>
+  <p>Neuron Flame is built for a different moment: you're typing in Mail, Slack, Cursor, or your terminal, you'd rather speak the next sentence than type it, you want it to appear at your cursor in milliseconds. Push-to-talk on a global hotkey, paste at the cursor, get back to work. That's the entire shape of the app.</p>
+  <h2>If you want one tool that does both</h2>
+  <p>Neuron Flame can transcribe audio files too — there's a Transcribe Audio tab that handles WAV, MP3, M4A, and most common formats. It's not as feature-rich as MacWhisper for batch work (no speaker diarisation, no fancy editing UI), but for casual "I have one MP3, I just want the text" use cases, it does the job.</p>
+  <h2>Switching costs</h2>
+  <ul>
+    <li>If you have a paid MacWhisper licence, you don't lose anything — keep it for batch transcription, add Neuron Flame for live dictation.</li>
+    <li>Whisper models you've already downloaded for MacWhisper can be moved into Neuron Flame's models folder.</li>
+    <li>Settings don't transfer (different apps), but Neuron Flame's onboarding takes about 60 seconds.</li>
+  </ul>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">Free dictation, on-device.</h2>
+  <p class="section-sub">Use Neuron Flame and MacWhisper together — they cover different jobs.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Should I use Neuron Flame or MacWhisper?</summary><p>Both, probably. MacWhisper for transcribing existing audio files (interviews, podcasts, lectures). Neuron Flame for dictating into apps as you work. They overlap a little — Neuron Flame can transcribe audio files too — but the primary jobs are different.</p></details><details><summary>Can Neuron Flame transcribe a folder of MP3s?</summary><p>Yes — drop them onto the Transcribe Audio tab and they queue up. Output goes into the History database where you can search and export. For heavy batch work with diarisation and editing, MacWhisper is the more specialised tool.</p></details><details><summary>Can I share Whisper models between the apps?</summary><p>Yes — Whisper .bin files are interchangeable. Neuron Flame's models folder is ~/Library/Application Support/com.neuronflame.app/Models/.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>

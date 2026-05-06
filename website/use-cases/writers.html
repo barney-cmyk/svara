@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voice-to-text for writers on macOS — drafts, edits, and email at speaking pace</title>
+<meta name="description" content="Neuron Flame for writers, journalists, novelists, copywriters: dictate first drafts at thinking speed, polish with the LLM of your choice, and keep your voice intact. Free and on-device for macOS." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/use-cases/writers.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/use-cases/writers.html" />
+<meta property="og:title" content="Voice-to-text for writers on macOS — drafts, edits, and email at speaking pace" />
+<meta property="og:description" content="Neuron Flame for writers, journalists, novelists, copywriters: dictate first drafts at thinking speed, polish with the LLM of your choice, and keep your voice intact. Free and on-device for macOS." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Voice-to-text for writers on macOS — drafts, edits, and email at speaking pace" />
+<meta name="twitter:description" content="Neuron Flame for writers, journalists, novelists, copywriters: dictate first drafts at thinking speed, polish with the LLM of your choice, and keep your voice intact. Free and on-device for macOS." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Use cases","item":"https://neuronflame.com/use-cases/developers.html"},{"@type":"ListItem","position":3,"name":"Writers","item":"https://neuronflame.com/use-cases/writers.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will the AI rewrite my voice?","acceptedAnswer":{"@type":"Answer","text":"Only if you ask it to. The default prompt is conservative \u2014 it cleans filler words and obvious grammar issues but preserves your phrasing. You can edit the prompt to whatever you like, or turn AI enhancement off entirely and get verbatim transcripts."}},{"@type":"Question","name":"Does Neuron Flame handle accents and ESL speakers?","acceptedAnswer":{"@type":"Answer","text":"Whisper Large v3 is the most accent-tolerant model available; Parakeet V2 is English-only and tuned for native and near-native speech. For non-native English speakers we generally recommend Whisper Medium or Large; the trade-off is a bit more processing time per sentence."}},{"@type":"Question","name":"What about non-English languages?","acceptedAnswer":{"@type":"Answer","text":"Whisper supports 100+ languages. Switch the model on the AI Models tab. Parakeet V2 is English-only; everything else uses Whisper variants."}},{"@type":"Question","name":"Is dictation private if I'm working on something confidential?","acceptedAnswer":{"@type":"Answer","text":"By default, transcription happens entirely on your Mac \u2014 nothing leaves the device. If you turn on AI Enhancement with a cloud LLM, the transcript is sent to that provider over HTTPS. For confidential work, use Ollama as your AI provider \u2014 it runs locally too."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <a href="/use-cases/developers.html">Use cases</a> <span class="sep">›</span> <span aria-current="page">Writers</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>For writers</span>
+  <h1 class="display compact">Drafts at <span class="gradient-text">thinking pace.</span></h1>
+  <p class="lede">Typing is the bottleneck between thought and page. Neuron Flame closes the gap — dictate at 150+ words a minute, polish with whichever LLM matches your voice, and keep editorial control. Free, on-device, no cloud round-trip.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="container narrow long-body">
+  <h2>Why writers reach for dictation</h2>
+  <p>Three numbers from cognitive science: humans think at roughly 250 WPM (Brysbaert/Rayner 2019), speak at 150 WPM in conversation, and type at 40 WPM on average. Typing is so much slower than thinking that you're constantly waiting for your hands to catch up — which causes you to forget the back half of the sentence you'd already worked out, which makes drafts feel laboured.</p>
+  <p>Dictation closes most of that gap. You're not as fast as pure thought, but you're a lot closer than you were typing. The catch is that most dictation apps render verbatim and you have to manually clean up filler words, false starts, and run-on sentences afterwards. Neuron Flame's AI Enhancement layer handles that cleanup automatically — with a prompt you control.</p>
+  <h2>Three workflows that actually work</h2>
+  <h3>1. The "blast draft, polish later" pattern</h3>
+  <p>Hold the hotkey. Talk through the whole section in one go — false starts, repetitions, "actually no, scratch that, what I meant was…" included. Release. Neuron Flame's default prompt cleans the filler words, removes false starts, fixes obvious grammar. You get a clean first draft in 10% of the time it would have taken to type.</p>
+  <h3>2. The "ESL writer's edge"</h3>
+  <p>If you think and speak in English fluently but write English with effort, dictation helps enormously. Set the prompt to "preserve voice and meaning, fix grammar to native-speaker quality, don't change vocabulary unless something is genuinely wrong". The result reads like you, polished.</p>
+  <h3>3. The "interview to article" loop</h3>
+  <p>Drop the recording into the Transcribe Audio tab → get the raw transcript → use the History tab to reach the text → dictate your commentary directly between paragraphs while the source is fresh in your head.</p>
+  <h2>Per-app personalities</h2>
+  <p>Power Mode lets you load different prompts in different apps. Some examples:</p>
+  <ul>
+    <li><strong>Email mode</strong> — formal greeting, professional tone, sign-off. Triggered by Mail.app, Outlook, Spark.</li>
+    <li><strong>Notes mode</strong> — bullet-formatted thinking, preserve voice. Triggered by Notes, Obsidian, Bear.</li>
+    <li><strong>Article mode</strong> — fully-formed prose, vary sentence length, eliminate filler. Triggered by Ulysses, Scrivener, Google Docs in Safari.</li>
+    <li><strong>DM mode</strong> — short, casual, one-line. Triggered by Slack, Messages.</li>
+  </ul>
+  <h2>What you keep</h2>
+  <p>Your raw transcript is always saved alongside the AI-cleaned version. If you don't like what the model did, you have the original. If the model fails (rate limit, key invalid, network), Neuron Flame falls back to the raw transcript automatically. You never lose what you said.</p>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">Write the way you think.</h2>
+  <p class="section-sub">Free, on-device, with editorial control over every prompt.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Will the AI rewrite my voice?</summary><p>Only if you ask it to. The default prompt is conservative — it cleans filler words and obvious grammar issues but preserves your phrasing. You can edit the prompt to whatever you like, or turn AI enhancement off entirely and get verbatim transcripts.</p></details><details><summary>Does Neuron Flame handle accents and ESL speakers?</summary><p>Whisper Large v3 is the most accent-tolerant model available; Parakeet V2 is English-only and tuned for native and near-native speech. For non-native English speakers we generally recommend Whisper Medium or Large; the trade-off is a bit more processing time per sentence.</p></details><details><summary>What about non-English languages?</summary><p>Whisper supports 100+ languages. Switch the model on the AI Models tab. Parakeet V2 is English-only; everything else uses Whisper variants.</p></details><details><summary>Is dictation private if I'm working on something confidential?</summary><p>By default, transcription happens entirely on your Mac — nothing leaves the device. If you turn on AI Enhancement with a cloud LLM, the transcript is sent to that provider over HTTPS. For confidential work, use Ollama as your AI provider — it runs locally too.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neuron Flame — the long-term fork of VoiceInk for macOS</title>
+<meta name="description" content="Neuron Flame is a fork of the open-source VoiceInk project, with extensive UI, performance, and feature work on top. Here's what's different and why you might want to switch." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/alternatives/voiceink.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/alternatives/voiceink.html" />
+<meta property="og:title" content="Neuron Flame — the long-term fork of VoiceInk for macOS" />
+<meta property="og:description" content="Neuron Flame is a fork of the open-source VoiceInk project, with extensive UI, performance, and feature work on top. Here's what's different and why you might want to switch." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Neuron Flame — the long-term fork of VoiceInk for macOS" />
+<meta name="twitter:description" content="Neuron Flame is a fork of the open-source VoiceInk project, with extensive UI, performance, and feature work on top. Here's what's different and why you might want to switch." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Alternatives","item":"https://neuronflame.com/alternatives/wispr-flow.html"},{"@type":"ListItem","position":3,"name":"VoiceInk","item":"https://neuronflame.com/alternatives/voiceink.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will my VoiceInk transcripts survive the migration?","acceptedAnswer":{"@type":"Answer","text":"Yes. Neuron Flame's migration chain detects the legacy folder at ~/Library/Application Support/com.prakashjoshipax.VoiceInk/ and forward-migrates the SwiftData store + custom dictionary + prompts to the new com.neuronflame.app/ location."}},{"@type":"Question","name":"Why a different name?","acceptedAnswer":{"@type":"Answer","text":"Forks on GitHub get a different name partly because we want to own the design direction without claiming to be the original. Neuron Flame is named after the developer's daughter (her Sanskrit name, \u0938\u094d\u0935\u0930 \u2014 svara \u2014 means 'tone' or 'note')."}},{"@type":"Question","name":"Can I contribute back?","acceptedAnswer":{"@type":"Answer","text":"PRs welcome on the fork (github.com/barney-cmyk/svara). For substantial features, please open an issue first to align on direction. Contributions to the upstream VoiceInk project are also welcome there."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <a href="/alternatives/wispr-flow.html">Alternatives</a> <span class="sep">›</span> <span aria-current="page">VoiceInk</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>VoiceInk fork</span>
+  <h1 class="display compact">VoiceInk's codebase.<br/><span class="gradient-text">A different design direction.</span></h1>
+  <p class="lede">Neuron Flame began as a fork of VoiceInk and has diverged substantially: a full design-system rebuild, the Liquid-Glass Dynamic-Island recorder, an extended migration chain so existing VoiceInk users keep their data, and a long list of UI polish, accessibility, and performance changes. Same GPL-3 licence, same open spirit.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="compare-table-section">
+  <div class="narrow">
+    <h2>What's different from upstream VoiceInk</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="us">Neuron Flame</th>
+          <th>Alternative</th>
+        </tr>
+      </thead>
+      <tbody><tr><th scope="row">Recorder UI</th><td class="us">Dynamic-Island top-of-screen pill with breathing halo</td><td>Bottom-of-screen mini pill</td></tr><tr><th scope="row">Liquid Glass (macOS 26)</th><td class="us">Yes — across dashboard, recorder, sidebar</td><td>No</td></tr><tr><th scope="row">Default model</th><td class="us">Parakeet V2 (English, fastest on ANE)</td><td>Whisper variants</td></tr><tr><th scope="row">Sidebar layout</th><td class="us">Status pills + utility actions inline</td><td>Standard list</td></tr><tr><th scope="row">Theme</th><td class="us">Stitch-inspired light + dark, custom palette</td><td>Default</td></tr><tr><th scope="row">Migration from VoiceInk</th><td class="us">Auto-migrates ~/Library/Application Support data</td><td>N/A (you'd be moving to it)</td></tr><tr><th scope="row">Dashboard</th><td class="us">Speed-of-thought thesis cards, personal records</td><td>Standard metrics</td></tr></tbody>
+    </table>
+  </div>
+</section>
+<section class="container narrow long-body">
+  <h2>Why fork at all?</h2>
+  <p>VoiceInk is a great open-source project and we've tried to be respectful with the fork — the original GPL-3 copyright is preserved in <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">LICENSE</a>. The reasons for forking come down to design direction:</p>
+  <ul>
+    <li><strong>Native macOS 26 design language.</strong> Liquid Glass throughout, real Glass surfaces (not just blurs), the Dynamic-Island recorder concept. We wanted the app to feel like macOS, not like a cross-platform Electron port.</li>
+    <li><strong>A specific dashboard thesis.</strong> Neuron Flame frames dictation around "speaking is closer to thinking than typing" — there's a flow visualization, your pace tracked against the world record, etc. Different storytelling than VoiceInk.</li>
+    <li><strong>Default to Parakeet.</strong> NVIDIA's English-only Parakeet V2 model on the Apple Neural Engine is significantly faster than Whisper on Apple Silicon. We made it the default for the English-speaking 80%.</li>
+    <li><strong>Free + signed.</strong> Same GPL-3, same source-available, same zero-cost — but signed with a stable developer cert so accessibility permissions stick across rebuilds and Sparkle updates.</li>
+  </ul>
+  <h2>If you're a VoiceInk user, switching is automatic</h2>
+  <p>Neuron Flame includes a migration chain that detects an existing VoiceInk install (or any of the intermediate folder names from this app's history) and brings your transcriptions, custom dictionary, and prompts forward to the new location. Install Neuron Flame, run it once — your data is there.</p>
+  <p>If you'd rather keep VoiceInk, no harm done. Both apps can coexist on the same Mac (just keep one as your hotkey-bound default).</p>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">Same DNA. Different design.</h2>
+  <p class="section-sub">Open source, GPL-3, free. The fork is on GitHub if you want to inspect every change.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Will my VoiceInk transcripts survive the migration?</summary><p>Yes. Neuron Flame's migration chain detects the legacy folder at ~/Library/Application Support/com.prakashjoshipax.VoiceInk/ and forward-migrates the SwiftData store + custom dictionary + prompts to the new com.neuronflame.app/ location.</p></details><details><summary>Why a different name?</summary><p>Forks on GitHub get a different name partly because we want to own the design direction without claiming to be the original. Neuron Flame is named after the developer's daughter (her Sanskrit name, स्वर — svara — means 'tone' or 'note').</p></details><details><summary>Can I contribute back?</summary><p>PRs welcome on the fork (github.com/barney-cmyk/svara). For substantial features, please open an issue first to align on direction. Contributions to the upstream VoiceInk project are also welcome there.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>

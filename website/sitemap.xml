@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Core pages -->
   <url><loc>https://neuronflame.com/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://neuronflame.com/support.html</loc><priority>0.6</priority></url>
+
+  <!-- Comparison / alternative pages — high commercial intent -->
+  <url><loc>https://neuronflame.com/alternatives/wispr-flow.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/alternatives/superwhisper.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/alternatives/macwhisper.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/alternatives/voiceink.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/alternatives/apple-dictation.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Use case pages -->
+  <url><loc>https://neuronflame.com/use-cases/developers.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/use-cases/writers.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/use-cases/accessibility.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Ecosystem landing pages -->
+  <url><loc>https://neuronflame.com/whisper-mac-gui.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/parakeet-mac.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://neuronflame.com/privacy/on-device-dictation.html</loc><priority>0.85</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Docs hub + per-feature pages -->
   <url><loc>https://neuronflame.com/docs/</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://neuronflame.com/docs/quick-start.html</loc><priority>0.9</priority></url>
   <url><loc>https://neuronflame.com/docs/permissions.html</loc><priority>0.8</priority></url>
@@ -10,5 +32,5 @@
   <url><loc>https://neuronflame.com/docs/custom-models.html</loc><priority>0.7</priority></url>
   <url><loc>https://neuronflame.com/docs/privacy.html</loc><priority>0.8</priority></url>
   <url><loc>https://neuronflame.com/docs/troubleshooting.html</loc><priority>0.7</priority></url>
-  <url><loc>https://neuronflame.com/support.html</loc><priority>0.6</priority></url>
+
 </urlset>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Neuron Flame</title>
+    <link>https://neuronflame.com/</link>
+    <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
+    <language>en-au</language>
+    <copyright>© 2026 Ziva Studio. GPL-3.0 licensed.</copyright>
+    <atom:link href="https://neuronflame.com/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://neuronflame.com/assets/icon.png</url>
+      <title>Neuron Flame</title>
+      <link>https://neuronflame.com/</link>
+    </image>
+
+    <item>
+      <title>Neuron Flame v1.74 — Dynamic Island recorder, brand cleanup, direct DMG download</title>
+      <link>https://neuronflame.com/</link>
+      <guid isPermaLink="false">neuronflame-v1.74</guid>
+      <pubDate>Wed, 06 May 2026 02:50:00 +0000</pubDate>
+      <description><![CDATA[
+        <p>The recorder pill now lives at the top of the screen, hugging the physical notch on Apple Silicon laptops. Brand-tinted breathing halo while recording. The whole site shipped with comparison + use-case landing pages and a direct DMG download.</p>
+        <p>Read more on <a href="https://github.com/barney-cmyk/svara">GitHub</a> or <a href="https://neuronflame.com/downloads/Neuron%20Flame.dmg">download the DMG</a>.</p>
+      ]]></description>
+    </item>
+
+  </channel>
+</rss>

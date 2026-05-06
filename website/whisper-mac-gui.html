@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The easiest way to run Whisper on a Mac — Neuron Flame</title>
+<meta name="description" content="Looking for a Whisper GUI for macOS? Neuron Flame ships whisper.cpp built-in, supports the full Whisper family (Tiny → Large v3 Turbo), and adds push-to-talk dictation, AI enhancement, and per-app behaviour. Free and open source." />
+<meta name="theme-color" content="#0a0712" />
+<link rel="canonical" href="https://neuronflame.com/whisper-mac-gui.html" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/icon-256.png" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="Neuron Flame blog" href="/feed.xml" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://neuronflame.com/whisper-mac-gui.html" />
+<meta property="og:title" content="The easiest way to run Whisper on a Mac — Neuron Flame" />
+<meta property="og:description" content="Looking for a Whisper GUI for macOS? Neuron Flame ships whisper.cpp built-in, supports the full Whisper family (Tiny → Large v3 Turbo), and adds push-to-talk dictation, AI enhancement, and per-app behaviour. Free and open source." />
+<meta property="og:image" content="https://neuronflame.com/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Neuron Flame" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The easiest way to run Whisper on a Mac — Neuron Flame" />
+<meta name="twitter:description" content="Looking for a Whisper GUI for macOS? Neuron Flame ships whisper.cpp built-in, supports the full Whisper family (Tiny → Large v3 Turbo), and adds push-to-talk dictation, AI enhancement, and per-app behaviour. Free and open source." />
+<meta name="twitter:image" content="https://neuronflame.com/assets/og.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://neuronflame.com/#organization","name":"Ziva Studio","url":"https://neuronflame.com","logo":"https://neuronflame.com/assets/icon.png","founder":{"@type":"Person","name":"Barney Sharma"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://neuronflame.com/#website","name":"Neuron Flame","url":"https://neuronflame.com","description":"Free, on-device voice-to-text dictation for macOS.","publisher":{"@id":"https://neuronflame.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://neuronflame.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://neuronflame.com/#app","name":"Neuron Flame","operatingSystem":"macOS 14.0 or later","applicationCategory":"ProductivityApplication","applicationSubCategory":"Voice-to-text dictation","url":"https://neuronflame.com","downloadUrl":"https://neuronflame.com/downloads/Neuron%20Flame.dmg","softwareVersion":"1.74","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://neuronflame.com/#organization"},"description":"A private, on-device voice-to-text dictation app for macOS. Hold a hotkey, speak, release \u2014 your words appear at the cursor in any app. Local Whisper + NVIDIA Parakeet, optional AI enhancement, per-app Power Mode, custom dictionary, Liquid Glass UI. Free and open source under GPL-3.","featureList":["On-device transcription (Whisper + Parakeet V2)","Push-to-talk global hotkey","Cursor-aware paste in any app","Optional AI enhancement (Gemini, OpenAI, Anthropic, Ollama, local CLI)","Per-app Power Mode","Custom dictionary","Live transcript preview","Dynamic Island top-of-screen recorder","Liquid Glass UI for macOS 26 Tahoe"],"image":"https://neuronflame.com/assets/icon.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://neuronflame.com/"},{"@type":"ListItem","position":2,"name":"Whisper on Mac","item":"https://neuronflame.com/whisper-mac-gui.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which Whisper model should I use?","acceptedAnswer":{"@type":"Answer","text":"If you only speak English on Apple Silicon: Parakeet V2 (default). If you need other languages: Whisper Small for speed, Whisper Medium for accuracy, Whisper Large v3 Turbo for the best of both. Avoid Whisper Tiny / Base unless you're testing \u2014 accuracy is noticeably worse."}},{"@type":"Question","name":"Can I bring my own .bin Whisper model file?","acceptedAnswer":{"@type":"Answer","text":"Yes \u2014 drop it into ~/Library/Application Support/com.neuronflame.app/Models/ and Neuron Flame will pick it up on next launch. Same format as plain whisper.cpp expects."}},{"@type":"Question","name":"Is this faster than running whisper.cpp directly?","acceptedAnswer":{"@type":"Answer","text":"Roughly the same \u2014 Neuron Flame uses whisper.cpp as the underlying library. The win is workflow: live audio capture, paste-at-cursor, history, search, custom dictionary, batch processing \u2014 all the stuff you'd otherwise wire up by hand."}},{"@type":"Question","name":"Does it use GPU acceleration?","acceptedAnswer":{"@type":"Answer","text":"Whisper uses Metal on Apple Silicon (and CoreML for the encoder if available). Parakeet V2 runs on the Apple Neural Engine via FluidAudio. Both are noticeably faster than CPU-only paths."}}]}</script>
+</head>
+<body><nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/docs/">Docs</a>
+      <a href="/alternatives/wispr-flow.html">Compare</a>
+      <a href="/support.html">Support</a>
+      <a href="/downloads/Neuron%20Flame.dmg" class="nav-cta">Download</a>
+    </div>
+  </div>
+</nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container"><a href="/">Home</a> <span class="sep">›</span> <span aria-current="page">Whisper on Mac</span></div></nav><header class="hero compare-hero">
+  <span class="eyebrow"><span class="dot"></span>Whisper on macOS</span>
+  <h1 class="display compact">Whisper, with <span class="gradient-text">all the wiring done.</span></h1>
+  <p class="lede">If you've been hand-rolling Whisper.cpp scripts, building Python pipelines, or wrangling SwiftWhisper bindings — stop. Neuron Flame ships whisper.cpp embedded with a full UI, model picker, and a workflow built around the actual job: dictating into apps and transcribing files.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download for Mac</a>
+    <a class="btn btn-secondary" href="/docs/">Read the docs</a>
+  </div>
+  <p class="tiny-note">Free · Open source · GPL-3.0 · 100% on-device by default</p>
+</header>
+<section class="container narrow long-body">
+  <h2>What's bundled</h2>
+  <ul>
+    <li><strong>whisper.cpp</strong> — Georgi Gerganov's port of OpenAI Whisper, compiled for Apple Silicon with Metal acceleration. Same engine used by most other Mac Whisper apps.</li>
+    <li><strong>Full Whisper family</strong> — Tiny (78 MB) through Large v3 Turbo (815 MB) and Large v3 (1.6 GB). Download what you need, delete what you don't.</li>
+    <li><strong>Parakeet V2</strong> via FluidAudio — NVIDIA's English-only model on the Apple Neural Engine. Faster than Whisper Medium with comparable accuracy. (Optional; pick this OR a Whisper variant.)</li>
+    <li><strong>OpenAI-compatible cloud endpoint support</strong> — point Neuron Flame at Groq's hosted Whisper Large v3 Turbo for blazing-fast cloud transcription if you want it.</li>
+  </ul>
+  <h2>Use cases beyond dictation</h2>
+  <p>Most people install Neuron Flame for live push-to-talk dictation. But the Transcribe Audio tab handles batch file work too:</p>
+  <ul>
+    <li>Drop in a folder of WAV/MP3/M4A files; they queue up and process sequentially.</li>
+    <li>History tab lets you search across every transcript you've ever made.</li>
+    <li>Export to plain text, Markdown, or CSV.</li>
+  </ul>
+  <h2>What this saves you</h2>
+  <p>If you've ever tried to "just run Whisper on my Mac", you know the friction:</p>
+  <ul>
+    <li>Building whisper.cpp from source against the right Xcode version</li>
+    <li>Finding the right model file at the right precision</li>
+    <li>Dealing with shell scripts that pipe ffmpeg into whisper-cli</li>
+    <li>Wrapping the output for the actual workflow you wanted</li>
+  </ul>
+  <p>Neuron Flame ships whisper.cpp as a bundled framework, downloads models from the AI Models tab, and gives you a UI shaped around real dictation + transcription tasks. Total setup is under 60 seconds.</p>
+  <h2>Open source under the hood</h2>
+  <p>If you want to inspect what's happening — confirm models live in your Application Support folder, see exactly what arguments are passed to whisper.cpp, audit network calls — the source is on <a href="https://github.com/barney-cmyk/svara">GitHub</a>. GPL-3.</p>
+</section>
+<section class="closing-cta">
+  <h2 class="section-title">Skip the build steps.</h2>
+  <p class="section-sub">whisper.cpp + Parakeet + a UI, packaged as one DMG.</p>
+  <a class="btn btn-primary" href="/downloads/Neuron%20Flame.dmg">Download Neuron Flame</a>
+</section>
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq"><details><summary>Which Whisper model should I use?</summary><p>If you only speak English on Apple Silicon: Parakeet V2 (default). If you need other languages: Whisper Small for speed, Whisper Medium for accuracy, Whisper Large v3 Turbo for the best of both. Avoid Whisper Tiny / Base unless you're testing — accuracy is noticeably worse.</p></details><details><summary>Can I bring my own .bin Whisper model file?</summary><p>Yes — drop it into ~/Library/Application Support/com.neuronflame.app/Models/ and Neuron Flame will pick it up on next launch. Same format as plain whisper.cpp expects.</p></details><details><summary>Is this faster than running whisper.cpp directly?</summary><p>Roughly the same — Neuron Flame uses whisper.cpp as the underlying library. The win is workflow: live audio capture, paste-at-cursor, history, search, custom dictionary, batch processing — all the stuff you'd otherwise wire up by hand.</p></details><details><summary>Does it use GPU acceleration?</summary><p>Whisper uses Metal on Apple Silicon (and CoreML for the encoder if available). Parakeet V2 runs on the Apple Neural Engine via FluidAudio. Both are noticeably faster than CPU-only paths.</p></details></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="brand"><span class="mark"></span>Neuron Flame</a>
+      <p>Voice-to-text at the speed of thought. Made by Barney Sharma in Australia, for Ziva.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Compare</h5>
+      <a href="/alternatives/wispr-flow.html">vs Wispr Flow</a>
+      <a href="/alternatives/superwhisper.html">vs SuperWhisper</a>
+      <a href="/alternatives/macwhisper.html">vs MacWhisper</a>
+      <a href="/alternatives/voiceink.html">vs VoiceInk</a>
+      <a href="/alternatives/apple-dictation.html">vs Apple Dictation</a>
+    </div>
+    <div class="footer-col">
+      <h5>Use cases</h5>
+      <a href="/use-cases/developers.html">Developers</a>
+      <a href="/use-cases/writers.html">Writers</a>
+      <a href="/use-cases/accessibility.html">Accessibility</a>
+      <a href="/whisper-mac-gui.html">Whisper on Mac</a>
+      <a href="/parakeet-mac.html">Parakeet on Mac</a>
+    </div>
+    <div class="footer-col">
+      <h5>Docs</h5>
+      <a href="/docs/quick-start.html">Quick start</a>
+      <a href="/docs/permissions.html">Permissions</a>
+      <a href="/docs/privacy.html">Privacy</a>
+      <a href="/docs/troubleshooting.html">Troubleshooting</a>
+    </div>
+    <div class="footer-col">
+      <h5>About</h5>
+      <a href="/support.html">Support</a>
+      <a href="https://github.com/barney-cmyk/svara">Source code</a>
+      <a href="https://github.com/barney-cmyk/svara/blob/main/LICENSE">License</a>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Ziva Studio. GPL-3.0 licensed.</span>
+    <span>Made with ❤️ for Ziva.</span>
+  </div>
+</footer>
+</body>
+</html>
