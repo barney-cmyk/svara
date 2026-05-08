@@ -1,0 +1,73 @@
+// Release.xcconfig
+// Build configuration for Apple-notarised release builds.
+//
+// Used by `make release` and `make ship`. Does NOT affect Debug or the
+// `make local` developer flow — both of those keep using the self-signed
+// "Ziva AI Developer" cert + hardened-runtime-disabled settings via
+// LocalBuild.xcconfig.
+//
+// Key differences from LocalBuild.xcconfig:
+//   - Real Developer ID Application certificate (issued by Apple after
+//     enrolment in the Apple Developer Program — Team ID 9J3G49GLLC).
+//   - Hardened runtime ON. Required by Apple notarisation. The team-ID
+//     mismatch issue we hit with self-signed certs goes away here because
+//     every component (main binary + bundled .dylib + frameworks) is
+//     signed with the same Developer ID identity, which has a real Team ID.
+//   - Entitlements pulled from VoiceInk.release.entitlements — no iCloud
+//     / no APS / no keychain-access-groups for the first notarised build,
+//     to avoid notarisation failures from missing developer-portal config.
+//
+// One-time prerequisite (you only do this once per Mac):
+//   1. Open Xcode → Settings → Accounts → sign in with your Apple ID
+//   2. Manage Certificates… → "+" → Developer ID Application
+//   3. Verify the cert is in your login Keychain:
+//        security find-identity -v -p codesigning | grep "Developer ID"
+//      Expected output:
+//        "Developer ID Application: Ravi Heera Lal Sharma (9J3G49GLLC)"
+//      (Cert subject = legal name on Apple Developer Program enrolment.
+//      Apple uses the legal name, not the brand. The TEAMID in the
+//      parentheses is what users see in Get Info on the bundle.)
+//
+// Notarisation prerequisite (also one-time):
+//   xcrun notarytool store-credentials "neuronflame-notary" \
+//       --apple-id "<your-apple-id-email>" \
+//       --team-id  "9J3G49GLLC" \
+//       --password "<app-specific-password>"
+//
+// After that, `make ship` builds, signs, notarises, staples, and uploads
+// to neuronflame.com in one command.
+
+CODE_SIGN_IDENTITY = Developer ID Application: Ravi Heera Lal Sharma (9J3G49GLLC)
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM = 9J3G49GLLC
+PROVISIONING_PROFILE_SPECIFIER =
+
+// Hardened runtime is required for notarisation. macOS will refuse to
+// notarise binaries without it (you'll see "The binary is not signed
+// with a valid Developer ID certificate" or "The binary uses an SDK
+// older than the 10.9 SDK" — both surface as hardened-runtime issues).
+ENABLE_HARDENED_RUNTIME = YES
+
+// Don't auto-inject the debugger-attach entitlement
+// (com.apple.security.get-task-allow) — Xcode adds it for Debug builds
+// to allow debugging, but it must NOT be present on a notarised build.
+// If left in, notarisation fails with: "The executable requests the
+// com.apple.security.get-task-allow entitlement."
+CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO
+
+// Display name + bundle name (override project's INFOPLIST_KEY_*).
+INFOPLIST_KEY_CFBundleDisplayName = Neuron Flame
+INFOPLIST_KEY_CFBundleName = Neuron Flame
+
+// Same INFO_PLIST_FILE the rest of the project uses; the entitlements
+// path is set on the Makefile command line so it doesn't propagate to
+// SPM dependency targets.
+//
+// (Don't set CODE_SIGN_ENTITLEMENTS here — pass it on the xcodebuild
+// command line. Setting it in xcconfig propagates to MediaRemoteAdapter
+// and other SPM packages and breaks their build. Same lesson learned
+// during the LocalBuild path.)
+
+// Reference release-specific compilation flag (lets Swift code branch on
+// release vs local builds for things like Sparkle update channel).
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) RELEASE_BUILD

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Entitlements for the Developer-ID-signed, notarised release build.
+
+  Differences from VoiceInk.entitlements (the Debug/iCloud-enabled version):
+   - APS environment: REMOVED (only relevant for App Store / TestFlight push)
+   - iCloud container + CloudKit: REMOVED for the first notarised release.
+     Re-enable once you've registered the iCloud container at
+     developer.apple.com → Identifiers → iCloud Containers and added the
+     'iCloud.com.neuronflame.app' identifier. Without that registration,
+     notarisation will reject the build.
+   - keychain-access-groups: REMOVED for the first release. Add back once
+     an App ID is registered for com.neuronflame.app with Keychain Sharing
+     enabled. (Without it the app reads/writes Keychain in the default
+     access group, which works fine for a single-app context.)
+
+  The local security entitlements below are all that's needed for Neuron
+  Flame to function: mic, accessibility events to other apps, optional
+  screen capture for window-context, and outbound network for AI
+  enhancement / Sparkle / model downloads. Hardened runtime is enforced
+  via Release.xcconfig — no runtime exceptions needed.
+-->
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.app-sandbox</key>
+    <false/>
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    <key>com.apple.security.files.user-selected.read-only</key>
+    <true/>
+    <key>com.apple.security.network.client</key>
+    <true/>
+    <key>com.apple.security.network.server</key>
+    <true/>
+    <key>com.apple.security.screen-capture</key>
+    <true/>
+    <key>com.apple.security.temporary-exception.mach-lookup.global-name</key>
+    <array>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)-spks</string>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)-spki</string>
+    </array>
+</dict>
+</plist>

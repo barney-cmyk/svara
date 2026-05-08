@@ -100,3 +100,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk 
+# Release pipeline artefacts (Apple-notarised distribution)
+.release-build/
+.dist/
