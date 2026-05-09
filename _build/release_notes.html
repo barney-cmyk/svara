@@ -1,8 +1,7 @@
-<h3>v1.75 — Apple-notarised, fresh About page, "Check for Updates" works</h3>
+<h3>v1.77 — Crash-on-launch fix</h3>
+<p>v1.75 / v1.76 had two startup crashes:</p>
 <ul>
-    <li><strong>Apple-notarised distribution.</strong> No more right-click → Open. Drag, double-click, you're in.</li>
-    <li><strong>Working "Check for Updates".</strong> A new EdDSA signing key for the Sparkle update channel — future versions install in place with one click.</li>
-    <li><strong>About page rebuilt.</strong> A clear mission statement, privacy and infrastructure stats, an inline updates check, evaluation-copy donation flow.</li>
-    <li><strong>Brand cleanup.</strong> Final sweep of legacy upstream references in user-facing docs and dialogs.</li>
+    <li><strong>CloudKit init</strong> tried to talk to an iCloud container that isn't yet registered with Apple — fixed by disabling sync until the container is set up. Local persistence is unaffected.</li>
+    <li><strong>Legacy license flow</strong> overflowed the Keychain access stack on notarised builds. Bypassed entirely — Neuron Flame is free under GPL-3, no license check needed.</li>
 </ul>
-<p>Free forever. Open source under GPL-3. Built by Barney Sharma.</p>
+<p>If you tried v1.75 or v1.76 and saw "Neuron Flame quit unexpectedly", grab this build and the launch crash is gone.</p>

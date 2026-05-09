@@ -24,11 +24,14 @@ class LicenseViewModel: ObservableObject {
     private let licenseManager = LicenseManager.shared
 
     init() {
-        #if LOCAL_BUILD
+        // Neuron Flame ships free under GPL-3 — no licensing flow. Always
+        // mark the app as fully licensed so any UI gated on licenseState
+        // is permissive. The keychain-backed loadLicenseState() flow is
+        // retained below only because PolarService.swift still references
+        // its types; it's never called from here. Calling it without the
+        // keychain-access-groups entitlement also stack-overflows on
+        // notarised builds inside SecItemAuthDoQuery.
         licenseState = .licensed
-        #else
-        loadLicenseState()
-        #endif
     }
 
     func startTrial() {

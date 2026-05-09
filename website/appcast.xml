@@ -6,20 +6,19 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.75</title>
-            <description><![CDATA[<h3>v1.75 — Apple-notarised, fresh About page, "Check for Updates" works</h3>
+            <title>1.77</title>
+            <description><![CDATA[<h3>v1.77 — Crash-on-launch fix</h3>
+<p>v1.75 / v1.76 had two startup crashes:</p>
 <ul>
-    <li><strong>Apple-notarised distribution.</strong> No more right-click → Open. Drag, double-click, you're in.</li>
-    <li><strong>Working "Check for Updates".</strong> A new EdDSA signing key for the Sparkle update channel — future versions install in place with one click.</li>
-    <li><strong>About page rebuilt.</strong> A clear mission statement, privacy and infrastructure stats, an inline updates check, evaluation-copy donation flow.</li>
-    <li><strong>Brand cleanup.</strong> Final sweep of legacy upstream references in user-facing docs and dialogs.</li>
+    <li><strong>CloudKit init</strong> tried to talk to an iCloud container that isn't yet registered with Apple — fixed by disabling sync until the container is set up. Local persistence is unaffected.</li>
+    <li><strong>Legacy license flow</strong> overflowed the Keychain access stack on notarised builds. Bypassed entirely — Neuron Flame is free under GPL-3, no license check needed.</li>
 </ul>
-<p>Free forever. Open source under GPL-3. Built by Barney Sharma.</p>]]></description>
-            <pubDate>Sat, 09 May 2026 00:35:44 +0000</pubDate>
-            <sparkle:version>175</sparkle:version>
-            <sparkle:shortVersionString>1.75</sparkle:shortVersionString>
+<p>If you tried v1.75 or v1.76 and saw "Neuron Flame quit unexpectedly", grab this build and the launch crash is gone.</p>]]></description>
+            <pubDate>Sat, 09 May 2026 03:05:09 +0000</pubDate>
+            <sparkle:version>177</sparkle:version>
+            <sparkle:shortVersionString>1.77</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="zkyN00AYnkI6ulTgbqXDFSs+YgPN7URs1XfjkF0A7uVu2oaarQz9CMaksmkB2/tBXmjSgcYkXJNByKdsK6/iCA==" length="15831952" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="CugUHChYPZ0YqixxyTdJHsfJ99ie0XSSvL7lI7Lz/Wz5Yik1Cg7nMrINRjcW5EiBKCakPhU5UTFycdv/Y5BuAg==" length="15831983" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

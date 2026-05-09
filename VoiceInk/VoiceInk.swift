@@ -254,11 +254,16 @@ struct ZivaApp: App {
 
             // Dictionary configuration
             let dictionarySchema = Schema([VocabularyWord.self, WordReplacement.self])
-            #if LOCAL_BUILD
+            // CloudKit sync is gated until the iCloud container
+            // (iCloud.com.neuronflame.app) is registered at
+            // developer.apple.com → Identifiers → iCloud Containers AND the
+            // matching entitlement is added to VoiceInk.release.entitlements.
+            // Until both are in place, instantiating a CloudKit-mirrored
+            // ModelContainer crashes the app on launch (PFCloudKitContainer
+            // can't find the container). Local-only persistence is fine for
+            // now — the dictionary doesn't need cross-device sync to be
+            // useful on a single Mac.
             let dictionaryCloudKit: ModelConfiguration.CloudKitDatabase = .none
-            #else
-            let dictionaryCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.neuronflame.app")
-            #endif
             let dictionaryConfig = ModelConfiguration(
                 "dictionary",
                 schema: dictionarySchema,
@@ -268,11 +273,9 @@ struct ZivaApp: App {
 
             // Recorder session metrics configuration
             let statsSchema = Schema([SessionMetric.self])
-            #if LOCAL_BUILD
+            // Same gate as the dictionary store — CloudKit disabled until the
+            // container is registered with Apple. See note above.
             let statsCloudKit: ModelConfiguration.CloudKitDatabase = .none
-            #else
-            let statsCloudKit: ModelConfiguration.CloudKitDatabase = .private("iCloud.com.neuronflame.app")
-            #endif
             let statsConfig = ModelConfiguration(
                 "stats",
                 schema: statsSchema,
