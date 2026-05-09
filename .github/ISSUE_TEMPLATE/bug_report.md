@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 > Copy the system information from VoiceInk's **Dashboard tab** (there's a copy button 📋 next to the "Feedback or Issues?" button) and paste it here. This includes all technical details needed for debugging.
 
 ```
-Paste the copied system information here (includes VoiceInk version, macOS version, hardware specs, transcription settings, and all configuration details)
+Paste the copied system information here (includes Neuron Flame version, macOS version, hardware specs, transcription settings, and all configuration details)
 ```
 
 ### **Logs and Error Messages**
@@ -40,19 +40,19 @@ Paste error messages or logs here
 - **Frequency**: [e.g., Happens every time, Intermittent, Only once]
 - **Impact**: [e.g., Prevents transcription, Affects accuracy, UI issue, Performance problem]
 - **Workarounds**: [Any temporary solutions you've found]
-- **Recent Changes**: [Any recent macOS updates, VoiceInk updates, or system changes]
+- **Recent Changes**: [Any recent macOS updates, Neuron Flame updates, or system changes]
 
-### **VoiceInk Debug Information**
+### **Neuron Flame Debug Information**
 If possible, include:
-- VoiceInk app logs (found in Console.app under VoiceInk)
+- Neuron Flame app logs (found in Console.app under Neuron Flame)
 - Any relevant entries from system logs
-- Screenshot of VoiceInk settings/preferences
+- Screenshot of Neuron Flame settings/preferences
 
 ---
 
 **Before submitting:**
 - [ ] I have checked existing issues to avoid duplicates
-- [ ] I have tried restarting VoiceInk and my Mac
+- [ ] I have tried restarting Neuron Flame and my Mac
 - [ ] I have included all relevant environment and configuration details
 
-Thank you for helping make VoiceInk better! 🙏
+Thank you for helping make Neuron Flame better! 🙏

@@ -1,6 +1,6 @@
-# Building VoiceInk
+# Building Neuron Flame
 
-This guide provides detailed instructions for building VoiceInk from source.
+This guide provides detailed instructions for building Neuron Flame from source.
 
 ## Prerequisites
 
@@ -12,14 +12,14 @@ Before you begin, ensure you have:
 
 ## Quick Start with Makefile (Recommended)
 
-The easiest way to build VoiceInk is using the included Makefile, which automates the entire build process including building and linking the whisper framework.
+The easiest way to build Neuron Flame is using the included Makefile, which automates the entire build process including building and linking the whisper framework.
 
 ### Simple Build Commands
 
 ```bash
 # Clone the repository
-git clone https://github.com/Beingpax/VoiceInk.git
-cd VoiceInk
+git clone https://github.com/barney-cmyk/svara.git
+cd svara
 
 # Build everything (recommended for first-time setup)
 make all
@@ -33,9 +33,9 @@ make dev
 - `make check` or `make healthcheck` - Verify all required tools are installed
 - `make whisper` - Clone and build whisper.cpp XCFramework automatically
 - `make setup` - Prepare the whisper framework for linking
-- `make build` - Build the VoiceInk Xcode project
+- `make build` - Build the Neuron Flame Xcode project
 - `make local` - Build for local use (no Apple Developer certificate needed)
-- `make run` - Launch the built VoiceInk app
+- `make run` - Launch the built Neuron Flame app
 - `make dev` - Build and run (ideal for development workflow)
 - `make all` - Complete build process (default)
 - `make clean` - Remove build artifacts and dependencies
@@ -59,19 +59,19 @@ This approach ensures consistent builds across different machines and eliminates
 If you don't have an Apple Developer certificate, use `make local`:
 
 ```bash
-git clone https://github.com/Beingpax/VoiceInk.git
-cd VoiceInk
+git clone https://github.com/barney-cmyk/svara.git
+cd svara
 make local
-open ~/Downloads/VoiceInk.app
+open ~/Downloads/Neuron Flame.app
 ```
 
-This builds VoiceInk with ad-hoc signing using a separate build configuration (`LocalBuild.xcconfig`) that requires no Apple Developer account.
+This builds Neuron Flame with ad-hoc signing using a separate build configuration (`LocalBuild.xcconfig`) that requires no Apple Developer account.
 
 ### How It Works
 
 The `make local` command uses:
 - `LocalBuild.xcconfig` to override signing and entitlements settings
-- `VoiceInk.local.entitlements` (stripped-down, no CloudKit/keychain groups)
+- `Neuron Flame.local.entitlements` (stripped-down, no CloudKit/keychain groups)
 - `LOCAL_BUILD` Swift compilation flag for conditional code paths
 
 Your normal `make all` / `make build` commands are completely unaffected.
@@ -92,12 +92,12 @@ cd whisper.cpp
 ```
 This will create the XCFramework at `build-apple/whisper.xcframework`.
 
-### Building VoiceInk
+### Building Neuron Flame
 
-1. Clone the VoiceInk repository:
+1. Clone the Neuron Flame repository:
 ```bash
-git clone https://github.com/Beingpax/VoiceInk.git
-cd VoiceInk
+git clone https://github.com/barney-cmyk/svara.git
+cd svara
 ```
 
 2. Add the whisper.xcframework to your project:
@@ -136,4 +136,4 @@ If you encounter any build issues:
 4. Verify all dependencies are properly installed
 5. Make sure whisper.xcframework is properly built and linked
 
-For more help, please check the [issues](https://github.com/Beingpax/VoiceInk/issues) section or create a new issue. 
+For more help, please check the [issues](https://github.com/barney-cmyk/svara/issues) section or create a new issue. 

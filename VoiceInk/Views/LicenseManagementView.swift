@@ -1,15 +1,32 @@
 import SwiftUI
 
+/// The About / "License" page.
+///
+/// Intentionally light on personal detail — the page is a manifesto for
+/// Neuron Flame more than a developer bio. Three sections that matter:
+///
+///   1. **Mission** — why a free, on-device dictation app exists at all.
+///      The thesis: typing has been a 50-year detour. Speech is closer to
+///      thinking and to humans. Bringing speech back to the cursor matters.
+///   2. **Privacy + infrastructure** — concrete claims (on-device, signed,
+///      notarised, open-source) so the user can verify they're not being
+///      surveilled.
+///   3. **Updates + evaluation copy + donation** — the "WinRAR-style" social
+///      contract: free forever, ship updates regularly, donate if it earns
+///      its keep.
 struct LicenseManagementView: View {
     @State private var pulse = false
+    @State private var lastUpdateCheck: Date?
+    @EnvironmentObject private var updaterViewModel: UpdaterViewModel
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 32) {
+            VStack(alignment: .leading, spacing: 28) {
                 greeting
-                bentoGrid
-                storyCallout
+                missionCard
+                privacyGrid
+                updatesCard
                 donationCard
                 footer
             }
@@ -25,9 +42,9 @@ struct LicenseManagementView: View {
     // MARK: - Greeting
 
     private var greeting: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
-                Text("Hi, I'm Barney")
+                Text("Hi.")
                     .font(.system(size: 32, weight: .bold))
                     .tracking(-0.6)
                     .foregroundStyle(ZivaTheme.onSurface)
@@ -41,48 +58,89 @@ struct LicenseManagementView: View {
                     .onAppear { pulse = true }
             }
 
-            Text("Neuron Flame by **Ziva Studio** — voice-to-text at the speed of thought.")
-                .font(.system(size: 14))
-                .foregroundStyle(ZivaTheme.onSurfaceVariant)
-                .lineSpacing(3)
-
-            Text("Named after my daughter Ziva. *Neuron Flame* is Sanskrit for the tone — the note that turns sound into meaning. That's exactly what this app captures.")
-                .font(.system(size: 13))
-                .foregroundStyle(ZivaTheme.onSurfaceVariant.opacity(0.85))
+            Text("Neuron Flame is voice-to-text for macOS — built on the bet that speaking is closer to thinking than typing.")
+                .font(.system(size: 15))
+                .foregroundStyle(ZivaTheme.onSurface)
                 .lineSpacing(4)
+                .padding(.top, 4)
+
+            Text("Free. On-device. Open source. An evaluation copy you can use forever.")
+                .font(.system(size: 13))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
                 .padding(.top, 2)
         }
     }
 
-    // MARK: - Bento grid
+    // MARK: - Mission
 
-    private var bentoGrid: some View {
+    private var missionCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("WHY THIS APP EXISTS")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(0.6)
+                .foregroundStyle(ZivaTheme.primary)
+
+            Text("Speaking, again.")
+                .font(.system(size: 22, weight: .bold))
+                .foregroundStyle(ZivaTheme.onSurface)
+
+            Text("Humans spent two hundred thousand years talking to each other. We've spent the last fifty pecking at keyboards. The shift was practical — typing scaled, speaking didn't — but we've quietly traded warmth, nuance and conversational rhythm for a faster way to put words on a screen.")
+                .font(.system(size: 14))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                .lineSpacing(5)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text("Local AI now transcribes faster than you can type. Neuron Flame's job is to put speech back where it belongs — at the cursor, in every app, without surveillance. Typing was always a detour. We're trying to make speaking the default again.")
+                .font(.system(size: 14))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                .lineSpacing(5)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: [ZivaTheme.primaryFixed.opacity(0.45), ZivaTheme.surfaceContainerLowest],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(ZivaTheme.outlineVariant, lineWidth: 1)
+        )
+    }
+
+    // MARK: - Privacy + infrastructure grid
+
+    private var privacyGrid: some View {
         HStack(alignment: .top, spacing: 16) {
             statCard(
-                icon: "sparkles",
-                iconBg: ZivaTheme.primaryFixed,
-                iconColor: ZivaTheme.primary,
-                label: "BUILT WITH",
-                value: "AI",
-                hint: "From zero to working app, with AI as my teacher."
-            )
-
-            statCard(
-                icon: "lock.fill",
+                icon: "lock.shield.fill",
                 iconBg: ZivaTheme.secondaryContainer,
                 iconColor: ZivaTheme.secondary,
-                label: "PRIVACY",
-                value: "100% Local",
-                hint: "Your voice never leaves this Mac."
+                label: "TRANSCRIPTION",
+                value: "100% local",
+                hint: "Whisper or Parakeet V2 on your Apple Neural Engine. Audio never leaves the Mac."
             )
 
             statCard(
-                icon: "heart.fill",
+                icon: "checkmark.seal.fill",
                 iconBg: ZivaTheme.tertiaryFixed,
                 iconColor: ZivaTheme.tertiary,
-                label: "FOR",
-                value: "Ziva",
-                hint: "Named after my daughter."
+                label: "DISTRIBUTION",
+                value: "Apple-notarised",
+                hint: "Signed with a registered Developer ID. Verified by Apple every time you launch."
+            )
+
+            statCard(
+                icon: "eye.slash.fill",
+                iconBg: ZivaTheme.primaryFixed,
+                iconColor: ZivaTheme.primary,
+                label: "TELEMETRY",
+                value: "None",
+                hint: "Zero analytics, zero phone-home. Open source under GPL-3 — auditable."
             )
         }
     }
@@ -106,7 +164,7 @@ struct LicenseManagementView: View {
                     .foregroundStyle(ZivaTheme.onSurfaceVariant)
 
                 Text(value)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(ZivaTheme.onSurface)
             }
 
@@ -126,33 +184,64 @@ struct LicenseManagementView: View {
         )
     }
 
-    // MARK: - Story callout
+    // MARK: - Updates card
 
-    private var storyCallout: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("A SMALL NOTE")
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(0.6)
-                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+    private var updatesCard: some View {
+        HStack(alignment: .center, spacing: 20) {
+            ZStack {
+                Circle().fill(ZivaTheme.primaryFixed)
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(ZivaTheme.primary)
+            }
+            .frame(width: 48, height: 48)
 
-            Text("AI is the great equalizer of our time. If I can build software, you can build whatever you've been dreaming of. Don't wait for permission — start now.")
-                .font(.system(size: 16, weight: .regular))
-                .italic()
-                .foregroundStyle(ZivaTheme.onSurface)
-                .lineSpacing(6)
-                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("STAY CURRENT")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(0.6)
+                    .foregroundStyle(ZivaTheme.onSurfaceVariant)
+
+                Text("Check for updates")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(ZivaTheme.onSurface)
+
+                Text("Currently running v\(appVersion). Updates ship signed and notarised — installed in place.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 12)
+
+            Button {
+                lastUpdateCheck = Date()
+                updaterViewModel.checkForUpdates()
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .font(.system(size: 12))
+                    Text("Check now").font(.system(size: 13, weight: .semibold))
+                }
+                .padding(.horizontal, 16).padding(.vertical, 10)
+                .background(ZivaTheme.primary)
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+            .buttonStyle(.plain)
         }
-        .padding(28)
+        .padding(24)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(ZivaTheme.surfaceContainerLowest)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(ZivaTheme.outlineVariant, lineWidth: 1)
         )
     }
 
-    // MARK: - Donation card (WinRAR-style evaluation)
+    // MARK: - Donation / evaluation copy
 
     private var donationCard: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -177,7 +266,7 @@ struct LicenseManagementView: View {
                 }
             }
 
-            Text("Neuron Flame is free to use, share, and modify. If it's earned a place in your daily routine, you can send a small thank-you via PayPal. No obligation — never has been, never will be.")
+            Text("Neuron Flame is free to use, share, and modify. It's an evaluation copy in the WinRAR sense — there's no paywall, no expiry, no nag. If it earns a place in your daily routine, a small thank-you via PayPal helps fund the time and infrastructure to keep shipping.")
                 .font(.system(size: 14))
                 .foregroundStyle(ZivaTheme.onSurfaceVariant)
                 .lineSpacing(5)
@@ -200,7 +289,7 @@ struct LicenseManagementView: View {
                 .buttonStyle(.plain)
 
                 Button {
-                    let url = URL(string: "mailto:barney@theaussiesharmas.com.au?subject=Hi%20from%20Ziva%20AI")!
+                    let url = URL(string: "mailto:hello@neuronflame.com?subject=Hi%20from%20Neuron%20Flame")!
                     NSWorkspace.shared.open(url)
                 } label: {
                     HStack(spacing: 8) {
@@ -243,7 +332,7 @@ struct LicenseManagementView: View {
                 .padding(.bottom, 16)
 
             HStack {
-                Text("Made by Barney Sharma · For Ziva")
+                Text("Built by Barney Sharma · GPL-3.0 · neuronflame.com")
                     .font(.system(size: 12))
                     .foregroundStyle(ZivaTheme.onSurfaceVariant)
                 Spacer()
@@ -252,6 +341,6 @@ struct LicenseManagementView: View {
                     .foregroundStyle(ZivaTheme.onSurfaceVariant)
             }
         }
-        .padding(.top, 16)
+        .padding(.top, 8)
     }
 }

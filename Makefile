@@ -23,7 +23,7 @@ FTP_USER := u904998269.neuronflame.com
 
 .PHONY: all clean whisper setup build local check healthcheck help dev run \
         release dmg notarise notarize staple verify-release deploy ship \
-        notary-setup-help
+        notary-setup-help appcast
 
 # Default target
 all: check build
@@ -210,6 +210,27 @@ notarise: dmg
 # US English alias.
 notarize: notarise
 
+# Generate appcast.xml from the notarised DMG: signs with EdDSA private key
+# in Keychain, embeds release notes from _build/release_notes.html, writes
+# to ./appcast.xml + website/appcast.xml. Runs automatically as part of
+# `make ship` so every release updates the Sparkle feed.
+appcast:
+	@if [ ! -f "$(DMG_PATH)" ]; then \
+		echo "❌ No DMG to sign at $(DMG_PATH) — run 'make notarise' first."; \
+		exit 1; \
+	fi
+	@SPARKLE_BIN="$(RELEASE_DERIVED_DATA)/SourcePackages/artifacts/sparkle/Sparkle/bin"; \
+	if [ ! -x "$$SPARKLE_BIN/sign_update" ]; then \
+		SPARKLE_BIN="$(LOCAL_DERIVED_DATA)/SourcePackages/artifacts/sparkle/Sparkle/bin"; \
+	fi; \
+	if [ ! -x "$$SPARKLE_BIN/sign_update" ]; then \
+		echo "❌ Sparkle's sign_update tool not found."; \
+		echo "   Run 'make release' first so the package is fetched."; \
+		exit 1; \
+	fi; \
+	echo "Generating signed appcast.xml..."; \
+	python3 _build/build_appcast.py "$(DMG_PATH)" "$$SPARKLE_BIN"
+
 # Re-staple an already-notarised DMG (rarely needed).
 staple:
 	xcrun stapler staple "$(DMG_PATH)"
@@ -236,10 +257,14 @@ deploy:
 	@echo ""
 	@echo "✅ Deployed. Verify at https://neuronflame.com/"
 
-# Full ship pipeline — build, dmg, notarise, deploy.
-ship: notarise deploy
+# Full ship pipeline — build, dmg, notarise, sign update, deploy.
+# After deploy, the appcast.xml is live at https://neuronflame.com/appcast.xml
+# and existing installs will pick up the new version on their next
+# "Check for Updates" (or auto-prompt within ~24h via SUEnableAutomaticChecks).
+ship: notarise appcast deploy
 	@echo ""
 	@echo "🚀 Shipped — neuronflame.com is live with the latest notarised DMG."
+	@echo "   Existing installs will see the update via Sparkle within 24h."
 
 # One-time setup instructions for the notarisation credentials profile.
 notary-setup-help:

@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Neuron Flame</title>
+        <link>https://neuronflame.com/appcast.xml</link>
+        <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
+        <language>en</language>
+        <item>
+            <title>1.75</title>
+            <description><![CDATA[<h3>v1.75 — Apple-notarised, fresh About page, "Check for Updates" works</h3>
+<ul>
+    <li><strong>Apple-notarised distribution.</strong> No more right-click → Open. Drag, double-click, you're in.</li>
+    <li><strong>Working "Check for Updates".</strong> A new EdDSA signing key for the Sparkle update channel — future versions install in place with one click.</li>
+    <li><strong>About page rebuilt.</strong> A clear mission statement, privacy and infrastructure stats, an inline updates check, evaluation-copy donation flow.</li>
+    <li><strong>Brand cleanup.</strong> Final sweep of legacy upstream references in user-facing docs and dialogs.</li>
+</ul>
+<p>Free forever. Open source under GPL-3. Built by Barney Sharma.</p>]]></description>
+            <pubDate>Sat, 09 May 2026 00:35:44 +0000</pubDate>
+            <sparkle:version>175</sparkle:version>
+            <sparkle:shortVersionString>1.75</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="zkyN00AYnkI6ulTgbqXDFSs+YgPN7URs1XfjkF0A7uVu2oaarQz9CMaksmkB2/tBXmjSgcYkXJNByKdsK6/iCA==" length="15831952" type="application/octet-stream"/>
+        </item>
+    </channel>
+</rss>
