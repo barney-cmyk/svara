@@ -84,6 +84,15 @@ local: check setup
 		rm -rf "$$DEST"; \
 		ditto "$$APP_PATH" "$$DEST"; \
 		xattr -cr "$$DEST"; \
+		echo "Patching CFBundleName to 'Neuron Flame' for the macOS menu bar..."; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleName 'Neuron Flame'" "$$DEST/Contents/Info.plist"; \
+		echo "Re-signing with stable Ziva AI Developer cert (preserves TCC permissions)..."; \
+		codesign --force --sign "Ziva AI Developer" \
+			--entitlements "$(CURDIR)/VoiceInk/VoiceInk.local.entitlements" \
+			"$$DEST" 2>/dev/null || \
+			codesign --force --sign - \
+				--entitlements "$(CURDIR)/VoiceInk/VoiceInk.local.entitlements" \
+				"$$DEST"; \
 		echo ""; \
 		echo "Build complete! App saved to: ~/Downloads/Neuron Flame.app"; \
 		echo "Run with: open '$$HOME/Downloads/Neuron Flame.app'"; \
@@ -138,10 +147,15 @@ release: check setup verify-release
 		ditto "$$APP_PATH" "$$DEST"; \
 		xattr -cr "$$DEST"; \
 		echo ""; \
+		echo "Patching CFBundleName to 'Neuron Flame' (Xcode auto-derives it from"; \
+		echo "PRODUCT_NAME=VoiceInk and there's no INFOPLIST_KEY_CFBundleName override).";\
+		echo "This is what macOS shows in the application menu (top bar)."; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleName 'Neuron Flame'" "$$DEST/Contents/Info.plist"; \
+		echo ""; \
 		echo "Re-signing Sparkle nested bundles (Xcode's --deep skips them)..."; \
 		./_build/sign-sparkle.sh "$$DEST" "Developer ID Application: Ravi Heera Lal Sharma ($(TEAM_ID))"; \
 		echo ""; \
-		echo "Re-signing app wrapper to seal Sparkle changes..."; \
+		echo "Re-signing app wrapper to seal Info.plist + Sparkle changes..."; \
 		codesign --force --options=runtime --timestamp \
 			--entitlements "$(CURDIR)/VoiceInk/VoiceInk.release.entitlements" \
 			--sign "Developer ID Application: Ravi Heera Lal Sharma ($(TEAM_ID))" \

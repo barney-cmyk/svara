@@ -6,19 +6,18 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.77</title>
-            <description><![CDATA[<h3>v1.77 — Crash-on-launch fix</h3>
-<p>v1.75 / v1.76 had two startup crashes:</p>
+            <title>1.78</title>
+            <description><![CDATA[<h3>v1.78 — Application menu now reads "Neuron Flame"</h3>
+<p>The macOS menu bar (top of screen) was still showing "VoiceInk" because Xcode auto-derives <code>CFBundleName</code> from the internal product name and Apple's xcconfig override family doesn't expose that key. Patched in the build pipeline: the bundle's Info.plist gets a post-build edit and is re-signed before notarisation.</p>
 <ul>
-    <li><strong>CloudKit init</strong> tried to talk to an iCloud container that isn't yet registered with Apple — fixed by disabling sync until the container is set up. Local persistence is unaffected.</li>
-    <li><strong>Legacy license flow</strong> overflowed the Keychain access stack on notarised builds. Bypassed entirely — Neuron Flame is free under GPL-3, no license check needed.</li>
-</ul>
-<p>If you tried v1.75 or v1.76 and saw "Neuron Flame quit unexpectedly", grab this build and the launch crash is gone.</p>]]></description>
-            <pubDate>Sat, 09 May 2026 03:05:09 +0000</pubDate>
-            <sparkle:version>177</sparkle:version>
-            <sparkle:shortVersionString>1.77</sparkle:shortVersionString>
+    <li>Application menu, About box, and Force Quit dialog all read "Neuron Flame" now</li>
+    <li>Internal executable name stays "VoiceInk" — only visible inside the bundle and in Activity Monitor; harmless and changing it would cascade through SPM dependencies</li>
+</ul>]]></description>
+            <pubDate>Sat, 09 May 2026 03:16:00 +0000</pubDate>
+            <sparkle:version>178</sparkle:version>
+            <sparkle:shortVersionString>1.78</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="CugUHChYPZ0YqixxyTdJHsfJ99ie0XSSvL7lI7Lz/Wz5Yik1Cg7nMrINRjcW5EiBKCakPhU5UTFycdv/Y5BuAg==" length="15831983" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="o7pi2Dg6eQdlJpgyZF8otKjC8jbZbr1Z2+pCIYLLlhzLy3kx1u/NgOeWV//Ap58yr0dbxXf3r3pSqURFwcykAQ==" length="15832007" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
