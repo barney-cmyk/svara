@@ -17,5 +17,16 @@ AddType application/x-apple-diskimage .dmg
     Header set Content-Disposition "attachment"
 </FilesMatch>
 
+# Sparkle update feed + sitemap — always re-fetch from origin so a freshly
+# shipped release surfaces in the in-app "Check for Updates" dialog
+# immediately. Sparkle uses NSURLSession with the default protocol cache
+# policy, so a cached "you're up to date" response can otherwise stick
+# around in the running app's URL cache for hours.
+<FilesMatch "^(appcast\.xml|sitemap\.xml|feed\.xml)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
+
 # Pretty 404s
 ErrorDocument 404 /404.html
