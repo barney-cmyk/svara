@@ -1,4 +1,7 @@
-<h3>v1.81 — Fix: in-app updates were silently failing to install</h3>
-<p>v1.78 through v1.80 had a Sparkle re-signing bug: when the build pipeline re-signed Sparkle's helper binaries with our Developer ID cert, it stripped an embedded entitlement that Sparkle uses to find its cache directory. Symptoms were "Failed to create installation cache directory" and "Installer never started archive extraction" in the logs — visually, the in-app update would download but never finish installing.</p>
-<p>Fixed by passing <code>--preserve-metadata=identifier,entitlements,flags</code> to the codesign step, per Sparkle's official guidance.</p>
-<p>From this version onwards, Check for Updates and the new sidebar update pill will work end-to-end: download → verify → quit → swap → relaunch. No more stuck installs.</p>
+<h3>v1.82 — Tighter About page, working donate link</h3>
+<ul>
+    <li><strong>About fits in one viewport.</strong> Updates and Donate cards now sit side-by-side near the top instead of below the fold. No scrolling to find Check for Updates.</li>
+    <li><strong>Plainer copy.</strong> Dropped the WinRAR analogy in favour of straight English.</li>
+    <li><strong>Donate link points at PayPal.me</strong> — the old <code>/donate/?business=…</code> URL needed PayPal Business donations enabled and was hitting a 404. PayPal.me handles personal accounts directly.</li>
+    <li><strong>Sidebar update pill</strong> from v1.80 is unchanged and working — when this release lands on your installed v1.81, you should see the small "v1.82 ready" pill appear under the brand mark within ~10 seconds of the app launching.</li>
+</ul>

@@ -6,16 +6,19 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.81</title>
-            <description><![CDATA[<h3>v1.81 — Fix: in-app updates were silently failing to install</h3>
-<p>v1.78 through v1.80 had a Sparkle re-signing bug: when the build pipeline re-signed Sparkle's helper binaries with our Developer ID cert, it stripped an embedded entitlement that Sparkle uses to find its cache directory. Symptoms were "Failed to create installation cache directory" and "Installer never started archive extraction" in the logs — visually, the in-app update would download but never finish installing.</p>
-<p>Fixed by passing <code>--preserve-metadata=identifier,entitlements,flags</code> to the codesign step, per Sparkle's official guidance.</p>
-<p>From this version onwards, Check for Updates and the new sidebar update pill will work end-to-end: download → verify → quit → swap → relaunch. No more stuck installs.</p>]]></description>
-            <pubDate>Sun, 10 May 2026 06:59:38 +0000</pubDate>
-            <sparkle:version>181</sparkle:version>
-            <sparkle:shortVersionString>1.81</sparkle:shortVersionString>
+            <title>1.82</title>
+            <description><![CDATA[<h3>v1.82 — Tighter About page, working donate link</h3>
+<ul>
+    <li><strong>About fits in one viewport.</strong> Updates and Donate cards now sit side-by-side near the top instead of below the fold. No scrolling to find Check for Updates.</li>
+    <li><strong>Plainer copy.</strong> Dropped the WinRAR analogy in favour of straight English.</li>
+    <li><strong>Donate link points at PayPal.me</strong> — the old <code>/donate/?business=…</code> URL needed PayPal Business donations enabled and was hitting a 404. PayPal.me handles personal accounts directly.</li>
+    <li><strong>Sidebar update pill</strong> from v1.80 is unchanged and working — when this release lands on your installed v1.81, you should see the small "v1.82 ready" pill appear under the brand mark within ~10 seconds of the app launching.</li>
+</ul>]]></description>
+            <pubDate>Sun, 10 May 2026 07:07:37 +0000</pubDate>
+            <sparkle:version>182</sparkle:version>
+            <sparkle:shortVersionString>1.82</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="W1h4+4Z2wk0IAjlwxuqsJcd/MNY57bV7JOyF0A/jkil0xJWr03X0eMZYeG33rvw/+kog4oDFdKyE39YJp/1bDw==" length="15827737" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="aPAzCXl0c8lCkMw6+PLRQgj7p9lGG0923CxWV/beHgtc4TuD22A6Shi1uc89NZtdbmTNBJ/dO5zbhK6ovm0nDQ==" length="15818606" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
