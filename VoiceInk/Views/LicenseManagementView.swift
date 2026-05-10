@@ -16,21 +16,32 @@ struct LicenseManagementView: View {
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            greeting
-            privacyGrid
-            HStack(alignment: .top, spacing: 16) {
-                updatesCard
-                donationCard
+        // Wrapped in ScrollView even though we expect everything to fit in the
+        // viewport — it's a defensive layout choice. NavigationSplitView's
+        // detail pane on macOS 26 can mis-measure VStacks that contain a
+        // bare Spacer(minLength: 0) inside a .frame(maxHeight: .infinity)
+        // wrapper: SwiftUI sometimes computes the inner VStack's height as
+        // zero, which propagates upward and causes the entire NavigationSplitView
+        // (sidebar + detail) to render blank. ScrollView gives the inner
+        // content its own valid coordinate space and side-steps the issue
+        // entirely. With our compact layout the user never actually scrolls.
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                greeting
+                privacyGrid
+                HStack(alignment: .top, spacing: 16) {
+                    updatesCard
+                    donationCard
+                }
+                footer
+                    .padding(.top, 6)
             }
-            Spacer(minLength: 0)
-            footer
+            .padding(.horizontal, 32)
+            .padding(.top, 28)
+            .padding(.bottom, 18)
+            .frame(maxWidth: 760, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.horizontal, 32)
-        .padding(.top, 28)
-        .padding(.bottom, 18)
-        .frame(maxWidth: 760, alignment: .leading)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(ZivaTheme.surface)
     }
 

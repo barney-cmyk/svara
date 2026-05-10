@@ -6,14 +6,15 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.83</title>
-            <description><![CDATA[<h3>v1.83 — Working donate link</h3>
-<p>The Donate button on the About page now points at <code>paypal.me/neuronflame</code> — supporters can send any amount in a couple of taps, no PayPal account required on their end. Thank you in advance to anyone who chips in.</p>]]></description>
-            <pubDate>Sun, 10 May 2026 07:18:06 +0000</pubDate>
-            <sparkle:version>183</sparkle:version>
-            <sparkle:shortVersionString>1.83</sparkle:shortVersionString>
+            <title>1.84</title>
+            <description><![CDATA[<h3>v1.84 — Fix: About tab rendered blank</h3>
+<p>v1.82/v1.83's compact About page used a layout pattern (Spacer inside <code>.frame(maxHeight: .infinity)</code>) that NavigationSplitView mis-measures on macOS 26 — the detail pane and sidebar both went blank when the About tab was clicked, with no way to navigate back without quitting.</p>
+<p>Fixed by wrapping the content in a ScrollView, which gives the inner views a valid coordinate space. The compact layout (everything visible without scrolling) is unchanged.</p>]]></description>
+            <pubDate>Sun, 10 May 2026 08:17:21 +0000</pubDate>
+            <sparkle:version>184</sparkle:version>
+            <sparkle:shortVersionString>1.84</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="N79QK4HMJDpHlVMq39TecUCWg7yQQAAEnaOA9bHgcbFHCh/Vu+xfgck2ZYK7IoZ1ZLM8dPOh3TaPeAx3PSgiBA==" length="15817435" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="DgXDsu+h+bDBwD2qf8b4fJkzr5AMAQ7gezHHEFIdLUnPh/eqhDezW24IlPv379QuddjCAtZkGUjOzumQwVw/AA==" length="15820653" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
