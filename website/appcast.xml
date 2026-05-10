@@ -6,20 +6,16 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.80</title>
-            <description><![CDATA[<h3>v1.80 — In-app update notifications</h3>
-<p>You no longer have to remember to check for updates manually. Neuron Flame now does it for you, quietly:</p>
-<ul>
-    <li><strong>Background check on launch + hourly while open.</strong> Sparkle pings <code>neuronflame.com/appcast.xml</code> in the background. No popup, no interruption.</li>
-    <li><strong>"Update available" pill in the sidebar.</strong> When a new version is found, a small Liquid-Glass pill appears under the Neuron Flame wordmark — soft brand-purple background, gentle pulsing dot, version number. Click it to install.</li>
-    <li><strong>No nag.</strong> When you're up to date, the sidebar stays exactly the same. No permanent version badge, no notification dot, nothing.</li>
-</ul>
-<p>From v1.81 onwards (next release), you'll see the new behaviour in action — the pill will appear under the brand mark within a few seconds of opening the app.</p>]]></description>
-            <pubDate>Sun, 10 May 2026 06:49:25 +0000</pubDate>
-            <sparkle:version>180</sparkle:version>
-            <sparkle:shortVersionString>1.80</sparkle:shortVersionString>
+            <title>1.81</title>
+            <description><![CDATA[<h3>v1.81 — Fix: in-app updates were silently failing to install</h3>
+<p>v1.78 through v1.80 had a Sparkle re-signing bug: when the build pipeline re-signed Sparkle's helper binaries with our Developer ID cert, it stripped an embedded entitlement that Sparkle uses to find its cache directory. Symptoms were "Failed to create installation cache directory" and "Installer never started archive extraction" in the logs — visually, the in-app update would download but never finish installing.</p>
+<p>Fixed by passing <code>--preserve-metadata=identifier,entitlements,flags</code> to the codesign step, per Sparkle's official guidance.</p>
+<p>From this version onwards, Check for Updates and the new sidebar update pill will work end-to-end: download → verify → quit → swap → relaunch. No more stuck installs.</p>]]></description>
+            <pubDate>Sun, 10 May 2026 06:59:38 +0000</pubDate>
+            <sparkle:version>181</sparkle:version>
+            <sparkle:shortVersionString>1.81</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="cVrlB/5DNZuzZIZsuVjHlntPZzotKl/0hUf6snV/7I1qk3S+PxhUtTBOTeUDi89QmyafJs/56M1mkL7n1bpjCg==" length="15826933" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="W1h4+4Z2wk0IAjlwxuqsJcd/MNY57bV7JOyF0A/jkil0xJWr03X0eMZYeG33rvw/+kog4oDFdKyE39YJp/1bDw==" length="15827737" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

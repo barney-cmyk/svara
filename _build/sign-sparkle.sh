@@ -45,7 +45,21 @@ echo "  Identity: $IDENTITY"
 
 # Common codesign args. --timestamp + --options=runtime are mandatory for
 # notarisation. --force replaces existing signatures.
-CS=(codesign --force --options=runtime --timestamp --sign "$IDENTITY")
+#
+# CRITICAL: --preserve-metadata=identifier,entitlements,flags is required
+# because Sparkle's Autoupdate ships with an embedded
+# `com.apple.application-identifier = org.sparkle-project.Sparkle.Autoupdate`
+# entitlement that namespaces its cache directory at ~/Library/Caches/<app>/
+# org.sparkle-project.Sparkle/. Without preserving entitlements, the resign
+# strips this entitlement and the running Autoupdate process fails to mkdir
+# its cache directory — symptoms are:
+#   "Failed to create installation cache directory in ~/Library/Caches/..."
+#   "Timeout: Installer never started archive extraction"
+#   "remote port connection was invalidated from the updater"
+# (These were all live in v1.78–v1.80; fixed from v1.81 onwards.)
+CS=(codesign --force --options=runtime --timestamp \
+    --preserve-metadata=identifier,entitlements,flags \
+    --sign "$IDENTITY")
 
 # Sign innermost first.
 sign_path() {

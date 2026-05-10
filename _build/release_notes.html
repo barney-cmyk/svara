@@ -1,8 +1,4 @@
-<h3>v1.80 — In-app update notifications</h3>
-<p>You no longer have to remember to check for updates manually. Neuron Flame now does it for you, quietly:</p>
-<ul>
-    <li><strong>Background check on launch + hourly while open.</strong> Sparkle pings <code>neuronflame.com/appcast.xml</code> in the background. No popup, no interruption.</li>
-    <li><strong>"Update available" pill in the sidebar.</strong> When a new version is found, a small Liquid-Glass pill appears under the Neuron Flame wordmark — soft brand-purple background, gentle pulsing dot, version number. Click it to install.</li>
-    <li><strong>No nag.</strong> When you're up to date, the sidebar stays exactly the same. No permanent version badge, no notification dot, nothing.</li>
-</ul>
-<p>From v1.81 onwards (next release), you'll see the new behaviour in action — the pill will appear under the brand mark within a few seconds of opening the app.</p>
+<h3>v1.81 — Fix: in-app updates were silently failing to install</h3>
+<p>v1.78 through v1.80 had a Sparkle re-signing bug: when the build pipeline re-signed Sparkle's helper binaries with our Developer ID cert, it stripped an embedded entitlement that Sparkle uses to find its cache directory. Symptoms were "Failed to create installation cache directory" and "Installer never started archive extraction" in the logs — visually, the in-app update would download but never finish installing.</p>
+<p>Fixed by passing <code>--preserve-metadata=identifier,entitlements,flags</code> to the codesign step, per Sparkle's official guidance.</p>
+<p>From this version onwards, Check for Updates and the new sidebar update pill will work end-to-end: download → verify → quit → swap → relaunch. No more stuck installs.</p>
