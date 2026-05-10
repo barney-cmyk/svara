@@ -224,11 +224,12 @@ struct LicenseManagementView: View {
 
             HStack(spacing: 8) {
                 Button {
-                    // PayPal.me — pending the handle from Barney. The current
-                    // /donate/?business=… format requires a PayPal Business
-                    // account with donations explicitly enabled and was the
-                    // reason the link was hitting a 404 before.
-                    let url = URL(string: "https://paypal.me/barneysharma")!
+                    // PayPal.me — works with personal PayPal accounts and
+                    // lands on a clean "send any amount" UI. The previous
+                    // /donate/?business=<email> format needed donations
+                    // explicitly enabled on a PayPal Business account, which
+                    // Barney's personal account doesn't have, so it 404'd.
+                    let url = URL(string: "https://paypal.me/neuronflame")!
                     NSWorkspace.shared.open(url)
                 } label: {
                     HStack(spacing: 6) {

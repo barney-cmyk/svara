@@ -6,19 +6,14 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.82</title>
-            <description><![CDATA[<h3>v1.82 — Tighter About page, working donate link</h3>
-<ul>
-    <li><strong>About fits in one viewport.</strong> Updates and Donate cards now sit side-by-side near the top instead of below the fold. No scrolling to find Check for Updates.</li>
-    <li><strong>Plainer copy.</strong> Dropped the WinRAR analogy in favour of straight English.</li>
-    <li><strong>Donate link points at PayPal.me</strong> — the old <code>/donate/?business=…</code> URL needed PayPal Business donations enabled and was hitting a 404. PayPal.me handles personal accounts directly.</li>
-    <li><strong>Sidebar update pill</strong> from v1.80 is unchanged and working — when this release lands on your installed v1.81, you should see the small "v1.82 ready" pill appear under the brand mark within ~10 seconds of the app launching.</li>
-</ul>]]></description>
-            <pubDate>Sun, 10 May 2026 07:07:37 +0000</pubDate>
-            <sparkle:version>182</sparkle:version>
-            <sparkle:shortVersionString>1.82</sparkle:shortVersionString>
+            <title>1.83</title>
+            <description><![CDATA[<h3>v1.83 — Working donate link</h3>
+<p>The Donate button on the About page now points at <code>paypal.me/neuronflame</code> — supporters can send any amount in a couple of taps, no PayPal account required on their end. Thank you in advance to anyone who chips in.</p>]]></description>
+            <pubDate>Sun, 10 May 2026 07:18:06 +0000</pubDate>
+            <sparkle:version>183</sparkle:version>
+            <sparkle:shortVersionString>1.83</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="aPAzCXl0c8lCkMw6+PLRQgj7p9lGG0923CxWV/beHgtc4TuD22A6Shi1uc89NZtdbmTNBJ/dO5zbhK6ovm0nDQ==" length="15818606" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="N79QK4HMJDpHlVMq39TecUCWg7yQQAAEnaOA9bHgcbFHCh/Vu+xfgck2ZYK7IoZ1ZLM8dPOh3TaPeAx3PSgiBA==" length="15817435" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
