@@ -1,6 +1,8 @@
-<h3>v1.78 — Application menu now reads "Neuron Flame"</h3>
-<p>The macOS menu bar (top of screen) was still showing "VoiceInk" because Xcode auto-derives <code>CFBundleName</code> from the internal product name and Apple's xcconfig override family doesn't expose that key. Patched in the build pipeline: the bundle's Info.plist gets a post-build edit and is re-signed before notarisation.</p>
+<h3>v1.80 — In-app update notifications</h3>
+<p>You no longer have to remember to check for updates manually. Neuron Flame now does it for you, quietly:</p>
 <ul>
-    <li>Application menu, About box, and Force Quit dialog all read "Neuron Flame" now</li>
-    <li>Internal executable name stays "VoiceInk" — only visible inside the bundle and in Activity Monitor; harmless and changing it would cascade through SPM dependencies</li>
+    <li><strong>Background check on launch + hourly while open.</strong> Sparkle pings <code>neuronflame.com/appcast.xml</code> in the background. No popup, no interruption.</li>
+    <li><strong>"Update available" pill in the sidebar.</strong> When a new version is found, a small Liquid-Glass pill appears under the Neuron Flame wordmark — soft brand-purple background, gentle pulsing dot, version number. Click it to install.</li>
+    <li><strong>No nag.</strong> When you're up to date, the sidebar stays exactly the same. No permanent version badge, no notification dot, nothing.</li>
 </ul>
+<p>From v1.81 onwards (next release), you'll see the new behaviour in action — the pill will appear under the brand mark within a few seconds of opening the app.</p>

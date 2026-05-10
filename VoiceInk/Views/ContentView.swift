@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import KeyboardShortcuts
 import OSLog
+import Sparkle
 
 // ViewType enum with all cases
 enum ViewType: String, CaseIterable, Identifiable {
@@ -62,6 +63,8 @@ struct ContentView: View {
     @EnvironmentObject private var whisperModelManager: WhisperModelManager
     @EnvironmentObject private var transcriptionModelManager: TranscriptionModelManager
     @EnvironmentObject private var hotkeyManager: HotkeyManager
+    @EnvironmentObject private var updaterViewModel: UpdaterViewModel
+    @State private var hasKickedOffLaunchUpdateCheck = false
     @AppStorage("powerModeUIFlag") private var powerModeUIFlag = false
     @State private var selectedView: ViewType? = .metrics
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
@@ -80,25 +83,29 @@ struct ContentView: View {
         NavigationSplitView {
             List(selection: $selectedView) {
                 Section {
-                    // App Header — icon + wordmark only. PREMIUM badge intentionally
-                    // removed: Neuron Flame is free, the badge took horizontal space
-                    // away from the wordmark, and "All systems go" / live AI status
-                    // sit immediately below now.
-                    HStack(spacing: 8) {
-                        if let appIcon = NSImage(named: "AppIcon") {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 28, height: 28)
-                                .cornerRadius(8)
+                    // App Header — icon + wordmark, with a quietly-appearing
+                    // "Update available" pill underneath when Sparkle's
+                    // background check finds a newer version. The pill is
+                    // tappable and triggers the standard install dialog.
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            if let appIcon = NSImage(named: "AppIcon") {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 28, height: 28)
+                                    .cornerRadius(8)
+                            }
+
+                            Text("Neuron Flame")
+                                .font(.system(size: 14, weight: .semibold))
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+
+                            Spacer(minLength: 0)
                         }
 
-                        Text("Neuron Flame")
-                            .font(.system(size: 14, weight: .semibold))
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-
-                        Spacer(minLength: 0)
+                        SidebarUpdatePill()
                     }
                     .padding(.vertical, 4)
                 }
@@ -168,6 +175,18 @@ struct ContentView: View {
         .frame(minHeight: 730)
         .onAppear {
             logger.notice("ContentView appeared")
+            // Kick off a silent Sparkle check shortly after the app finishes
+            // launching. If a newer version is available, our UpdaterViewModel
+            // delegate will set availableUpdate and the SidebarUpdatePill
+            // fades in. The 8s delay is so model prewarm + initial UI render
+            // aren't competing with the network round-trip to neuronflame.com.
+            // Subsequent checks are scheduled by Sparkle (updateCheckInterval).
+            if !hasKickedOffLaunchUpdateCheck {
+                hasKickedOffLaunchUpdateCheck = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                    updaterViewModel.silentlyCheckForUpdates()
+                }
+            }
         }
         .onDisappear {
             logger.notice("ContentView disappeared")
@@ -333,6 +352,78 @@ private struct SidebarCopySystemInfoButton: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { isCopied = false }
         }
+    }
+}
+
+// MARK: - Sidebar update pill
+//
+// Appears under the brand mark when Sparkle's background check finds a new
+// version. Hidden completely when up-to-date — no permanent "version" badge,
+// no nag. Click → opens the standard install dialog.
+//
+// The animation: pill slides + fades in from above. A small pulsing brand-orange
+// dot draws attention without being aggressive.
+private struct SidebarUpdatePill: View {
+    @EnvironmentObject private var updaterViewModel: UpdaterViewModel
+    @State private var pulse = false
+    @State private var hovered = false
+
+    var body: some View {
+        Group {
+            if let update = updaterViewModel.availableUpdate {
+                Button {
+                    // Trigger the standard "An update is available" dialog so
+                    // the user sees release notes + Install / Skip buttons.
+                    updaterViewModel.checkForUpdates()
+                } label: {
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(ZivaTheme.primary)
+                            .frame(width: 6, height: 6)
+                            .scaleEffect(pulse ? 1.4 : 1.0)
+                            .opacity(pulse ? 0.6 : 1.0)
+                            .animation(
+                                .easeInOut(duration: 1.1).repeatForever(autoreverses: true),
+                                value: pulse
+                            )
+
+                        Text("v\(update.displayVersionString) ready")
+                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                            .foregroundStyle(ZivaTheme.primary)
+                            .lineLimit(1)
+
+                        Spacer(minLength: 0)
+
+                        Image(systemName: "arrow.down.circle.fill")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(ZivaTheme.primary)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 999, style: .continuous)
+                            .fill(ZivaTheme.primaryFixed.opacity(0.55))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999, style: .continuous)
+                            .strokeBorder(ZivaTheme.primary.opacity(0.3), lineWidth: 1)
+                    )
+                    .scaleEffect(hovered ? 1.02 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: hovered)
+                }
+                .buttonStyle(.plain)
+                .onHover { hovered = $0 }
+                .help("New version v\(update.displayVersionString) is available — click to install")
+                .transition(
+                    .asymmetric(
+                        insertion: .opacity.combined(with: .move(edge: .top)),
+                        removal: .opacity
+                    )
+                )
+                .onAppear { pulse = true }
+            }
+        }
+        .animation(.spring(response: 0.45, dampingFraction: 0.85), value: updaterViewModel.availableUpdate?.displayVersionString)
     }
 }
 

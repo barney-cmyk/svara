@@ -6,18 +6,20 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.78</title>
-            <description><![CDATA[<h3>v1.78 — Application menu now reads "Neuron Flame"</h3>
-<p>The macOS menu bar (top of screen) was still showing "VoiceInk" because Xcode auto-derives <code>CFBundleName</code> from the internal product name and Apple's xcconfig override family doesn't expose that key. Patched in the build pipeline: the bundle's Info.plist gets a post-build edit and is re-signed before notarisation.</p>
+            <title>1.80</title>
+            <description><![CDATA[<h3>v1.80 — In-app update notifications</h3>
+<p>You no longer have to remember to check for updates manually. Neuron Flame now does it for you, quietly:</p>
 <ul>
-    <li>Application menu, About box, and Force Quit dialog all read "Neuron Flame" now</li>
-    <li>Internal executable name stays "VoiceInk" — only visible inside the bundle and in Activity Monitor; harmless and changing it would cascade through SPM dependencies</li>
-</ul>]]></description>
-            <pubDate>Sat, 09 May 2026 03:16:00 +0000</pubDate>
-            <sparkle:version>178</sparkle:version>
-            <sparkle:shortVersionString>1.78</sparkle:shortVersionString>
+    <li><strong>Background check on launch + hourly while open.</strong> Sparkle pings <code>neuronflame.com/appcast.xml</code> in the background. No popup, no interruption.</li>
+    <li><strong>"Update available" pill in the sidebar.</strong> When a new version is found, a small Liquid-Glass pill appears under the Neuron Flame wordmark — soft brand-purple background, gentle pulsing dot, version number. Click it to install.</li>
+    <li><strong>No nag.</strong> When you're up to date, the sidebar stays exactly the same. No permanent version badge, no notification dot, nothing.</li>
+</ul>
+<p>From v1.81 onwards (next release), you'll see the new behaviour in action — the pill will appear under the brand mark within a few seconds of opening the app.</p>]]></description>
+            <pubDate>Sun, 10 May 2026 06:49:25 +0000</pubDate>
+            <sparkle:version>180</sparkle:version>
+            <sparkle:shortVersionString>1.80</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="o7pi2Dg6eQdlJpgyZF8otKjC8jbZbr1Z2+pCIYLLlhzLy3kx1u/NgOeWV//Ap58yr0dbxXf3r3pSqURFwcykAQ==" length="15832007" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="cVrlB/5DNZuzZIZsuVjHlntPZzotKl/0hUf6snV/7I1qk3S+PxhUtTBOTeUDi89QmyafJs/56M1mkL7n1bpjCg==" length="15826933" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

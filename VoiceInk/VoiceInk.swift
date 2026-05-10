@@ -449,19 +449,49 @@ struct ZivaApp: App {
     }
 }
 
-class UpdaterViewModel: ObservableObject {
+/// Sparkle update orchestrator + state holder for the in-app "update available"
+/// UI surface (the pill that appears under the brand mark in the sidebar).
+///
+/// We do NOT want Sparkle's default behaviour of popping its update dialog
+/// on top of whatever the user is doing every time the silent background
+/// check finds something new. That's the opposite of "creative, not a pain".
+/// Instead, we conform to `SPUStandardUserDriverDelegate` and tell Sparkle
+/// "we'll handle the showing-an-update-is-available stage ourselves" — which
+/// just means we set `availableUpdate` and let SwiftUI render the pill.
+///
+/// When the user clicks the pill, we call `checkForUpdates()` which then
+/// surfaces the standard "An update is available" dialog with Install / Skip /
+/// Remind Me Later buttons. From there Sparkle handles the rest: download,
+/// signature verification, install, relaunch.
+final class UpdaterViewModel: NSObject, ObservableObject, SPUStandardUserDriverDelegate {
     @AppStorage("autoUpdateCheck") private var autoUpdateCheck = true
 
-    private let updaterController: SPUStandardUpdaterController
+    private var updaterController: SPUStandardUpdaterController!
 
     @Published var canCheckForUpdates = false
 
-    init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    /// Non-nil while Sparkle has detected a newer version available than the
+    /// running build. Cleared when the user dismisses, installs, or after the
+    /// update is consumed.
+    @Published var availableUpdate: SUAppcastItem?
 
-        // Enable automatic update checking
+    /// Telling Sparkle's standard user driver that we want to suppress the
+    /// scheduled-update prompt and own the "show the user there's an update"
+    /// stage ourselves. Fires through `standardUserDriverShouldHandleShowingScheduledUpdate`.
+    var supportsGentleScheduledUpdateReminders: Bool { true }
+
+    override init() {
+        super.init()
+        updaterController = SPUStandardUpdaterController(
+            startingUpdater: true,
+            updaterDelegate: nil,
+            userDriverDelegate: self
+        )
+
         updaterController.updater.automaticallyChecksForUpdates = autoUpdateCheck
-        updaterController.updater.updateCheckInterval = 24 * 60 * 60
+        // Hourly while testing the flow. Bump to 24*60*60 once we've shipped a
+        // few updates and confirmed everything's stable end-to-end.
+        updaterController.updater.updateCheckInterval = 60 * 60
 
         updaterController.updater.publisher(for: \.canCheckForUpdates)
             .assign(to: &$canCheckForUpdates)
@@ -471,14 +501,49 @@ class UpdaterViewModel: ObservableObject {
         updaterController.updater.automaticallyChecksForUpdates = value
     }
 
+    /// Surface the standard Sparkle "An update is available" dialog. Wired to
+    /// the sidebar pill's tap and to the About page's "Check now" button.
     func checkForUpdates() {
-        // This is for manual checks - will show UI
         updaterController.checkForUpdates(nil)
     }
 
+    /// Background check — if an update is found, our delegate methods set
+    /// `availableUpdate` instead of showing Sparkle's default popup.
     func silentlyCheckForUpdates() {
-        // This checks for updates in the background without showing UI unless an update is found
         updaterController.updater.checkForUpdatesInBackground()
+    }
+
+    // MARK: - SPUStandardUserDriverDelegate
+
+    /// Tell Sparkle: "no, don't show the scheduled-update sheet — we've got
+    /// our own surface (the sidebar pill)." Returning false here is the
+    /// supported way to opt into custom 'gentle reminder' UX in Sparkle 2.x.
+    func standardUserDriverShouldHandleShowingScheduledUpdate(
+        _ update: SUAppcastItem,
+        andInImmediateFocus immediateFocus: Bool
+    ) -> Bool {
+        return false
+    }
+
+    /// Sparkle hands us the SUAppcastItem before deciding whether to show its
+    /// standard sheet. We capture it for the SwiftUI binding so the pill can
+    /// appear in the sidebar.
+    func standardUserDriverWillHandleShowingUpdate(
+        _ handleShowingUpdate: Bool,
+        forUpdate update: SUAppcastItem,
+        state: SPUUserUpdateState
+    ) {
+        DispatchQueue.main.async { [weak self] in
+            self?.availableUpdate = update
+        }
+    }
+
+    /// Once Sparkle's user driver moves on (user clicked Install / Skip), the
+    /// pill should disappear.
+    func standardUserDriverWillFinishUpdateSession() {
+        DispatchQueue.main.async { [weak self] in
+            self?.availableUpdate = nil
+        }
     }
 }
 

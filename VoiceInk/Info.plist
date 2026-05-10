@@ -43,7 +43,9 @@
 	<key>NSScreenCaptureUsageDescription</key>
 	<string>Neuron Flame needs screen recording access to understand context from your screen for improved transcription accuracy.</string>
 	<key>SUEnableAutomaticChecks</key>
-	<false/>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>3600</integer>
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
 	<key>SUFeedURL</key>
