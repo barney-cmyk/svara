@@ -171,6 +171,37 @@ struct ModelManagementView: View {
                             warmupCoordinator.isWarming(modelNamed: whisperModel.name)
                         } ?? false
 
+                        // On the Recommended tab, prefix each row with a small
+                        // badge explaining why the engine picked it ("Best
+                        // overall", "Fastest", etc.). On other tabs we render
+                        // the card on its own. The reason is computed live by
+                        // RecommendationEngine over the merged registry, so it
+                        // auto-updates as new models flow in via models.json.
+                        if selectedFilter == .recommended,
+                           let reason = recommendationReason(for: model) {
+                            HStack(spacing: 0) {
+                                Text(reason.uppercased())
+                                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                                    .tracking(0.6)
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        Capsule().fill(
+                                            LinearGradient(
+                                                colors: [Color.purple, Color(red: 0.75, green: 0.15, blue: 0.83)],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        )
+                                    )
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.leading, 4)
+                            .padding(.top, 4)
+                            .padding(.bottom, -4)
+                        }
+
                         ModelCardView(
                             model: model,
                             fluidAudioModelManager: fluidAudioModelManager,
@@ -303,18 +334,30 @@ struct ModelManagementView: View {
         .cornerRadius(8)
     }
 
+    /// Recommendations computed once per body render against the live
+    /// merged registry. Kept as a property so both `filteredModels` and
+    /// `recommendationReason(for:)` see the same ordering.
+    private var liveRecommendations: [RecommendationEngine.Recommendation] {
+        RecommendationEngine.recommendations(
+            from: transcriptionModelManager.allAvailableModels,
+            isAvailableOnCurrentOS: { transcriptionModelManager.isAvailableOnCurrentOS($0) }
+        )
+    }
+
+    /// Returns the "why" label for a given model on the Recommended tab,
+    /// or nil if the model isn't currently in the recommended set.
+    private func recommendationReason(for model: any TranscriptionModel) -> String? {
+        liveRecommendations.first(where: { $0.model.name == model.name })?.reason
+    }
+
     private var filteredModels: [any TranscriptionModel] {
         switch selectedFilter {
         case .recommended:
-            return transcriptionModelManager.allAvailableModels.filter {
-                let recommendedNames = ["ggml-base.en", "parakeet-tdt-0.6b-v2", "ggml-large-v3-turbo-q5_0", "whisper-large-v3-turbo"]
-                return recommendedNames.contains($0.name)
-            }.sorted { model1, model2 in
-                let recommendedOrder = ["ggml-base.en", "parakeet-tdt-0.6b-v2", "ggml-large-v3-turbo-q5_0", "whisper-large-v3-turbo"]
-                let index1 = recommendedOrder.firstIndex(of: model1.name) ?? Int.max
-                let index2 = recommendedOrder.firstIndex(of: model2.name) ?? Int.max
-                return index1 < index2
-            }
+            // Driven entirely by RecommendationEngine — no hard-coded model
+            // names. As new entries arrive via models.json with better
+            // speed/accuracy values, they automatically displace older
+            // picks here. See RecommendationEngine.score() for the formula.
+            return liveRecommendations.map { $0.model }
         case .local:
             return transcriptionModelManager.allAvailableModels.filter {
                 ($0.provider == .whisper || $0.provider == .nativeApple || $0.provider == .fluidAudio)

@@ -6,21 +6,22 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.86</title>
-            <description><![CDATA[<h3>v1.86 — Dynamic model registry</h3>
-<p>Neuron Flame now pulls its transcription model catalogue from a live JSON file on neuronflame.com on launch and every 24 hours. When a new Whisper variant or Parakeet release becomes worth surfacing, we add it to the registry and every running install picks it up — no app update required.</p>
-<p>This release introduces three new models alongside the existing catalogue:</p>
+            <title>1.87</title>
+            <description><![CDATA[<h3>v1.87 — Smarter "Recommended" tab</h3>
+<p>The Recommended tab is no longer a hand-picked list of four models. It's now computed live from whatever's in the merged registry (built-in + remote catalogue + your custom endpoints), and each pick carries a small badge explaining why it's there:</p>
 <ul>
-    <li><strong>Whisper Large v3 Turbo (Q8)</strong> — higher-quality quantized variant, closer to full Large v3 Turbo accuracy at ~874 MB</li>
-    <li><strong>Distil-Whisper Large v3</strong> — HuggingFace's distilled Whisper. ~6× faster than v3 with 99% relative WER. English-focused.</li>
-    <li><strong>Tiny English (Q5)</strong> — 32 MB quantized variant, useful for short utterances on lower-spec Macs</li>
+    <li><strong>BEST OVERALL</strong> — top score on the formula <code>accuracy² × speed</code></li>
+    <li><strong>FASTEST</strong> — highest speed among local (on-device) models</li>
+    <li><strong>MOST ACCURATE</strong> — highest accuracy regardless of speed</li>
+    <li><strong>BEST FOR MULTILINGUAL</strong> — top scorer among multilingual models</li>
+    <li><strong>BEST CLOUD</strong> — top scorer among cloud-hosted options</li>
 </ul>
-<p>Under the hood: catalogue lives at <code>neuronflame.com/models.json</code>, fetched by <code>RemoteModelCatalogue</code>, merged with the hard-coded fallback list. If the fetch fails, you keep whatever was cached from your last successful refresh. Worst case is "you see the in-binary defaults", never a broken state.</p>]]></description>
-            <pubDate>Mon, 11 May 2026 02:06:32 +0000</pubDate>
-            <sparkle:version>186</sparkle:version>
-            <sparkle:shortVersionString>1.86</sparkle:shortVersionString>
+<p>Practical effect: when a new model lands in <code>models.json</code> with better metrics than any current pick, the Recommended tab updates automatically — no app release needed. Users always see the best models for their use case, not the ones that were "best" six months ago.</p>]]></description>
+            <pubDate>Mon, 11 May 2026 02:55:49 +0000</pubDate>
+            <sparkle:version>187</sparkle:version>
+            <sparkle:shortVersionString>1.87</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="RE4F19H2Ny85gR8i2jILYZnpc5QzvSmgG9BkHehOwc7txFcOMRAjipQQ6YaGEmT7KgCfVuzCKpxqi/98XczMCQ==" length="15844610" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="C8zcGRJXSUhntEoqRyPKS5Ol9cpJw0ZYqFb2owmxnqcU2D4E1RcXHI80goq2Xl+CIiyP4gp1VRfGjaBzzKL9CQ==" length="15865335" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
