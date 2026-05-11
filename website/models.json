@@ -1,0 +1,52 @@
+{
+  "_comment": "Neuron Flame remote model catalogue. Fetched by the app on launch + every 24h. Merged with the in-binary fallback list (TranscriptionModelRegistry.predefinedModels). Entries here ADD to or OVERRIDE the local list — they don't replace it. Schema versioned via `version` field; bump it when making breaking changes the client must understand.",
+  "version": 1,
+  "updated_at": "2026-05-11T00:00:00Z",
+  "models": [
+    {
+      "id": "ggml-large-v3-turbo-q8_0",
+      "family": "whisper",
+      "display_name": "Large v3 Turbo (Q8)",
+      "description": "Higher-quality 8-bit quantized variant. Closer to full Large v3 Turbo accuracy at roughly half the size. Good middle ground if Q5 is too aggressive.",
+      "size": "874 MB",
+      "speed": 0.75,
+      "accuracy": 0.965,
+      "ram_usage": 1.4,
+      "languages": "multi",
+      "introduced": "2026-04-15",
+      "deprecated_at": null,
+      "min_app_version": "1.74",
+      "is_new": true
+    },
+    {
+      "id": "ggml-distil-large-v3",
+      "family": "whisper",
+      "display_name": "Distil-Whisper Large v3",
+      "description": "HuggingFace's distilled Whisper Large v3. About 6× faster than the original with ~99% relative WER. English-focused. Worth trying on slower Apple Silicon.",
+      "size": "1.5 GB",
+      "speed": 0.92,
+      "accuracy": 0.94,
+      "ram_usage": 1.7,
+      "languages": "english",
+      "introduced": "2026-03-08",
+      "deprecated_at": null,
+      "min_app_version": "1.74",
+      "is_new": true
+    },
+    {
+      "id": "ggml-tiny.en-q5_1",
+      "family": "whisper",
+      "display_name": "Tiny English (Q5)",
+      "description": "Quantized tiny English-only model. Tiny enough to live entirely in cache — useful for very short utterances on older Macs or low-power scenarios.",
+      "size": "32 MB",
+      "speed": 0.98,
+      "accuracy": 0.62,
+      "ram_usage": 0.15,
+      "languages": "english",
+      "introduced": "2026-02-20",
+      "deprecated_at": null,
+      "min_app_version": "1.74",
+      "is_new": false
+    }
+  ]
+}

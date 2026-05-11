@@ -22,7 +22,7 @@ AddType application/x-apple-diskimage .dmg
 # immediately. Sparkle uses NSURLSession with the default protocol cache
 # policy, so a cached "you're up to date" response can otherwise stick
 # around in the running app's URL cache for hours.
-<FilesMatch "^(appcast\.xml|sitemap\.xml|feed\.xml)$">
+<FilesMatch "^(appcast\.xml|sitemap\.xml|feed\.xml|models\.json)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires "0"

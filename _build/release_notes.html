@@ -1,7 +1,9 @@
-<h3>v1.85 — Cleaner notch, no border, sits flush with the menu bar</h3>
+<h3>v1.86 — Dynamic model registry</h3>
+<p>Neuron Flame now pulls its transcription model catalogue from a live JSON file on neuronflame.com on launch and every 24 hours. When a new Whisper variant or Parakeet release becomes worth surfacing, we add it to the registry and every running install picks it up — no app update required.</p>
+<p>This release introduces three new models alongside the existing catalogue:</p>
 <ul>
-    <li><strong>Flush silhouette.</strong> The recorder pill is now exactly menu-bar-height (was overshooting by ~8pt). Reads as part of the notch hardware instead of a floating widget that hangs below it.</li>
-    <li><strong>No border.</strong> Removed the rim stroke entirely. The brand-tinted breathing halo behind the pill now appears to emit from the silhouette directly — softer, more alive.</li>
-    <li><strong>Halo unchanged.</strong> The gentle pulsing glow while recording is still there, just borderless.</li>
+    <li><strong>Whisper Large v3 Turbo (Q8)</strong> — higher-quality quantized variant, closer to full Large v3 Turbo accuracy at ~874 MB</li>
+    <li><strong>Distil-Whisper Large v3</strong> — HuggingFace's distilled Whisper. ~6× faster than v3 with 99% relative WER. English-focused.</li>
+    <li><strong>Tiny English (Q5)</strong> — 32 MB quantized variant, useful for short utterances on lower-spec Macs</li>
 </ul>
-<p>Bonus: the website hero logo now sits on a clean white card against the dark page theme — pops the brand colours instead of fighting them.</p>
+<p>Under the hood: catalogue lives at <code>neuronflame.com/models.json</code>, fetched by <code>RemoteModelCatalogue</code>, merged with the hard-coded fallback list. If the fetch fails, you keep whatever was cached from your last successful refresh. Worst case is "you see the in-binary defaults", never a broken state.</p>

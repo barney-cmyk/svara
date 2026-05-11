@@ -175,16 +175,41 @@ struct ContentView: View {
         .frame(minHeight: 730)
         .onAppear {
             logger.notice("ContentView appeared")
-            // Kick off a silent Sparkle check shortly after the app finishes
-            // launching. If a newer version is available, our UpdaterViewModel
-            // delegate will set availableUpdate and the SidebarUpdatePill
-            // fades in. The 8s delay is so model prewarm + initial UI render
-            // aren't competing with the network round-trip to neuronflame.com.
-            // Subsequent checks are scheduled by Sparkle (updateCheckInterval).
+            // Kick off two background checks shortly after launch:
+            //
+            // 1. Sparkle silent update check → if a newer Neuron Flame is
+            //    available, UpdaterViewModel sets availableUpdate and the
+            //    SidebarUpdatePill fades in.
+            //
+            // 2. RemoteModelCatalogue refresh → pulls the latest models.json
+            //    from neuronflame.com so users see new/updated transcription
+            //    models (Distil-Whisper, new Parakeet variants, etc.) in the
+            //    AI Models tab without needing an app update.
+            //
+            // 8s delay so model prewarm + first-paint aren't competing with
+            // outbound network. Subsequent ticks are scheduled per-service.
             if !hasKickedOffLaunchUpdateCheck {
                 hasKickedOffLaunchUpdateCheck = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
                     updaterViewModel.silentlyCheckForUpdates()
+                    Task { @MainActor in
+                        await RemoteModelCatalogue.shared.refresh()
+                        // After the remote list lands, ask the transcription
+                        // model manager to re-derive its available models so
+                        // any new entries show up in the AI Models tab
+                        // without a restart.
+                        transcriptionModelManager.refreshAllAvailableModels()
+                    }
+                }
+
+                // Schedule a second refresh every 24h while the app stays
+                // open. Sparkle already does its own scheduling for the
+                // update channel; we add the model channel here.
+                Timer.scheduledTimer(withTimeInterval: 24 * 60 * 60, repeats: true) { _ in
+                    Task { @MainActor in
+                        await RemoteModelCatalogue.shared.refresh()
+                        transcriptionModelManager.refreshAllAvailableModels()
+                    }
                 }
             }
         }

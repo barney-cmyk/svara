@@ -6,19 +6,21 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.85</title>
-            <description><![CDATA[<h3>v1.85 — Cleaner notch, no border, sits flush with the menu bar</h3>
+            <title>1.86</title>
+            <description><![CDATA[<h3>v1.86 — Dynamic model registry</h3>
+<p>Neuron Flame now pulls its transcription model catalogue from a live JSON file on neuronflame.com on launch and every 24 hours. When a new Whisper variant or Parakeet release becomes worth surfacing, we add it to the registry and every running install picks it up — no app update required.</p>
+<p>This release introduces three new models alongside the existing catalogue:</p>
 <ul>
-    <li><strong>Flush silhouette.</strong> The recorder pill is now exactly menu-bar-height (was overshooting by ~8pt). Reads as part of the notch hardware instead of a floating widget that hangs below it.</li>
-    <li><strong>No border.</strong> Removed the rim stroke entirely. The brand-tinted breathing halo behind the pill now appears to emit from the silhouette directly — softer, more alive.</li>
-    <li><strong>Halo unchanged.</strong> The gentle pulsing glow while recording is still there, just borderless.</li>
+    <li><strong>Whisper Large v3 Turbo (Q8)</strong> — higher-quality quantized variant, closer to full Large v3 Turbo accuracy at ~874 MB</li>
+    <li><strong>Distil-Whisper Large v3</strong> — HuggingFace's distilled Whisper. ~6× faster than v3 with 99% relative WER. English-focused.</li>
+    <li><strong>Tiny English (Q5)</strong> — 32 MB quantized variant, useful for short utterances on lower-spec Macs</li>
 </ul>
-<p>Bonus: the website hero logo now sits on a clean white card against the dark page theme — pops the brand colours instead of fighting them.</p>]]></description>
-            <pubDate>Mon, 11 May 2026 01:54:20 +0000</pubDate>
-            <sparkle:version>185</sparkle:version>
-            <sparkle:shortVersionString>1.85</sparkle:shortVersionString>
+<p>Under the hood: catalogue lives at <code>neuronflame.com/models.json</code>, fetched by <code>RemoteModelCatalogue</code>, merged with the hard-coded fallback list. If the fetch fails, you keep whatever was cached from your last successful refresh. Worst case is "you see the in-binary defaults", never a broken state.</p>]]></description>
+            <pubDate>Mon, 11 May 2026 02:06:32 +0000</pubDate>
+            <sparkle:version>186</sparkle:version>
+            <sparkle:shortVersionString>1.86</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="kJcu7xm5VmsIfKLJhtnR/0t2gYZTZyqbweUM2Lhnw5Ss5eQ2DH4G89C2/ouEotqzfQRrq6+/9DNnWPH1SpOLBQ==" length="15817655" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="RE4F19H2Ny85gR8i2jILYZnpc5QzvSmgG9BkHehOwc7txFcOMRAjipQQ6YaGEmT7KgCfVuzCKpxqi/98XczMCQ==" length="15844610" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

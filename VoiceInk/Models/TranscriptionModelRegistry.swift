@@ -3,7 +3,42 @@ import Foundation
 enum TranscriptionModelRegistry {
 
     static var models: [any TranscriptionModel] {
-        return predefinedModels + CustomCloudModelManager.shared.customModels
+        // Three sources, merged:
+        //   1. `predefinedModels` — hard-coded in the binary. Always present,
+        //      works offline, baseline of trusted models.
+        //   2. `RemoteModelCatalogue.remoteModels` — fetched from
+        //      neuronflame.com/models.json. Adds new models we ship between
+        //      app releases (e.g. Distil-Whisper, new Parakeet variants).
+        //      Falls back gracefully if the fetch hasn't happened or failed.
+        //   3. `CustomCloudModelManager.shared.customModels` — user-added
+        //      OpenAI-compatible cloud endpoints (e.g. their personal Groq
+        //      account).
+        // De-duplicate by name; remote entries override predefined ones with
+        // the same id so we can ship an updated description/size for an
+        // existing model without an app release.
+        var seen: Set<String> = []
+        var result: [any TranscriptionModel] = []
+
+        let remote = RemoteModelCatalogue.shared.remoteModels
+        for model in remote {
+            if !seen.contains(model.name) {
+                result.append(model)
+                seen.insert(model.name)
+            }
+        }
+        for model in predefinedModels {
+            if !seen.contains(model.name) {
+                result.append(model)
+                seen.insert(model.name)
+            }
+        }
+        for model in CustomCloudModelManager.shared.customModels {
+            if !seen.contains(model.name) {
+                result.append(model)
+                seen.insert(model.name)
+            }
+        }
+        return result
     }
     
     private static let predefinedModels: [any TranscriptionModel] = {
