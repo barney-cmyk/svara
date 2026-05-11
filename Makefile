@@ -263,7 +263,11 @@ deploy:
 	@command -v lftp >/dev/null 2>&1 || { echo "❌ lftp not installed (brew install lftp)"; exit 1; }
 	@echo "Copying DMG into website tree..."
 	@mkdir -p website/downloads
-	@cp "$(DMG_PATH)" "website/downloads/Neuron Flame.dmg"
+	@VERSION=$$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$(RELEASE_DIST_DIR)/Neuron Flame.app/Contents/Info.plist") && \
+	cp "$(DMG_PATH)" "website/downloads/Neuron Flame.dmg" && \
+	cp "$(DMG_PATH)" "website/downloads/Neuron Flame-$$VERSION.dmg" && \
+	echo "  → versioned: website/downloads/Neuron Flame-$$VERSION.dmg" && \
+	echo "  → latest:    website/downloads/Neuron Flame.dmg"
 	@echo "Deploying website + DMG via FTP..."
 	@cd website && lftp -u "$(FTP_USER),$$NEURONFLAME_FTP_PASS" -p 21 $(FTP_HOST) \
 		-e "set ftp:passive-mode true; set ssl:verify-certificate no; \

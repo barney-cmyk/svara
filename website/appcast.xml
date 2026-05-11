@@ -24,7 +24,7 @@
             <sparkle:version>188</sparkle:version>
             <sparkle:shortVersionString>1.88</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="Mn9YHH6zbBq4KMCagyoYlDBIYewyoUZKT8R0Yf+qW5FG3Dxl9wSfp4Pwux/8wyGwRcVKML8mvnOzCAKtpYijCA==" length="15892635" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.88.dmg" sparkle:edSignature="Mn9YHH6zbBq4KMCagyoYlDBIYewyoUZKT8R0Yf+qW5FG3Dxl9wSfp4Pwux/8wyGwRcVKML8mvnOzCAKtpYijCA==" length="15892635" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

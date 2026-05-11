@@ -13,7 +13,16 @@ AddType application/x-apple-diskimage .dmg
 </FilesMatch>
 
 <FilesMatch "\.dmg$">
-    Header set Cache-Control "public, max-age=86400"
+    # DMGs MUST NOT cache — every `make ship` overwrites the same
+    # `Neuron Flame.dmg` filename with new content, but the bytes have a
+    # new EdDSA signature embedded in the matching appcast.xml entry.
+    # If the CDN serves stale DMG bytes after the appcast has updated,
+    # Sparkle's signature verification rejects the install with:
+    #   "EdDSA signature does not match... downloaded archive length
+    #    differs from appcast item's length"
+    # Previously we had `max-age=86400` here, which caused exactly this
+    # bug when we shipped v1.86 → v1.87 → v1.88 in rapid succession.
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Content-Disposition "attachment"
 </FilesMatch>
 

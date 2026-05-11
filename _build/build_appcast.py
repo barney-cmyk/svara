@@ -83,7 +83,17 @@ def main():
         notes_html = f"<h3>v{short_version}</h3><p>Maintenance update.</p>"
 
     pub_date = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
-    dmg_url = "https://neuronflame.com/downloads/Neuron%20Flame.dmg"
+    # Versioned URL for Sparkle auto-update. Every release lives at an
+    # immutable URL so the CDN never serves stale bytes from a previous
+    # release's cache. This was a real bug in v1.86–v1.88: Hostinger's
+    # CDN aggressively cached `Neuron Flame.dmg` for 24h, so when we
+    # shipped a newer version, edges kept serving the older bytes —
+    # Sparkle's EdDSA signature check then correctly rejected the
+    # mismatch ("downloaded archive length differs from appcast item").
+    # The generic `/Neuron Flame.dmg` URL is still uploaded (and is what
+    # the website Download button points at) — it's allowed to be cached
+    # because manual downloaders don't verify signatures the same way.
+    dmg_url = f"https://neuronflame.com/downloads/Neuron%20Flame-{short_version}.dmg"
 
     appcast = f"""<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
