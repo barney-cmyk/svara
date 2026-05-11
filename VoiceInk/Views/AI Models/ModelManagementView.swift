@@ -171,35 +171,18 @@ struct ModelManagementView: View {
                             warmupCoordinator.isWarming(modelNamed: whisperModel.name)
                         } ?? false
 
-                        // On the Recommended tab, prefix each row with a small
-                        // badge explaining why the engine picked it ("Best
-                        // overall", "Fastest", etc.). On other tabs we render
-                        // the card on its own. The reason is computed live by
-                        // RecommendationEngine over the merged registry, so it
-                        // auto-updates as new models flow in via models.json.
+                        // On the Recommended tab, prefix each row with a
+                        // small colour-coded badge explaining why the engine
+                        // picked it. Each category has its own gradient so
+                        // users can scan the column and immediately see what
+                        // each pick optimises for (speed = orange, accuracy
+                        // = green, multilingual = blue, etc).
                         if selectedFilter == .recommended,
                            let reason = recommendationReason(for: model) {
-                            HStack(spacing: 0) {
-                                Text(reason.uppercased())
-                                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                                    .tracking(0.6)
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 4)
-                                    .background(
-                                        Capsule().fill(
-                                            LinearGradient(
-                                                colors: [Color.purple, Color(red: 0.75, green: 0.15, blue: 0.83)],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                    )
-                                Spacer(minLength: 0)
-                            }
-                            .padding(.leading, 4)
-                            .padding(.top, 4)
-                            .padding(.bottom, -4)
+                            ReasonBadge(reason: reason)
+                                .padding(.leading, 4)
+                                .padding(.top, 4)
+                                .padding(.bottom, -4)
                         }
 
                         ModelCardView(
@@ -245,8 +228,17 @@ struct ModelManagementView: View {
                                 customModelToEdit = customModel
                             } : nil
                         )
+
+                        // Provenance row — small strip under each card
+                        // showing origin (organisation · country · via)
+                        // and a colour-coded trust chip. Helps users make
+                        // an informed call on whether to use any given
+                        // model rather than guessing.
+                        ProvenanceStrip(model: model)
+                            .padding(.leading, 4)
+                            .padding(.trailing, 8)
                     }
-                    
+
                     // Import button as a card at the end of the Local list
                     if selectedFilter == .local {
                         HStack(spacing: 8) {
@@ -359,9 +351,25 @@ struct ModelManagementView: View {
             // picks here. See RecommendationEngine.score() for the formula.
             return liveRecommendations.map { $0.model }
         case .local:
-            return transcriptionModelManager.allAvailableModels.filter {
-                ($0.provider == .whisper || $0.provider == .nativeApple || $0.provider == .fluidAudio)
-                    && transcriptionModelManager.isAvailableOnCurrentOS($0)
+            // Hide superseded variants by default. If you've already
+            // downloaded an older version (it's on disk), keep it visible
+            // — we don't want it to "disappear" out from under you. The
+            // user's instinct here is right: people shouldn't have to
+            // pick between Parakeet V2 and V3 when V3 simply replaces V2.
+            let downloadedNames = Set(whisperModelManager.availableModels.map { $0.name })
+            let supersededIds = Set(
+                transcriptionModelManager.allAvailableModels.compactMap {
+                    ModelMetadata.info(for: $0).supersededBy
+                }
+            )
+            return transcriptionModelManager.allAvailableModels.filter { model in
+                guard (model.provider == .whisper || model.provider == .nativeApple || model.provider == .fluidAudio)
+                    && transcriptionModelManager.isAvailableOnCurrentOS(model) else { return false }
+                // Suppress superseded entries unless the user already has them on disk.
+                if supersededIds.contains(model.name) && !downloadedNames.contains(model.name) {
+                    return false
+                }
+                return true
             }
         case .cloud:
             return transcriptionModelManager.allAvailableModels.filter { CloudProviderRegistry.provider(for: $0.provider) != nil }
@@ -383,5 +391,150 @@ struct ModelManagementView: View {
                 await whisperModelManager.importWhisperModel(from: url)
             }
         }
+    }
+}
+
+// MARK: - Provenance strip
+//
+// Small horizontal row under each model card showing:
+//   • Origin string from ModelMetadata (organisation · country · via)
+//   • A coloured trust chip (Verified / Community / Custom)
+//   • An "introduced YYYY-MM" hint when the date is known
+//
+// All info comes from ModelMetadata.info(_:), which merges the hard-coded
+// `predefined` map with whatever flowed in via the remote catalogue. So
+// every model — including future ones we add to models.json — gets the
+// provenance treatment automatically.
+private struct ProvenanceStrip: View {
+    let model: any TranscriptionModel
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "MMM yyyy"   // e.g. "Apr 2026"
+        return f
+    }()
+
+    var body: some View {
+        let info = ModelMetadata.info(for: model)
+        HStack(spacing: 8) {
+            Image(systemName: "building.2")
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant.opacity(0.7))
+            Text(info.origin)
+                .font(.system(size: 10, design: .rounded))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                .lineLimit(1)
+                .truncationMode(.tail)
+            if let date = info.introduced {
+                Text("·")
+                    .font(.system(size: 10))
+                    .foregroundStyle(ZivaTheme.onSurfaceVariant.opacity(0.5))
+                Text("Introduced \(Self.dateFormatter.string(from: date))")
+                    .font(.system(size: 10, design: .rounded))
+                    .foregroundStyle(ZivaTheme.onSurfaceVariant.opacity(0.85))
+            }
+            Spacer(minLength: 0)
+            TrustChip(trust: info.trust)
+        }
+        .padding(.horizontal, 6)
+        .padding(.top, 2)
+    }
+}
+
+/// Tiered trust chip — colour communicates the level. Verified is brand
+/// green (sturdy / audited), Community is brand violet (open source /
+/// community-vetted), Custom is amber (caution: you brought this).
+private struct TrustChip: View {
+    let trust: ModelMetadata.Trust
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(dotColor)
+                .frame(width: 6, height: 6)
+            Text(trust.label.uppercased())
+                .font(.system(size: 9, weight: .semibold, design: .rounded))
+                .tracking(0.4)
+                .foregroundStyle(textColor)
+        }
+        .padding(.horizontal, 7)
+        .padding(.vertical, 2)
+        .background(
+            Capsule().fill(backgroundColor)
+        )
+    }
+
+    private var dotColor: Color {
+        switch trust {
+        case .verified:  return Color(red: 0.06, green: 0.72, blue: 0.50)
+        case .community: return Color(red: 0.49, green: 0.23, blue: 0.93)
+        case .custom:    return Color(red: 0.98, green: 0.65, blue: 0.10)
+        }
+    }
+    private var textColor: Color {
+        switch trust {
+        case .verified:  return Color(red: 0.06, green: 0.48, blue: 0.34)
+        case .community: return Color(red: 0.32, green: 0.15, blue: 0.62)
+        case .custom:    return Color(red: 0.65, green: 0.42, blue: 0.05)
+        }
+    }
+    private var backgroundColor: Color {
+        switch trust {
+        case .verified:  return Color(red: 0.06, green: 0.72, blue: 0.50).opacity(0.10)
+        case .community: return Color(red: 0.49, green: 0.23, blue: 0.93).opacity(0.10)
+        case .custom:    return Color(red: 0.98, green: 0.65, blue: 0.10).opacity(0.12)
+        }
+    }
+}
+
+// MARK: - Reason badge
+//
+// The coloured capsule we render above each row on the Recommended tab.
+// Each recommendation category gets its own gradient so the visual cue
+// matches the semantic — speed feels energetic (orange/amber), accuracy
+// feels solid and trustworthy (emerald/teal), multilingual feels global
+// (blue/indigo), cloud feels neutral (slate). "Best overall" keeps the
+// brand violet/magenta so it remains the visual anchor.
+private struct ReasonBadge: View {
+    let reason: String
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Text(reason.uppercased())
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .tracking(0.6)
+                .foregroundStyle(.white)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(
+                    Capsule().fill(gradient)
+                )
+            Spacer(minLength: 0)
+        }
+    }
+
+    private var gradient: LinearGradient {
+        let colors: [Color]
+        switch reason {
+        case "Best overall":
+            colors = [Color(red: 0.49, green: 0.23, blue: 0.93),   // violet
+                      Color(red: 0.75, green: 0.15, blue: 0.83)]   // magenta
+        case "Fastest":
+            colors = [Color(red: 0.98, green: 0.45, blue: 0.09),   // orange
+                      Color(red: 0.98, green: 0.75, blue: 0.14)]   // amber
+        case "Most accurate":
+            colors = [Color(red: 0.06, green: 0.72, blue: 0.50),   // emerald
+                      Color(red: 0.08, green: 0.72, blue: 0.66)]   // teal
+        case "Best for multilingual":
+            colors = [Color(red: 0.23, green: 0.51, blue: 0.96),   // sky blue
+                      Color(red: 0.39, green: 0.40, blue: 0.95)]   // indigo
+        case "Best cloud":
+            colors = [Color(red: 0.39, green: 0.45, blue: 0.55),   // slate
+                      Color(red: 0.58, green: 0.64, blue: 0.72)]   // slate-300
+        default:
+            colors = [Color(red: 0.49, green: 0.23, blue: 0.93),
+                      Color(red: 0.75, green: 0.15, blue: 0.83)]
+        }
+        return LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
     }
 }

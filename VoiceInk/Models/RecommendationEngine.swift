@@ -31,9 +31,17 @@ enum RecommendationEngine {
         from models: [any TranscriptionModel],
         isAvailableOnCurrentOS: (any TranscriptionModel) -> Bool
     ) -> [Recommendation] {
-        // Only consider models that work on the user's current OS — e.g.
-        // NativeAppleModel needs macOS 26+, no point recommending it on 14/15.
-        let pool = models.filter(isAvailableOnCurrentOS)
+        // Three filters compose the candidate pool:
+        //   1. Available on current OS — NativeAppleModel needs macOS 26+.
+        //   2. Not superseded — Parakeet V2 is hidden because V3 supersedes
+        //      it; old Whisper Large v3 hidden in favour of Turbo. Power
+        //      users can still find every variant in the Local tab.
+        let supersededIds = Set(
+            models.compactMap { ModelMetadata.info(for: $0).supersededBy }
+        )
+        let pool = models.filter { model in
+            isAvailableOnCurrentOS(model) && !supersededIds.contains(model.name)
+        }
         guard !pool.isEmpty else { return [] }
 
         var picks: [Recommendation] = []
@@ -52,30 +60,74 @@ enum RecommendationEngine {
 
         // 1. Best overall — highest combined score. This is the default
         //    pick for most users; usually a mid-size English model.
-        add(pool.max { score($0) < score($1) }, reason: "Best overall")
+        add(pool.max(by: scoreThenRecency), reason: "Best overall")
 
         // 2. Fastest local — highest `speed` among models that run on the
         //    user's Mac (i.e. no cloud round-trip). Picks the responsiveness
         //    winner regardless of accuracy.
-        add(local.max { metrics($0).speed < metrics($1).speed }, reason: "Fastest")
+        add(local.max(by: speedThenRecency), reason: "Fastest")
 
         // 3. Most accurate local — highest `accuracy` regardless of speed
         //    or size. The "I care about quality, I'll wait" pick.
-        add(local.max { metrics($0).accuracy < metrics($1).accuracy }, reason: "Most accurate")
+        add(local.max(by: accuracyThenRecency), reason: "Most accurate")
 
         // 4. Best multilingual — best score in the multilingual subset.
         //    Only adds a fourth row if a strong multilingual option exists
         //    and isn't already in the picks via a prior category.
         if !taken.contains(where: { name in multilingual.contains(where: { $0.name == name }) }) {
-            add(multilingual.max { score($0) < score($1) }, reason: "Best for multilingual")
+            add(multilingual.max(by: scoreThenRecency), reason: "Best for multilingual")
         }
 
         // 5. Best cloud — best score among cloud-hosted models. Useful
         //    when the user wants Whisper Large quality without the local
         //    compute cost (e.g. Groq's hosted Whisper).
-        add(cloud.max { score($0) < score($1) }, reason: "Best cloud")
+        add(cloud.max(by: scoreThenRecency), reason: "Best cloud")
 
         return picks
+    }
+
+    // MARK: - Comparators
+    //
+    // Each comparator returns "is $0 strictly less preferable than $1"
+    // — they're suitable as the `by:` argument to `Array.max(by:)`. Each
+    // breaks ties by recency (newer wins), then by name as a final
+    // deterministic fallback so the order is stable across renders.
+
+    private static func scoreThenRecency(_ a: any TranscriptionModel, _ b: any TranscriptionModel) -> Bool {
+        let sa = score(a), sb = score(b)
+        if sa != sb { return sa < sb }
+        return olderThan(a, b)
+    }
+
+    private static func speedThenRecency(_ a: any TranscriptionModel, _ b: any TranscriptionModel) -> Bool {
+        let va = metrics(a).speed, vb = metrics(b).speed
+        if va != vb { return va < vb }
+        return olderThan(a, b)
+    }
+
+    private static func accuracyThenRecency(_ a: any TranscriptionModel, _ b: any TranscriptionModel) -> Bool {
+        let va = metrics(a).accuracy, vb = metrics(b).accuracy
+        if va != vb { return va < vb }
+        return olderThan(a, b)
+    }
+
+    /// Returns true if `a` is older than `b` (so it "loses" in a max
+    /// comparator). Missing dates lose to known dates; equal dates fall
+    /// back to lexicographic name ordering for stability.
+    private static func olderThan(_ a: any TranscriptionModel, _ b: any TranscriptionModel) -> Bool {
+        let da = ModelMetadata.info(for: a).introduced
+        let db = ModelMetadata.info(for: b).introduced
+        switch (da, db) {
+        case (nil, nil):
+            return a.name > b.name
+        case (nil, _):
+            return true              // unknown date is "older" than any known
+        case (_, nil):
+            return false
+        case (let lhs?, let rhs?):
+            if lhs != rhs { return lhs < rhs }
+            return a.name > b.name
+        }
     }
 
     // MARK: - Scoring

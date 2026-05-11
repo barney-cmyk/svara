@@ -6,22 +6,25 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.87</title>
-            <description><![CDATA[<h3>v1.87 — Smarter "Recommended" tab</h3>
-<p>The Recommended tab is no longer a hand-picked list of four models. It's now computed live from whatever's in the merged registry (built-in + remote catalogue + your custom endpoints), and each pick carries a small badge explaining why it's there:</p>
+            <title>1.88</title>
+            <description><![CDATA[<h3>v1.88 — Model provenance, smarter recommendations, no more old versions</h3>
+<p>Every model in the AI Models tab now shows you who made it, where they're based, and how much we trust the provenance — so you can make an informed call rather than guessing at names.</p>
 <ul>
-    <li><strong>BEST OVERALL</strong> — top score on the formula <code>accuracy² × speed</code></li>
-    <li><strong>FASTEST</strong> — highest speed among local (on-device) models</li>
-    <li><strong>MOST ACCURATE</strong> — highest accuracy regardless of speed</li>
-    <li><strong>BEST FOR MULTILINGUAL</strong> — top scorer among multilingual models</li>
-    <li><strong>BEST CLOUD</strong> — top scorer among cloud-hosted options</li>
+    <li><strong>Origin line</strong> under each model: <em>OpenAI · United States · via whisper.cpp</em> / <em>NVIDIA · United States · via FluidAudio</em> / <em>Apple · United States</em> / etc.</li>
+    <li><strong>Trust chip</strong> on every card — <span style="color:#10b981">Verified</span> for major-org models, <span style="color:#7c3aed">Community</span> for open-source ports, <span style="color:#f59e0b">Custom</span> for user-supplied endpoints.</li>
+    <li><strong>Introduced YYYY-MM</strong> stamp so you know how fresh each model is.</li>
 </ul>
-<p>Practical effect: when a new model lands in <code>models.json</code> with better metrics than any current pick, the Recommended tab updates automatically — no app release needed. Users always see the best models for their use case, not the ones that were "best" six months ago.</p>]]></description>
-            <pubDate>Mon, 11 May 2026 02:55:49 +0000</pubDate>
-            <sparkle:version>187</sparkle:version>
-            <sparkle:shortVersionString>1.87</sparkle:shortVersionString>
+<p>Smarter Recommended tab:</p>
+<ul>
+    <li><strong>Colour-coded badges</strong> — Best overall (violet) / Fastest (orange) / Most accurate (emerald) / Best for multilingual (blue) / Best cloud (slate). Each category is now visually distinct so you can scan and find what you need.</li>
+    <li><strong>Recency tiebreaks</strong> — when two models have the same score, the newer one wins. Parakeet V3 now beats V2 even though they're scored identically.</li>
+    <li><strong>Old versions hidden</strong> — Parakeet V2 and Whisper Large v2/v3 are no longer shown in Local view (they've been superseded by Parakeet V3 / Large v3 Turbo). Already-downloaded older variants stay visible so nothing disappears from disk.</li>
+</ul>]]></description>
+            <pubDate>Mon, 11 May 2026 03:37:42 +0000</pubDate>
+            <sparkle:version>188</sparkle:version>
+            <sparkle:shortVersionString>1.88</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="C8zcGRJXSUhntEoqRyPKS5Ol9cpJw0ZYqFb2owmxnqcU2D4E1RcXHI80goq2Xl+CIiyP4gp1VRfGjaBzzKL9CQ==" length="15865335" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="Mn9YHH6zbBq4KMCagyoYlDBIYewyoUZKT8R0Yf+qW5FG3Dxl9wSfp4Pwux/8wyGwRcVKML8mvnOzCAKtpYijCA==" length="15892635" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

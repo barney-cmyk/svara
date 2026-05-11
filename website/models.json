@@ -1,13 +1,14 @@
 {
   "_comment": "Neuron Flame remote model catalogue. Fetched by the app on launch + every 24h. Merged with the in-binary fallback list (TranscriptionModelRegistry.predefinedModels). Entries here ADD to or OVERRIDE the local list — they don't replace it. Schema versioned via `version` field; bump it when making breaking changes the client must understand.",
-  "version": 1,
-  "updated_at": "2026-05-11T00:00:00Z",
+  "version": 2,
+  "_v2_notes": "Schema v2 adds: origin (organization + country), trust_level (verified|community|custom), introduced (ISO date for recency tiebreaks), superseded_by (id of newer model that replaces this one — older versions get hidden from Local tab by default).",
+  "updated_at": "2026-05-11T03:00:00Z",
   "models": [
     {
       "id": "ggml-large-v3-turbo-q8_0",
       "family": "whisper",
       "display_name": "Large v3 Turbo (Q8)",
-      "description": "Higher-quality 8-bit quantized variant. Closer to full Large v3 Turbo accuracy at roughly half the size. Good middle ground if Q5 is too aggressive.",
+      "description": "Higher-quality 8-bit quantized variant. Closer to full Large v3 Turbo accuracy at roughly half the size.",
       "size": "874 MB",
       "speed": 0.75,
       "accuracy": 0.965,
@@ -15,14 +16,21 @@
       "languages": "multi",
       "introduced": "2026-04-15",
       "deprecated_at": null,
+      "superseded_by": null,
       "min_app_version": "1.74",
-      "is_new": true
+      "is_new": true,
+      "origin": {
+        "organization": "OpenAI",
+        "country": "United States",
+        "via": "ggerganov/whisper.cpp quantization"
+      },
+      "trust_level": "verified"
     },
     {
       "id": "ggml-distil-large-v3",
       "family": "whisper",
       "display_name": "Distil-Whisper Large v3",
-      "description": "HuggingFace's distilled Whisper Large v3. About 6× faster than the original with ~99% relative WER. English-focused. Worth trying on slower Apple Silicon.",
+      "description": "HuggingFace's distilled Whisper Large v3. ~6× faster than the original with 99% relative WER. English-focused.",
       "size": "1.5 GB",
       "speed": 0.92,
       "accuracy": 0.94,
@@ -30,14 +38,20 @@
       "languages": "english",
       "introduced": "2026-03-08",
       "deprecated_at": null,
+      "superseded_by": null,
       "min_app_version": "1.74",
-      "is_new": true
+      "is_new": true,
+      "origin": {
+        "organization": "HuggingFace · OpenAI",
+        "country": "International (open-source community)"
+      },
+      "trust_level": "community"
     },
     {
       "id": "ggml-tiny.en-q5_1",
       "family": "whisper",
       "display_name": "Tiny English (Q5)",
-      "description": "Quantized tiny English-only model. Tiny enough to live entirely in cache — useful for very short utterances on older Macs or low-power scenarios.",
+      "description": "Quantized tiny English-only model. Tiny enough to live entirely in cache — useful for short utterances on lower-spec Macs.",
       "size": "32 MB",
       "speed": 0.98,
       "accuracy": 0.62,
@@ -45,8 +59,15 @@
       "languages": "english",
       "introduced": "2026-02-20",
       "deprecated_at": null,
+      "superseded_by": null,
       "min_app_version": "1.74",
-      "is_new": false
+      "is_new": false,
+      "origin": {
+        "organization": "OpenAI",
+        "country": "United States",
+        "via": "ggerganov/whisper.cpp quantization"
+      },
+      "trust_level": "verified"
     }
   ]
 }

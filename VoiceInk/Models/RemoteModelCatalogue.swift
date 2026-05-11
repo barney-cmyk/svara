@@ -112,9 +112,18 @@ final class RemoteModelCatalogue: ObservableObject {
             let materialised = filtered.compactMap { $0.toTranscriptionModel() }
             let now = Date()
 
+            // Register origin/trust/introduced/supersededBy with the
+            // metadata lookup so the AI Models tab can render those
+            // badges + the RecommendationEngine can use them for
+            // tiebreaks and superseded filtering.
+            let metadataByName = Dictionary(uniqueKeysWithValues:
+                filtered.map { ($0.id, $0.toMetadataInfo()) }
+            )
+
             await MainActor.run {
                 self.remoteModels = materialised
                 self.lastRefreshed = now
+                ModelMetadata.registerRemoteEntries(metadataByName)
             }
             persistToCache(entries: filtered, stamp: now)
 
@@ -131,6 +140,14 @@ final class RemoteModelCatalogue: ObservableObject {
         if let data = defaults.data(forKey: Self.cacheKey),
            let entries = try? JSONDecoder().decode([RemoteModelEntry].self, from: data) {
             self.remoteModels = entries.compactMap { $0.toTranscriptionModel() }
+            // Hydrate metadata from the cache too so origin/trust badges
+            // render correctly even before the first network refresh
+            // succeeds. Without this, the AI Models tab shows heuristic
+            // metadata for cached remote models until the next fetch.
+            let cachedMetadata = Dictionary(uniqueKeysWithValues:
+                entries.map { ($0.id, $0.toMetadataInfo()) }
+            )
+            ModelMetadata.registerRemoteEntries(cachedMetadata)
             logger.notice("Restored \(self.remoteModels.count, privacy: .public) cached remote models")
         }
         if let stamp = defaults.object(forKey: Self.lastRefreshedKey) as? Date {
@@ -194,8 +211,17 @@ struct RemoteModelEntry: Codable {
     let languages: String      // "english" | "multi"
     let introduced: String?
     let deprecatedAt: String?
+    let supersededBy: String?
     let minAppVersion: String?
     let isNew: Bool?
+    let origin: Origin?
+    let trustLevel: String?    // "verified" | "community" | "custom"
+
+    struct Origin: Codable {
+        let organization: String
+        let country: String
+        let via: String?
+    }
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -208,9 +234,40 @@ struct RemoteModelEntry: Codable {
         case ramUsage     = "ram_usage"
         case languages
         case introduced
-        case deprecatedAt = "deprecated_at"
+        case deprecatedAt  = "deprecated_at"
+        case supersededBy  = "superseded_by"
         case minAppVersion = "min_app_version"
-        case isNew        = "is_new"
+        case isNew         = "is_new"
+        case origin
+        case trustLevel    = "trust_level"
+    }
+
+    /// Convert this remote entry into a `ModelMetadata.Info` so it shows
+    /// up in the lookup with the same shape as built-in models. Called
+    /// by RemoteModelCatalogue.refresh() after a successful fetch.
+    func toMetadataInfo() -> ModelMetadata.Info {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        let originString: String = {
+            guard let o = origin else { return "—" }
+            var parts = ["\(o.organization) · \(o.country)"]
+            if let via = o.via { parts.append("via \(via)") }
+            return parts.joined(separator: " · ")
+        }()
+        let trust: ModelMetadata.Trust = {
+            switch trustLevel?.lowercased() {
+            case "verified":  return .verified
+            case "community": return .community
+            case "custom":    return .custom
+            default:          return .community
+            }
+        }()
+        return ModelMetadata.Info(
+            origin: originString,
+            trust: trust,
+            introduced: introduced.flatMap { formatter.date(from: $0) },
+            supersededBy: supersededBy
+        )
     }
 
     /// Convert the wire shape into one of the concrete TranscriptionModel
