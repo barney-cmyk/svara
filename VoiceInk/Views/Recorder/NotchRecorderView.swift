@@ -71,7 +71,12 @@ struct NotchRecorderView<S: RecorderStateProvider & ObservableObject>: View {
 
     private let recordingSideExpansion: CGFloat = 110
     private let transcriptSideExpansion: CGFloat = 130
-    private let activeHeightBonus: CGFloat = 8
+    // Was 8pt — made the active pill extend ~8pt below the menu bar, looking
+    // like a separate widget instead of a continuation of the notch silhouette.
+    // Set to 0 so the active pill height matches notchHeight exactly. The
+    // breathing halo still bleeds outward via blur, giving the "alive" cue
+    // without changing the silhouette itself.
+    private let activeHeightBonus: CGFloat = 0
     private let transcriptPanelHeight: CGFloat = 60
 
     private var mainRowHeight: CGFloat { notchHeight + activeHeightBonus }
@@ -189,20 +194,11 @@ struct NotchRecorderView<S: RecorderStateProvider & ObservableObject>: View {
             }
             .frame(width: pillWidth, height: pillHeight)
             .background(shape.fill(surfaceGradient))
-            .overlay(
-                // Brand-gradient rim that traces the silhouette while recording.
-                shape
-                    .stroke(rimGradient, lineWidth: 1.4)
-                    .opacity(isRecording ? 0.9 : 0)
-                    .animation(.easeInOut(duration: 0.35), value: isRecording)
-            )
-            .overlay(
-                // Constant hairline that defines the silhouette against the
-                // menu bar even when idle/transcribing. (NotchShape isn't
-                // InsettableShape so we use .stroke, not .strokeBorder.)
-                shape
-                    .stroke(Color.white.opacity(0.07), lineWidth: 0.6)
-            )
+            // Borderless. The pill silhouette is defined purely by the fill
+            // shape against the desktop wallpaper / menu bar. The breathing
+            // halo behind provides all the "alive" cueing we need — no rim
+            // stroke, no hairline border, the glow appears to emit from the
+            // silhouette itself rather than from an outlined edge.
             .clipShape(shape)
         }
         .animation(.easeInOut(duration: 0.4), value: isRecording)

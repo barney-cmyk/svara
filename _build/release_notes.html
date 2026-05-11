@@ -1,3 +1,7 @@
-<h3>v1.84 — Fix: About tab rendered blank</h3>
-<p>v1.82/v1.83's compact About page used a layout pattern (Spacer inside <code>.frame(maxHeight: .infinity)</code>) that NavigationSplitView mis-measures on macOS 26 — the detail pane and sidebar both went blank when the About tab was clicked, with no way to navigate back without quitting.</p>
-<p>Fixed by wrapping the content in a ScrollView, which gives the inner views a valid coordinate space. The compact layout (everything visible without scrolling) is unchanged.</p>
+<h3>v1.85 — Cleaner notch, no border, sits flush with the menu bar</h3>
+<ul>
+    <li><strong>Flush silhouette.</strong> The recorder pill is now exactly menu-bar-height (was overshooting by ~8pt). Reads as part of the notch hardware instead of a floating widget that hangs below it.</li>
+    <li><strong>No border.</strong> Removed the rim stroke entirely. The brand-tinted breathing halo behind the pill now appears to emit from the silhouette directly — softer, more alive.</li>
+    <li><strong>Halo unchanged.</strong> The gentle pulsing glow while recording is still there, just borderless.</li>
+</ul>
+<p>Bonus: the website hero logo now sits on a clean white card against the dark page theme — pops the brand colours instead of fighting them.</p>

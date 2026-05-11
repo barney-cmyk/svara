@@ -6,15 +6,19 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.84</title>
-            <description><![CDATA[<h3>v1.84 — Fix: About tab rendered blank</h3>
-<p>v1.82/v1.83's compact About page used a layout pattern (Spacer inside <code>.frame(maxHeight: .infinity)</code>) that NavigationSplitView mis-measures on macOS 26 — the detail pane and sidebar both went blank when the About tab was clicked, with no way to navigate back without quitting.</p>
-<p>Fixed by wrapping the content in a ScrollView, which gives the inner views a valid coordinate space. The compact layout (everything visible without scrolling) is unchanged.</p>]]></description>
-            <pubDate>Sun, 10 May 2026 08:17:21 +0000</pubDate>
-            <sparkle:version>184</sparkle:version>
-            <sparkle:shortVersionString>1.84</sparkle:shortVersionString>
+            <title>1.85</title>
+            <description><![CDATA[<h3>v1.85 — Cleaner notch, no border, sits flush with the menu bar</h3>
+<ul>
+    <li><strong>Flush silhouette.</strong> The recorder pill is now exactly menu-bar-height (was overshooting by ~8pt). Reads as part of the notch hardware instead of a floating widget that hangs below it.</li>
+    <li><strong>No border.</strong> Removed the rim stroke entirely. The brand-tinted breathing halo behind the pill now appears to emit from the silhouette directly — softer, more alive.</li>
+    <li><strong>Halo unchanged.</strong> The gentle pulsing glow while recording is still there, just borderless.</li>
+</ul>
+<p>Bonus: the website hero logo now sits on a clean white card against the dark page theme — pops the brand colours instead of fighting them.</p>]]></description>
+            <pubDate>Mon, 11 May 2026 01:54:20 +0000</pubDate>
+            <sparkle:version>185</sparkle:version>
+            <sparkle:shortVersionString>1.85</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="DgXDsu+h+bDBwD2qf8b4fJkzr5AMAQ7gezHHEFIdLUnPh/eqhDezW24IlPv379QuddjCAtZkGUjOzumQwVw/AA==" length="15820653" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="kJcu7xm5VmsIfKLJhtnR/0t2gYZTZyqbweUM2Lhnw5Ss5eQ2DH4G89C2/ouEotqzfQRrq6+/9DNnWPH1SpOLBQ==" length="15817655" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
