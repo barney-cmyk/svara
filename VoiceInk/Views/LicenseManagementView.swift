@@ -29,10 +29,12 @@ struct LicenseManagementView: View {
             VStack(alignment: .leading, spacing: 18) {
                 greeting
                 privacyGrid
-                HStack(alignment: .top, spacing: 16) {
+                HStack(spacing: 16) {
                     updatesCard
                     donationCard
                 }
+                .fixedSize(horizontal: false, vertical: true)
+                promises
                 footer
                     .padding(.top, 6)
             }
@@ -193,7 +195,7 @@ struct LicenseManagementView: View {
             .buttonStyle(.plain)
         }
         .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(ZivaTheme.surfaceContainerLowest)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(
@@ -273,7 +275,7 @@ struct LicenseManagementView: View {
             }
         }
         .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(
             LinearGradient(
                 colors: [ZivaTheme.primaryFixed.opacity(0.55), ZivaTheme.surfaceContainerLowest],
@@ -288,11 +290,74 @@ struct LicenseManagementView: View {
         )
     }
 
+    // MARK: - Promises strip (fills bottom real estate)
+
+    private var promises: some View {
+        HStack(alignment: .top, spacing: 0) {
+            promise(
+                icon: "waveform",
+                title: "Your voice stays here",
+                body: "Audio is transcribed on your Mac and discarded. Nothing leaves the device."
+            )
+            divider
+            promise(
+                icon: "infinity",
+                title: "Free, forever",
+                body: "No accounts, no trials, no upsell. Every release is signed and free."
+            )
+            divider
+            promise(
+                icon: "sparkles",
+                title: "Built in the open",
+                body: "Source on GitHub. Fork it, audit it, or just enjoy it."
+            )
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity)
+        .background(
+            LinearGradient(
+                colors: [ZivaTheme.surfaceContainerLowest, ZivaTheme.primaryFixed.opacity(0.25)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .strokeBorder(ZivaTheme.outlineVariant, lineWidth: 1)
+        )
+    }
+
+    private func promise(icon: String, title: String, body: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(ZivaTheme.primary)
+            Text(title)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(ZivaTheme.onSurface)
+            Text(body)
+                .font(.system(size: 11))
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                .lineSpacing(2)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 6)
+    }
+
+    private var divider: some View {
+        Rectangle()
+            .fill(ZivaTheme.outlineVariant.opacity(0.6))
+            .frame(width: 1)
+            .padding(.vertical, 4)
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
         HStack {
-            Text("Built by Barney Sharma · GPL-3.0 · neuronflame.com")
+            Text("neuronflame.com · GPL-3.0")
                 .font(.system(size: 11))
                 .foregroundStyle(ZivaTheme.onSurfaceVariant)
             Spacer()
