@@ -6,25 +6,25 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.88</title>
-            <description><![CDATA[<h3>v1.88 — Model provenance, smarter recommendations, no more old versions</h3>
-<p>Every model in the AI Models tab now shows you who made it, where they're based, and how much we trust the provenance — so you can make an informed call rather than guessing at names.</p>
+            <title>1.89</title>
+            <description><![CDATA[<h3>v1.89 — Filter the Local catalogue, see when models have a newer version</h3>
 <ul>
-    <li><strong>Origin line</strong> under each model: <em>OpenAI · United States · via whisper.cpp</em> / <em>NVIDIA · United States · via FluidAudio</em> / <em>Apple · United States</em> / etc.</li>
-    <li><strong>Trust chip</strong> on every card — <span style="color:#10b981">Verified</span> for major-org models, <span style="color:#7c3aed">Community</span> for open-source ports, <span style="color:#f59e0b">Custom</span> for user-supplied endpoints.</li>
-    <li><strong>Introduced YYYY-MM</strong> stamp so you know how fresh each model is.</li>
+    <li><strong>Filter chips at the top of the Local tab.</strong> Three groups, multi-select, hide what you don't want to see:
+        <ul>
+            <li><strong>Trust</strong> — Verified / Community / Custom</li>
+            <li><strong>Organisation</strong> — OpenAI / NVIDIA / Apple / HuggingFace / etc. — adapts to whoever's models are actually available</li>
+            <li><strong>Family</strong> — Whisper / Parakeet / Apple Speech</li>
+        </ul>
+        Click "Filter" to expand, click chips to toggle. "Clear" wipes all selections.
+    </li>
+    <li><strong>"Newer version available" banner</strong> appears below any downloaded model that's been superseded by a newer one (e.g. you have Parakeet V2 but V3 exists). One click downloads the newer version and sets it as default — no hunting through the list.</li>
 </ul>
-<p>Smarter Recommended tab:</p>
-<ul>
-    <li><strong>Colour-coded badges</strong> — Best overall (violet) / Fastest (orange) / Most accurate (emerald) / Best for multilingual (blue) / Best cloud (slate). Each category is now visually distinct so you can scan and find what you need.</li>
-    <li><strong>Recency tiebreaks</strong> — when two models have the same score, the newer one wins. Parakeet V3 now beats V2 even though they're scored identically.</li>
-    <li><strong>Old versions hidden</strong> — Parakeet V2 and Whisper Large v2/v3 are no longer shown in Local view (they've been superseded by Parakeet V3 / Large v3 Turbo). Already-downloaded older variants stay visible so nothing disappears from disk.</li>
-</ul>]]></description>
-            <pubDate>Mon, 11 May 2026 03:37:42 +0000</pubDate>
-            <sparkle:version>188</sparkle:version>
-            <sparkle:shortVersionString>1.88</sparkle:shortVersionString>
+<p>The underlying data comes from the remote catalogue (<code>neuronflame.com/models.json</code>), so when NVIDIA ships Parakeet V4, anyone on V3 sees the upgrade banner within 24 hours of me adding the entry.</p>]]></description>
+            <pubDate>Mon, 11 May 2026 04:14:46 +0000</pubDate>
+            <sparkle:version>189</sparkle:version>
+            <sparkle:shortVersionString>1.89</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame.dmg" sparkle:edSignature="Mn9YHH6zbBq4KMCagyoYlDBIYewyoUZKT8R0Yf+qW5FG3Dxl9wSfp4Pwux/8wyGwRcVKML8mvnOzCAKtpYijCA==" length="15892635" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.89.dmg" sparkle:edSignature="DEK2elHkJk5+Qy7tF2/wov2qOTe81WL9G0iX0V0E6bYyMLuhB88SS67XNl3BxL/vcECdVBC+HjZoOa7U50DEDg==" length="15955535" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

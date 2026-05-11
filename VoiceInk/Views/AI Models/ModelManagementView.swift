@@ -26,6 +26,15 @@ struct ModelManagementView: View {
     @State private var selectedFilter: ModelFilter = .recommended
     @State private var isShowingSettings = false
 
+    // Sub-filters that only apply on the Local tab. Multi-select chips —
+    // empty set means "show everything". Trust filters by ModelMetadata.Trust,
+    // Org filters by the first segment of the origin string ("OpenAI",
+    // "NVIDIA", etc.), Family filters by ModelMetadata.family().
+    @State private var trustFilters: Set<ModelMetadata.Trust> = []
+    @State private var orgFilters: Set<String> = []
+    @State private var familyFilters: Set<String> = []
+    @State private var isLocalFilterBarExpanded = false
+
     private let settingsPanelWidth: CGFloat = 400
 
     // State for the unified alert
@@ -164,7 +173,23 @@ struct ModelManagementView: View {
                 .buttonStyle(PlainButtonStyle())
             }
             .padding(.bottom, 12)
-            
+
+            // Filter chips — only shown on the Local tab. Lets the user
+            // narrow by trust level, organisation, or family. Empty
+            // selections in a group mean "include all".
+            if selectedFilter == .local {
+                LocalFilterBar(
+                    availableTrusts: availableTrustsInLocalSet,
+                    availableOrgs: availableOrgsInLocalSet,
+                    availableFamilies: availableFamiliesInLocalSet,
+                    selectedTrusts: $trustFilters,
+                    selectedOrgs: $orgFilters,
+                    selectedFamilies: $familyFilters,
+                    isExpanded: $isLocalFilterBarExpanded
+                )
+                .padding(.bottom, 8)
+            }
+
             VStack(spacing: 12) {
                     ForEach(filteredModels, id: \.id) { model in
                         let isWarming = (model as? WhisperModel).map { whisperModel in
@@ -237,6 +262,27 @@ struct ModelManagementView: View {
                         ProvenanceStrip(model: model)
                             .padding(.leading, 4)
                             .padding(.trailing, 8)
+
+                        // "Update available" CTA — when the user has a
+                        // downloaded model whose metadata says it's been
+                        // superseded by a newer version, surface a one-click
+                        // upgrade row below the card. Click → download the
+                        // newer model and set it as default.
+                        if let upgrade = upgradeOption(for: model) {
+                            UpdateAvailableBanner(
+                                from: model.displayName,
+                                to: upgrade.displayName,
+                                onUpdate: {
+                                    if let newer = upgrade as? WhisperModel {
+                                        Task { await whisperModelManager.downloadModel(newer) }
+                                    }
+                                    Task {
+                                        transcriptionModelManager.setDefaultTranscriptionModel(upgrade)
+                                    }
+                                }
+                            )
+                            .padding(.horizontal, 4)
+                        }
                     }
 
                     // Import button as a card at the end of the Local list
@@ -353,9 +399,9 @@ struct ModelManagementView: View {
         case .local:
             // Hide superseded variants by default. If you've already
             // downloaded an older version (it's on disk), keep it visible
-            // — we don't want it to "disappear" out from under you. The
-            // user's instinct here is right: people shouldn't have to
-            // pick between Parakeet V2 and V3 when V3 simply replaces V2.
+            // — we don't want it to "disappear" out from under you. Also
+            // apply any active chip filters (Trust / Organisation / Family)
+            // on top.
             let downloadedNames = Set(whisperModelManager.availableModels.map { $0.name })
             let supersededIds = Set(
                 transcriptionModelManager.allAvailableModels.compactMap {
@@ -369,6 +415,11 @@ struct ModelManagementView: View {
                 if supersededIds.contains(model.name) && !downloadedNames.contains(model.name) {
                     return false
                 }
+                // Apply chip filters. Empty selection in a group = no filter.
+                let info = ModelMetadata.info(for: model)
+                if !trustFilters.isEmpty && !trustFilters.contains(info.trust) { return false }
+                if !orgFilters.isEmpty && !orgFilters.contains(ModelMetadata.company(for: model)) { return false }
+                if !familyFilters.isEmpty && !familyFilters.contains(ModelMetadata.family(for: model)) { return false }
                 return true
             }
         case .cloud:
@@ -391,6 +442,269 @@ struct ModelManagementView: View {
                 await whisperModelManager.importWhisperModel(from: url)
             }
         }
+    }
+
+    // MARK: - Filter chip helpers
+    //
+    // Each computed property returns the SET of values currently present
+    // across the on-device-runnable models, so the filter bar can render
+    // chips only for what's actually available. This keeps the bar
+    // adaptive — if we never ship a model from Apple, no Apple chip
+    // appears in the Organisation row.
+
+    /// All on-device-eligible models (without applying chip filters) — the
+    /// universe we pull facet values from. We don't filter by chip
+    /// selections here, otherwise unselecting the last chip in a group
+    /// would lose that chip from the UI.
+    private var localUniverse: [any TranscriptionModel] {
+        let downloadedNames = Set(whisperModelManager.availableModels.map { $0.name })
+        let supersededIds = Set(
+            transcriptionModelManager.allAvailableModels.compactMap {
+                ModelMetadata.info(for: $0).supersededBy
+            }
+        )
+        return transcriptionModelManager.allAvailableModels.filter { model in
+            guard (model.provider == .whisper || model.provider == .nativeApple || model.provider == .fluidAudio)
+                && transcriptionModelManager.isAvailableOnCurrentOS(model) else { return false }
+            if supersededIds.contains(model.name) && !downloadedNames.contains(model.name) {
+                return false
+            }
+            return true
+        }
+    }
+
+    var availableTrustsInLocalSet: [ModelMetadata.Trust] {
+        let trusts = Set(localUniverse.map { ModelMetadata.info(for: $0).trust })
+        // Order: Verified first, then Community, then Custom — most-trusted first.
+        return [.verified, .community, .custom].filter { trusts.contains($0) }
+    }
+
+    var availableOrgsInLocalSet: [String] {
+        Set(localUniverse.map { ModelMetadata.company(for: $0) })
+            .sorted()
+    }
+
+    var availableFamiliesInLocalSet: [String] {
+        Set(localUniverse.map { ModelMetadata.family(for: $0) })
+            .sorted()
+    }
+
+    /// If the given model has a `supersededBy` pointer AND the user has
+    /// the model downloaded AND the newer model exists in the registry,
+    /// return that newer model — caller renders the "Update available"
+    /// CTA. Otherwise nil.
+    private func upgradeOption(for model: any TranscriptionModel) -> (any TranscriptionModel)? {
+        guard let supersededByName = ModelMetadata.info(for: model).supersededBy else { return nil }
+        let downloaded = whisperModelManager.availableModels.contains { $0.name == model.name }
+        guard downloaded else { return nil }
+        return transcriptionModelManager.allAvailableModels.first { $0.name == supersededByName }
+    }
+}
+
+// MARK: - Local filter bar
+//
+// Three groups of multi-select chips (Trust / Organisation / Family) shown
+// at the top of the Local tab. Empty selection within a group = "include
+// all from this group". Collapses to a single summary row when not in use.
+private struct LocalFilterBar: View {
+    let availableTrusts: [ModelMetadata.Trust]
+    let availableOrgs: [String]
+    let availableFamilies: [String]
+    @Binding var selectedTrusts: Set<ModelMetadata.Trust>
+    @Binding var selectedOrgs: Set<String>
+    @Binding var selectedFamilies: Set<String>
+    @Binding var isExpanded: Bool
+
+    private var activeFilterCount: Int {
+        selectedTrusts.count + selectedOrgs.count + selectedFamilies.count
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Header — click to expand/collapse the filter groups.
+            Button {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "line.3.horizontal.decrease.circle\(activeFilterCount > 0 ? ".fill" : "")")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurfaceVariant)
+
+                    Text(activeFilterCount == 0 ? "Filter" : "\(activeFilterCount) filter\(activeFilterCount == 1 ? "" : "s") active")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurface)
+
+                    if activeFilterCount > 0 {
+                        Button {
+                            selectedTrusts.removeAll()
+                            selectedOrgs.removeAll()
+                            selectedFamilies.removeAll()
+                        } label: {
+                            Text("Clear")
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Capsule().fill(ZivaTheme.surfaceContainerHigh))
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                }
+            }
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                if !availableTrusts.isEmpty {
+                    filterGroup(
+                        label: "Trust",
+                        chips: availableTrusts.map { ($0.label, selectedTrusts.contains($0)) },
+                        onToggle: { idx in
+                            let trust = availableTrusts[idx]
+                            if selectedTrusts.contains(trust) { selectedTrusts.remove(trust) }
+                            else { selectedTrusts.insert(trust) }
+                        }
+                    )
+                }
+                if !availableOrgs.isEmpty {
+                    filterGroup(
+                        label: "Organisation",
+                        chips: availableOrgs.map { ($0, selectedOrgs.contains($0)) },
+                        onToggle: { idx in
+                            let org = availableOrgs[idx]
+                            if selectedOrgs.contains(org) { selectedOrgs.remove(org) }
+                            else { selectedOrgs.insert(org) }
+                        }
+                    )
+                }
+                if !availableFamilies.isEmpty {
+                    filterGroup(
+                        label: "Family",
+                        chips: availableFamilies.map { ($0, selectedFamilies.contains($0)) },
+                        onToggle: { idx in
+                            let fam = availableFamilies[idx]
+                            if selectedFamilies.contains(fam) { selectedFamilies.remove(fam) }
+                            else { selectedFamilies.insert(fam) }
+                        }
+                    )
+                }
+            }
+        }
+        .padding(12)
+        .background(ZivaTheme.surfaceContainerLowest)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(ZivaTheme.outlineVariant, lineWidth: 1)
+        )
+    }
+
+    @ViewBuilder
+    private func filterGroup(label: String, chips: [(String, Bool)], onToggle: @escaping (Int) -> Void) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .semibold, design: .rounded))
+                .tracking(0.5)
+                .foregroundStyle(ZivaTheme.onSurfaceVariant)
+
+            HStack(spacing: 6) {
+                ForEach(Array(chips.enumerated()), id: \.offset) { idx, chip in
+                    Button { onToggle(idx) } label: {
+                        Text(chip.0)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(chip.1 ? .white : ZivaTheme.onSurface)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(
+                                Capsule().fill(chip.1 ? ZivaTheme.primary : ZivaTheme.surfaceContainerLow)
+                            )
+                            .overlay(
+                                Capsule().strokeBorder(
+                                    chip.1 ? ZivaTheme.primary : ZivaTheme.outlineVariant,
+                                    lineWidth: 0.5
+                                )
+                            )
+                    }
+                    .buttonStyle(.plain)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+}
+
+// MARK: - Update available banner
+//
+// Slim row that sits below a model card when the user has an older version
+// downloaded and a newer one exists in the registry (driven by
+// ModelMetadata.supersededBy). One click downloads the newer model and
+// sets it as the default. The user can still find their old version in
+// the Local list — we don't delete it for them.
+private struct UpdateAvailableBanner: View {
+    let from: String
+    let to: String
+    let onUpdate: () -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "arrow.up.circle.fill")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(ZivaTheme.primary)
+
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Newer version available")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(ZivaTheme.primary)
+                Text("\(to) replaces \(from). Local-first; download and switch in one click.")
+                    .font(.system(size: 10))
+                    .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 8)
+
+            Button(action: onUpdate) {
+                HStack(spacing: 4) {
+                    Image(systemName: "arrow.down.circle.fill").font(.system(size: 10))
+                    Text("Update").font(.system(size: 11, weight: .semibold))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(
+                    Capsule().fill(
+                        LinearGradient(
+                            colors: [ZivaTheme.primary, Color(red: 0.75, green: 0.15, blue: 0.83)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                )
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(
+            LinearGradient(
+                colors: [ZivaTheme.primaryFixed.opacity(0.5), ZivaTheme.surfaceContainerLowest],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(ZivaTheme.primary.opacity(0.3), lineWidth: 1)
+        )
     }
 }
 

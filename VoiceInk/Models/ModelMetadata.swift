@@ -97,6 +97,31 @@ enum ModelMetadata {
         remoteEntries = entries
     }
 
+    /// Extract the company / organisation name from an Info (the first
+    /// segment of the origin string before " · "). Used by the Local-tab
+    /// filter chips so the user can narrow by who made the model.
+    static func company(for model: any TranscriptionModel) -> String {
+        let origin = info(for: model).origin
+        return origin.split(separator: " · ").first.map(String.init) ?? origin
+    }
+
+    /// A simple "family" bucket for filtering — broader than the strict
+    /// model `family` field in JSON. Maps:
+    ///   • Whisper variants → "Whisper"
+    ///   • Parakeet variants → "Parakeet"
+    ///   • Apple Speech     → "Apple Speech"
+    ///   • Cloud providers  → "Cloud"
+    ///   • Custom endpoint  → "Custom"
+    static func family(for model: any TranscriptionModel) -> String {
+        switch model.provider {
+        case .whisper:    return "Whisper"
+        case .fluidAudio: return "Parakeet"
+        case .nativeApple: return "Apple Speech"
+        case .custom:     return "Custom"
+        default:          return "Cloud"
+        }
+    }
+
     // MARK: - Private storage
 
     private static var remoteEntries: [String: Info] = [:]
