@@ -31,16 +31,21 @@ enum RecommendationEngine {
         from models: [any TranscriptionModel],
         isAvailableOnCurrentOS: (any TranscriptionModel) -> Bool
     ) -> [Recommendation] {
-        // Three filters compose the candidate pool:
+        // Two filters compose the candidate pool:
         //   1. Available on current OS — NativeAppleModel needs macOS 26+.
         //   2. Not superseded — Parakeet V2 is hidden because V3 supersedes
         //      it; old Whisper Large v3 hidden in favour of Turbo. Power
         //      users can still find every variant in the Local tab.
-        let supersededIds = Set(
-            models.compactMap { ModelMetadata.info(for: $0).supersededBy }
-        )
+        //
+        // A model is superseded if its OWN metadata has a non-nil
+        // supersededBy pointer (i.e., the model says "I've been replaced
+        // by X"). Previously this used a flipped check that accidentally
+        // hid the newer model instead — that's why Recommended kept
+        // showing Parakeet V2 as 'Fastest' even though V3 should have
+        // won the slot. Fixed in v1.90.
         let pool = models.filter { model in
-            isAvailableOnCurrentOS(model) && !supersededIds.contains(model.name)
+            isAvailableOnCurrentOS(model)
+                && ModelMetadata.info(for: model).supersededBy == nil
         }
         guard !pool.isEmpty else { return [] }
 

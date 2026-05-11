@@ -105,6 +105,17 @@ enum ModelMetadata {
         return origin.split(separator: " · ").first.map(String.init) ?? origin
     }
 
+    /// Extract the country of origin from an Info — the second segment of
+    /// the origin string ("OpenAI · United States · via whisper.cpp" →
+    /// "United States"). Used by the Country filter chips on the Local
+    /// tab so users can choose to use only models from specific
+    /// jurisdictions if that matters to them.
+    static func country(for model: any TranscriptionModel) -> String {
+        let parts = info(for: model).origin.split(separator: " · ").map(String.init)
+        if parts.count >= 2 { return parts[1] }
+        return parts.first ?? info(for: model).origin
+    }
+
     /// A simple "family" bucket for filtering — broader than the strict
     /// model `family` field in JSON. Maps:
     ///   • Whisper variants → "Whisper"

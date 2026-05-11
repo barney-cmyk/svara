@@ -6,25 +6,19 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.89</title>
-            <description><![CDATA[<h3>v1.89 — Filter the Local catalogue, see when models have a newer version</h3>
+            <title>1.90</title>
+            <description><![CDATA[<h3>v1.90 — Bug fix: V3 was being hidden behind V2; new Country filter; always-on chips</h3>
 <ul>
-    <li><strong>Filter chips at the top of the Local tab.</strong> Three groups, multi-select, hide what you don't want to see:
-        <ul>
-            <li><strong>Trust</strong> — Verified / Community / Custom</li>
-            <li><strong>Organisation</strong> — OpenAI / NVIDIA / Apple / HuggingFace / etc. — adapts to whoever's models are actually available</li>
-            <li><strong>Family</strong> — Whisper / Parakeet / Apple Speech</li>
-        </ul>
-        Click "Filter" to expand, click chips to toggle. "Clear" wipes all selections.
-    </li>
-    <li><strong>"Newer version available" banner</strong> appears below any downloaded model that's been superseded by a newer one (e.g. you have Parakeet V2 but V3 exists). One click downloads the newer version and sets it as default — no hunting through the list.</li>
-</ul>
-<p>The underlying data comes from the remote catalogue (<code>neuronflame.com/models.json</code>), so when NVIDIA ships Parakeet V4, anyone on V3 sees the upgrade banner within 24 hours of me adding the entry.</p>]]></description>
-            <pubDate>Mon, 11 May 2026 04:14:46 +0000</pubDate>
-            <sparkle:version>189</sparkle:version>
-            <sparkle:shortVersionString>1.89</sparkle:shortVersionString>
+    <li><strong>Critical fix.</strong> In v1.88–v1.89, the "supersededBy" logic was inverted — Parakeet V2 was being shown as Fastest in Recommended, and V3 was hidden. Now V3 wins the slot as it should. Whisper Large v3 Turbo correctly displaces v2 and v3 across the board.</li>
+    <li><strong>Top-of-tab upgrade banner.</strong> If your current default model has been superseded (e.g. you're on Parakeet V2), a "Newer version available — switch to V3" banner appears at the top of the AI Models tab on every sub-tab (Recommended / Local / Cloud). One click downloads V3, swaps it as default.</li>
+    <li><strong>Country filter</strong> joins Trust / Organisation / Family on the Local tab. Filter by where the model was built.</li>
+    <li><strong>Filter chips always visible</strong> — dropped the expand/collapse interaction. You see the full set of available chips immediately when you land on Local. Chips wrap onto multiple lines when needed.</li>
+</ul>]]></description>
+            <pubDate>Mon, 11 May 2026 04:29:01 +0000</pubDate>
+            <sparkle:version>190</sparkle:version>
+            <sparkle:shortVersionString>1.90</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.89.dmg" sparkle:edSignature="DEK2elHkJk5+Qy7tF2/wov2qOTe81WL9G0iX0V0E6bYyMLuhB88SS67XNl3BxL/vcECdVBC+HjZoOa7U50DEDg==" length="15955535" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.90.dmg" sparkle:edSignature="u0WGD4O5NR8/UOlA4aAF9K8IFrww33RvvNHe1zxkC4qiybLIXJfkP3IH5vQtCN56MIlI+w07bNA4CPUit1nSDw==" length="15961973" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

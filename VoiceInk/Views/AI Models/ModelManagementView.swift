@@ -29,11 +29,12 @@ struct ModelManagementView: View {
     // Sub-filters that only apply on the Local tab. Multi-select chips —
     // empty set means "show everything". Trust filters by ModelMetadata.Trust,
     // Org filters by the first segment of the origin string ("OpenAI",
-    // "NVIDIA", etc.), Family filters by ModelMetadata.family().
+    // "NVIDIA", etc.), Family filters by ModelMetadata.family(), Country
+    // by ModelMetadata.country().
     @State private var trustFilters: Set<ModelMetadata.Trust> = []
     @State private var orgFilters: Set<String> = []
     @State private var familyFilters: Set<String> = []
-    @State private var isLocalFilterBarExpanded = false
+    @State private var countryFilters: Set<String> = []
 
     private let settingsPanelWidth: CGFloat = 400
 
@@ -174,20 +175,44 @@ struct ModelManagementView: View {
             }
             .padding(.bottom, 12)
 
-            // Filter chips — only shown on the Local tab. Lets the user
-            // narrow by trust level, organisation, or family. Empty
-            // selections in a group mean "include all".
+            // Filter chips — only shown on the Local tab. Always
+            // visible (no expand/collapse) so users see the available
+            // facets at a glance. Empty selection in a group = "include
+            // all from this group".
             if selectedFilter == .local {
                 LocalFilterBar(
                     availableTrusts: availableTrustsInLocalSet,
                     availableOrgs: availableOrgsInLocalSet,
                     availableFamilies: availableFamiliesInLocalSet,
+                    availableCountries: availableCountriesInLocalSet,
                     selectedTrusts: $trustFilters,
                     selectedOrgs: $orgFilters,
                     selectedFamilies: $familyFilters,
-                    isExpanded: $isLocalFilterBarExpanded
+                    selectedCountries: $countryFilters
                 )
                 .padding(.bottom, 8)
+            }
+
+            // Top-of-tab upgrade prompt — fires when the user's CURRENT
+            // default model is superseded by a newer one in the registry.
+            // Visible on every tab so the upgrade path is always one click
+            // away regardless of which view the user is on.
+            if let currentDefault = transcriptionModelManager.currentTranscriptionModel,
+               let supersededByName = ModelMetadata.info(for: currentDefault).supersededBy,
+               let newer = transcriptionModelManager.allAvailableModels.first(where: { $0.name == supersededByName }) {
+                UpdateAvailableBanner(
+                    from: currentDefault.displayName,
+                    to: newer.displayName,
+                    onUpdate: {
+                        if let newerWhisper = newer as? WhisperModel {
+                            Task { await whisperModelManager.downloadModel(newerWhisper) }
+                        }
+                        Task {
+                            transcriptionModelManager.setDefaultTranscriptionModel(newer)
+                        }
+                    }
+                )
+                .padding(.bottom, 12)
             }
 
             VStack(spacing: 12) {
@@ -403,23 +428,22 @@ struct ModelManagementView: View {
             // apply any active chip filters (Trust / Organisation / Family)
             // on top.
             let downloadedNames = Set(whisperModelManager.availableModels.map { $0.name })
-            let supersededIds = Set(
-                transcriptionModelManager.allAvailableModels.compactMap {
-                    ModelMetadata.info(for: $0).supersededBy
-                }
-            )
             return transcriptionModelManager.allAvailableModels.filter { model in
                 guard (model.provider == .whisper || model.provider == .nativeApple || model.provider == .fluidAudio)
                     && transcriptionModelManager.isAvailableOnCurrentOS(model) else { return false }
-                // Suppress superseded entries unless the user already has them on disk.
-                if supersededIds.contains(model.name) && !downloadedNames.contains(model.name) {
+                // A model is "superseded" if its own metadata has a
+                // supersededBy pointer to a newer one. Hide it unless
+                // the user has it downloaded — don't yank visibility of
+                // something already on disk.
+                let info = ModelMetadata.info(for: model)
+                if info.supersededBy != nil && !downloadedNames.contains(model.name) {
                     return false
                 }
                 // Apply chip filters. Empty selection in a group = no filter.
-                let info = ModelMetadata.info(for: model)
                 if !trustFilters.isEmpty && !trustFilters.contains(info.trust) { return false }
                 if !orgFilters.isEmpty && !orgFilters.contains(ModelMetadata.company(for: model)) { return false }
                 if !familyFilters.isEmpty && !familyFilters.contains(ModelMetadata.family(for: model)) { return false }
+                if !countryFilters.isEmpty && !countryFilters.contains(ModelMetadata.country(for: model)) { return false }
                 return true
             }
         case .cloud:
@@ -458,15 +482,13 @@ struct ModelManagementView: View {
     /// would lose that chip from the UI.
     private var localUniverse: [any TranscriptionModel] {
         let downloadedNames = Set(whisperModelManager.availableModels.map { $0.name })
-        let supersededIds = Set(
-            transcriptionModelManager.allAvailableModels.compactMap {
-                ModelMetadata.info(for: $0).supersededBy
-            }
-        )
         return transcriptionModelManager.allAvailableModels.filter { model in
             guard (model.provider == .whisper || model.provider == .nativeApple || model.provider == .fluidAudio)
                 && transcriptionModelManager.isAvailableOnCurrentOS(model) else { return false }
-            if supersededIds.contains(model.name) && !downloadedNames.contains(model.name) {
+            // Hide superseded entries (own metadata says it's been replaced)
+            // UNLESS the user has them on disk.
+            let info = ModelMetadata.info(for: model)
+            if info.supersededBy != nil && !downloadedNames.contains(model.name) {
                 return false
             }
             return true
@@ -489,6 +511,11 @@ struct ModelManagementView: View {
             .sorted()
     }
 
+    var availableCountriesInLocalSet: [String] {
+        Set(localUniverse.map { ModelMetadata.country(for: $0) })
+            .sorted()
+    }
+
     /// If the given model has a `supersededBy` pointer AND the user has
     /// the model downloaded AND the newer model exists in the registry,
     /// return that newer model — caller renders the "Update available"
@@ -503,105 +530,109 @@ struct ModelManagementView: View {
 
 // MARK: - Local filter bar
 //
-// Three groups of multi-select chips (Trust / Organisation / Family) shown
-// at the top of the Local tab. Empty selection within a group = "include
-// all from this group". Collapses to a single summary row when not in use.
+// Four groups of multi-select chips (Trust / Organisation / Family /
+// Country) always visible at the top of the Local tab. Empty selection
+// within a group = "include all from this group". A "Clear" affordance
+// appears once any chip is selected.
 private struct LocalFilterBar: View {
     let availableTrusts: [ModelMetadata.Trust]
     let availableOrgs: [String]
     let availableFamilies: [String]
+    let availableCountries: [String]
     @Binding var selectedTrusts: Set<ModelMetadata.Trust>
     @Binding var selectedOrgs: Set<String>
     @Binding var selectedFamilies: Set<String>
-    @Binding var isExpanded: Bool
+    @Binding var selectedCountries: Set<String>
 
     private var activeFilterCount: Int {
-        selectedTrusts.count + selectedOrgs.count + selectedFamilies.count
+        selectedTrusts.count + selectedOrgs.count + selectedFamilies.count + selectedCountries.count
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header — click to expand/collapse the filter groups.
-            Button {
-                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                    isExpanded.toggle()
-                }
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "line.3.horizontal.decrease.circle\(activeFilterCount > 0 ? ".fill" : "")")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurfaceVariant)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Image(systemName: "line.3.horizontal.decrease.circle\(activeFilterCount > 0 ? ".fill" : "")")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurfaceVariant)
 
-                    Text(activeFilterCount == 0 ? "Filter" : "\(activeFilterCount) filter\(activeFilterCount == 1 ? "" : "s") active")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurface)
+                Text(activeFilterCount == 0 ? "Filters" : "\(activeFilterCount) filter\(activeFilterCount == 1 ? "" : "s") active")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(activeFilterCount > 0 ? ZivaTheme.primary : ZivaTheme.onSurface)
 
-                    if activeFilterCount > 0 {
-                        Button {
-                            selectedTrusts.removeAll()
-                            selectedOrgs.removeAll()
-                            selectedFamilies.removeAll()
-                        } label: {
+                Spacer(minLength: 0)
+
+                if activeFilterCount > 0 {
+                    Button {
+                        selectedTrusts.removeAll()
+                        selectedOrgs.removeAll()
+                        selectedFamilies.removeAll()
+                        selectedCountries.removeAll()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 10))
                             Text("Clear")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(ZivaTheme.onSurfaceVariant)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Capsule().fill(ZivaTheme.surfaceContainerHigh))
+                                .font(.system(size: 11, weight: .semibold))
                         }
-                        .buttonStyle(.plain)
-                    }
-
-                    Spacer(minLength: 0)
-
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(ZivaTheme.onSurfaceVariant)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(ZivaTheme.surfaceContainerHigh))
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            .buttonStyle(.plain)
 
-            if isExpanded {
-                if !availableTrusts.isEmpty {
-                    filterGroup(
-                        label: "Trust",
-                        chips: availableTrusts.map { ($0.label, selectedTrusts.contains($0)) },
-                        onToggle: { idx in
-                            let trust = availableTrusts[idx]
-                            if selectedTrusts.contains(trust) { selectedTrusts.remove(trust) }
-                            else { selectedTrusts.insert(trust) }
-                        }
-                    )
-                }
-                if !availableOrgs.isEmpty {
-                    filterGroup(
-                        label: "Organisation",
-                        chips: availableOrgs.map { ($0, selectedOrgs.contains($0)) },
-                        onToggle: { idx in
-                            let org = availableOrgs[idx]
-                            if selectedOrgs.contains(org) { selectedOrgs.remove(org) }
-                            else { selectedOrgs.insert(org) }
-                        }
-                    )
-                }
-                if !availableFamilies.isEmpty {
-                    filterGroup(
-                        label: "Family",
-                        chips: availableFamilies.map { ($0, selectedFamilies.contains($0)) },
-                        onToggle: { idx in
-                            let fam = availableFamilies[idx]
-                            if selectedFamilies.contains(fam) { selectedFamilies.remove(fam) }
-                            else { selectedFamilies.insert(fam) }
-                        }
-                    )
-                }
+            if !availableTrusts.isEmpty {
+                filterGroup(
+                    label: "Trust",
+                    chips: availableTrusts.map { ($0.label, selectedTrusts.contains($0)) },
+                    onToggle: { idx in
+                        let v = availableTrusts[idx]
+                        if selectedTrusts.contains(v) { selectedTrusts.remove(v) }
+                        else { selectedTrusts.insert(v) }
+                    }
+                )
+            }
+            if !availableOrgs.isEmpty {
+                filterGroup(
+                    label: "Organisation",
+                    chips: availableOrgs.map { ($0, selectedOrgs.contains($0)) },
+                    onToggle: { idx in
+                        let v = availableOrgs[idx]
+                        if selectedOrgs.contains(v) { selectedOrgs.remove(v) }
+                        else { selectedOrgs.insert(v) }
+                    }
+                )
+            }
+            if !availableCountries.isEmpty {
+                filterGroup(
+                    label: "Country",
+                    chips: availableCountries.map { ($0, selectedCountries.contains($0)) },
+                    onToggle: { idx in
+                        let v = availableCountries[idx]
+                        if selectedCountries.contains(v) { selectedCountries.remove(v) }
+                        else { selectedCountries.insert(v) }
+                    }
+                )
+            }
+            if !availableFamilies.isEmpty {
+                filterGroup(
+                    label: "Family",
+                    chips: availableFamilies.map { ($0, selectedFamilies.contains($0)) },
+                    onToggle: { idx in
+                        let v = availableFamilies[idx]
+                        if selectedFamilies.contains(v) { selectedFamilies.remove(v) }
+                        else { selectedFamilies.insert(v) }
+                    }
+                )
             }
         }
-        .padding(12)
+        .padding(14)
         .background(ZivaTheme.surfaceContainerLowest)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .strokeBorder(ZivaTheme.outlineVariant, lineWidth: 1)
         )
     }
@@ -614,7 +645,7 @@ private struct LocalFilterBar: View {
                 .tracking(0.5)
                 .foregroundStyle(ZivaTheme.onSurfaceVariant)
 
-            HStack(spacing: 6) {
+            FlowLayout(spacing: 6) {
                 ForEach(Array(chips.enumerated()), id: \.offset) { idx, chip in
                     Button { onToggle(idx) } label: {
                         Text(chip.0)
@@ -634,11 +665,15 @@ private struct LocalFilterBar: View {
                     }
                     .buttonStyle(.plain)
                 }
-                Spacer(minLength: 0)
             }
         }
     }
 }
+
+// (FlowLayout already defined in Views/Components/FlowLayout.swift — we
+// reuse the project-level one rather than declaring a duplicate. It does
+// exactly what we need: wraps chip rows onto multiple lines when the
+// container is narrower than the natural HStack width.)
 
 // MARK: - Update available banner
 //
