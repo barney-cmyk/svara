@@ -14,11 +14,11 @@
     <li><strong>Country filter</strong> joins Trust / Organisation / Family on the Local tab. Filter by where the model was built.</li>
     <li><strong>Filter chips always visible</strong> — dropped the expand/collapse interaction. You see the full set of available chips immediately when you land on Local. Chips wrap onto multiple lines when needed.</li>
 </ul>]]></description>
-            <pubDate>Fri, 22 May 2026 01:23:26 +0000</pubDate>
-            <sparkle:version>190</sparkle:version>
+            <pubDate>Fri, 22 May 2026 01:30:45 +0000</pubDate>
+            <sparkle:version>192</sparkle:version>
             <sparkle:shortVersionString>1.92</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.92.dmg" sparkle:edSignature="b591yDtJPwqR2XyRCY3mmoQAd2/2hBe12x2lFwU1rBb2E2o3dPvLXTUFnC3FqcxnoS7Yo96ZhTgda6NjvKIwDA==" length="15973902" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.92.dmg" sparkle:edSignature="c6eFsLHTpH0jJZ9mZtnfVWgMwRiYGXG9dfdVk+aghTF0KxoC/nKnSoSKguM+8lYEwMEtc30aC3i0VQR/Jv+9CA==" length="15973913" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

@@ -128,14 +128,23 @@ class CursorPaster {
             let end = min(index + chunkSize, utf16.count)
             let chunk = Array(utf16[index..<end])
 
-            if let event = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true) {
-                chunk.withUnsafeBufferPointer { buf in
-                    if let base = buf.baseAddress {
-                        event.keyboardSetUnicodeString(stringLength: chunk.count, unicodeString: base)
-                    }
-                }
-                event.post(tap: .cghidEventTap)
+            // Both keyDown AND keyUp are required. Without a matching keyUp,
+            // macOS treats the keyDown as "key is being held" and triggers the
+            // press-and-hold accent picker on the receiving app (you see
+            // "à á â ä ǎ æ ã å ā" pop up over the input field instead of the
+            // text being typed). Posting keyDown immediately followed by keyUp
+            // is the standard pattern.
+            let down = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+            let up   = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+
+            chunk.withUnsafeBufferPointer { buf in
+                guard let base = buf.baseAddress else { return }
+                down?.keyboardSetUnicodeString(stringLength: chunk.count, unicodeString: base)
+                up?.keyboardSetUnicodeString(stringLength: chunk.count, unicodeString: base)
             }
+
+            down?.post(tap: .cghidEventTap)
+            up?.post(tap: .cghidEventTap)
 
             usleep(3_000) // 3 ms between chunks
             index = end
