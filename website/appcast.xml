@@ -6,7 +6,7 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.90</title>
+            <title>1.92</title>
             <description><![CDATA[<h3>v1.90 — Bug fix: V3 was being hidden behind V2; new Country filter; always-on chips</h3>
 <ul>
     <li><strong>Critical fix.</strong> In v1.88–v1.89, the "supersededBy" logic was inverted — Parakeet V2 was being shown as Fastest in Recommended, and V3 was hidden. Now V3 wins the slot as it should. Whisper Large v3 Turbo correctly displaces v2 and v3 across the board.</li>
@@ -14,11 +14,11 @@
     <li><strong>Country filter</strong> joins Trust / Organisation / Family on the Local tab. Filter by where the model was built.</li>
     <li><strong>Filter chips always visible</strong> — dropped the expand/collapse interaction. You see the full set of available chips immediately when you land on Local. Chips wrap onto multiple lines when needed.</li>
 </ul>]]></description>
-            <pubDate>Mon, 11 May 2026 04:29:01 +0000</pubDate>
+            <pubDate>Fri, 22 May 2026 01:23:26 +0000</pubDate>
             <sparkle:version>190</sparkle:version>
-            <sparkle:shortVersionString>1.90</sparkle:shortVersionString>
+            <sparkle:shortVersionString>1.92</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.90.dmg" sparkle:edSignature="u0WGD4O5NR8/UOlA4aAF9K8IFrww33RvvNHe1zxkC4qiybLIXJfkP3IH5vQtCN56MIlI+w07bNA4CPUit1nSDw==" length="15961973" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.92.dmg" sparkle:edSignature="b591yDtJPwqR2XyRCY3mmoQAd2/2hBe12x2lFwU1rBb2E2o3dPvLXTUFnC3FqcxnoS7Yo96ZhTgda6NjvKIwDA==" length="15973902" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>
