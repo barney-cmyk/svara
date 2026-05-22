@@ -22,6 +22,7 @@ struct SettingsView: View {
     @AppStorage("restoreClipboardAfterPaste") private var restoreClipboardAfterPaste = true
     @AppStorage("clipboardRestoreDelay") private var clipboardRestoreDelay = 2.0
     @AppStorage("useAppleScriptPaste") private var useAppleScriptPaste = false
+    @AppStorage("insertionMode") private var insertionMode = "auto"
     @State private var showResetOnboardingAlert = false
     @State private var currentShortcut = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
     @State private var isCustomCancelEnabled = KeyboardShortcuts.getShortcut(for: .cancelRecorder) != nil
@@ -188,6 +189,16 @@ struct SettingsView: View {
                         Text("Use AppleScript Paste")
                         InfoTip("Enable this if pasting doesn't work with your keyboard layout (e.g. Neo2). Uses AppleScript instead of simulated key events.")
                     }
+                }
+
+                // Insertion Mode (paste vs direct-type for remote desktops / VMs)
+                HStack(spacing: 4) {
+                    Picker("Insertion Mode", selection: $insertionMode) {
+                        Text("Auto (recommended)").tag("auto")
+                        Text("Paste — fast").tag("paste")
+                        Text("Type — remote desktop / VM compatible").tag("type")
+                    }
+                    InfoTip("How transcribed text is inserted. \"Paste\" is fast but doesn't work inside Screen Sharing, Microsoft Remote Desktop, Parallels, VMware, AnyDesk, Citrix etc. — the remote machine receives only a stray \"v\" because the local viewer eats the Cmd key. \"Type\" injects each character directly, which every remote client forwards. \"Auto\" picks Type whenever a known remote-desktop or VM app is in the foreground.")
                 }
             }
 

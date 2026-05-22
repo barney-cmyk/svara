@@ -30,6 +30,7 @@ struct GeneralSettings: Codable {
     let restoreClipboardAfterPaste: Bool?
     let clipboardRestoreDelay: Double?
     let useAppleScriptPaste: Bool?
+    let insertionMode: String?
 }
 
 // Simple codable struct for vocabulary words (for export/import only)
@@ -126,7 +127,8 @@ class ImportExportService {
             isExperimentalFeaturesEnabled: UserDefaults.standard.bool(forKey: "isExperimentalFeaturesEnabled"),
             restoreClipboardAfterPaste: UserDefaults.standard.bool(forKey: "restoreClipboardAfterPaste"),
             clipboardRestoreDelay: UserDefaults.standard.double(forKey: "clipboardRestoreDelay"),
-            useAppleScriptPaste: UserDefaults.standard.bool(forKey: "useAppleScriptPaste")
+            useAppleScriptPaste: UserDefaults.standard.bool(forKey: "useAppleScriptPaste"),
+            insertionMode: UserDefaults.standard.string(forKey: "insertionMode")
         )
 
         let exportedSettings = ZivaExportedSettings(
@@ -353,6 +355,9 @@ class ImportExportService {
                         }
                         if let appleScriptPaste = general.useAppleScriptPaste {
                             UserDefaults.standard.set(appleScriptPaste, forKey: "useAppleScriptPaste")
+                        }
+                        if let mode = general.insertionMode {
+                            UserDefaults.standard.set(mode, forKey: "insertionMode")
                         }
                     }
 

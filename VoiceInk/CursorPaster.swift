@@ -19,6 +19,18 @@ class CursorPaster {
     @MainActor
     @discardableResult
     static func startPasteAtCursor(_ text: String) -> Task<Void, Never> {
+        // Resolve insertion mode BEFORE touching the clipboard. In "type" mode
+        // we bypass the clipboard entirely — writing to it would be wasted
+        // work and would needlessly stomp on the user's clipboard contents.
+        let mode = resolvedInsertionMode()
+
+        if mode == .type {
+            return Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 50_000_000)
+                typeTextDirectly(text)
+            }
+        }
+
         let pasteboard = NSPasteboard.general
         let shouldRestoreClipboard = UserDefaults.standard.bool(forKey: "restoreClipboardAfterPaste")
         let savedContents = shouldRestoreClipboard ? snapshotClipboard(from: pasteboard) : []
@@ -33,6 +45,103 @@ class CursorPaster {
                 scheduleClipboardRestore(savedContents, on: pasteboard)
             }
         }
+    }
+
+    // MARK: - Insertion mode resolution
+
+    private enum ResolvedInsertionMode { case paste, type }
+
+    /// Bundle ID prefixes of apps where Cmd+V doesn't survive — the local
+    /// client eats the Cmd modifier and only the bare V keystroke is
+    /// forwarded to the remote machine. For these we type characters
+    /// directly via CGEvent.keyboardSetUnicodeString so every character
+    /// gets forwarded as a regular keystroke.
+    private static let remoteDesktopBundlePrefixes: [String] = [
+        "com.apple.ScreenSharing",
+        "com.apple.RemoteDesktop",          // Apple Remote Desktop (admin)
+        "com.microsoft.rdc",                // Microsoft Remote Desktop (any platform suffix)
+        "com.parallels.",                   // Parallels Desktop / Client / RAS
+        "com.vmware.fusion",
+        "com.vmware.horizon",
+        "com.anydesk.AnyDesk",
+        "com.teamviewer.TeamViewer",
+        "com.citrix.",                      // Citrix Workspace / Receiver
+        "com.jumpdesktop.viewer",
+        "com.p5sys.jump",                   // older Jump Desktop bundle
+        "com.realvnc.vncviewer",
+        "com.tigervnc.vncviewer",
+        "com.devolutions.remotedesktopmanager",
+        "com.nulana.rdmmac",                // Remotix
+        "com.splashtop.",
+        "com.nomachine.nxplayer",
+        "com.google.chromeremotedesktop",
+        "com.chrome.remote-desktop",
+    ]
+
+    private static var frontmostIsRemoteDesktop: Bool {
+        guard let bundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier else {
+            return false
+        }
+        return remoteDesktopBundlePrefixes.contains { bundleID.hasPrefix($0) }
+    }
+
+    private static func resolvedInsertionMode() -> ResolvedInsertionMode {
+        let raw = UserDefaults.standard.string(forKey: "insertionMode") ?? "auto"
+        switch raw {
+        case "paste":
+            return .paste
+        case "type":
+            return .type
+        default:
+            // Auto: detect remote-desktop / VM client in the foreground.
+            if frontmostIsRemoteDesktop {
+                logger.notice("Auto-insertion: remote desktop detected, typing directly")
+                return .type
+            }
+            return .paste
+        }
+    }
+
+    // MARK: - Direct typing (bypass clipboard for remote desktop / VM apps)
+
+    /// Posts the text as a sequence of CGEvents using keyboardSetUnicodeString,
+    /// in small chunks. Each chunk becomes one synthetic keydown event carrying
+    /// the unicode payload — no modifier keys involved, so remote-desktop
+    /// clients forward every character intact to the remote machine.
+    ///
+    /// Chunk size 20 keeps each event well under the documented practical
+    /// limit; the 3 ms inter-chunk pause lets remote-forwarding pipelines
+    /// drain before the next event arrives.
+    private static func typeTextDirectly(_ text: String) {
+        guard AXIsProcessTrusted() else {
+            logger.error("Accessibility not trusted — cannot type directly")
+            return
+        }
+        guard !text.isEmpty else { return }
+
+        let source = CGEventSource(stateID: .privateState)
+        let utf16 = Array(text.utf16)
+        let chunkSize = 20
+        var index = 0
+
+        while index < utf16.count {
+            let end = min(index + chunkSize, utf16.count)
+            let chunk = Array(utf16[index..<end])
+
+            if let event = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true) {
+                chunk.withUnsafeBufferPointer { buf in
+                    if let base = buf.baseAddress {
+                        event.keyboardSetUnicodeString(stringLength: chunk.count, unicodeString: base)
+                    }
+                }
+                event.post(tap: .cghidEventTap)
+            }
+
+            usleep(3_000) // 3 ms between chunks
+            index = end
+        }
+
+        logger.notice("Typed \(text.count) characters directly")
     }
 
     @MainActor
@@ -126,9 +235,14 @@ class CursorPaster {
         vDown?.flags   = .maskCommand
         vUp?.flags     = .maskCommand
 
+        // Tiny gaps between the modifier and the key let some remote-desktop
+        // or virtualisation clients register the Cmd state before the V key
+        // arrives. Without them, those clients occasionally see a bare "v".
         cmdDown?.post(tap: .cghidEventTap)
+        usleep(2_000)
         vDown?.post(tap: .cghidEventTap)
         vUp?.post(tap: .cghidEventTap)
+        usleep(2_000)
         cmdUp?.post(tap: .cghidEventTap)
 
         logger.notice("CGEvents posted for Cmd+V")

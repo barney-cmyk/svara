@@ -12,6 +12,8 @@ enum AppDefaults {
             "restoreClipboardAfterPaste": true,
             "clipboardRestoreDelay": 2.0,
             "useAppleScriptPaste": false,
+            // Insertion mode: "auto" (detect remote-desktop apps) | "paste" | "type"
+            "insertionMode": "auto",
 
             // Audio & Media
             "isSystemMuteEnabled": true,
