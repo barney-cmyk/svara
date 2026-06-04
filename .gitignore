@@ -103,3 +103,6 @@ Temporary Items
 # Release pipeline artefacts (Apple-notarised distribution)
 .release-build/
 .dist/
+node_modules/
+**/node_modules/
+.claude/worktrees/
