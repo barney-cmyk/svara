@@ -28,6 +28,9 @@ Neuron Flame's moat is not feature count — GPL means anything shippable is cop
 
 **Settings & dictionary sync across Macs.** The *real* iCloud need — not transcript sync. Sync dictionary, replacements, prompts, and Power Mode configs via iCloud Drive file or NSUbiquitousKeyValueStore, building on `Services/ImportExportService.swift`. Avoids the CloudKit container/notarisation trap entirely until the container is registered.
 
+
+**Model catalogue expansion (post-fleet addendum, 2026-07-10).** Server-side: five verified whisper.cpp additions went live (Small / Small-EN / Small-Q5 / Medium-Q5 / Large-v3-Q5) and the broken Distil-Whisper entry was deprecated (its GGML never lived in the ggerganov repo — downloads 404'd). App-side, the pinned FluidAudio is months stale; v0.15.5 unlocks: **Cohere Transcribe 03-2026** (1.77% WER, 14 languages incl. Japanese/Chinese/Korean/Arabic — a "max accuracy" tier and the answer to Parakeet's Europe-only gap), **Nemotron 3.5 streaming multilingual** (the natural engine for ghost-text streaming above), **Parakeet Unified EN** (word timestamps + per-term custom vocabulary — feeds the self-learning dictionary), **Parakeet-ja / zh / SenseVoiceSmall** (CJK coverage), and a 110M tiny tier. Bumping FluidAudio and wiring Cohere + Nemotron is the single highest-leverage model work available and should precede the latency pass. A catalogue schema v3 with a `download_url` override field would also unlock distil-large-v3.5 (English, 1.5× faster than turbo).
+
 ## 4. Strategic bets (sequenced)
 
 1. **Upstream-fork decision (decide before any of the below).** VoiceInk keeps shipping; a pipeline rewrite or deep parser integration makes future merges impossible. Recommendation: declare hard divergence now, do one final selective upstream sync, and stop tracking. Every subsequent bet assumes this.
