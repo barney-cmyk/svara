@@ -101,6 +101,18 @@ struct FluidAudioModelCardView: View {
 
     private var progressSection: some View {
         Group {
+            if let errorMessage = fluidAudioModelManager.downloadErrors[model.name] {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 11))
+                    Text(errorMessage)
+                        .font(.system(size: 11, weight: .medium))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(Color(red: 0.75, green: 0.22, blue: 0.17))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+            }
             if let status = fluidAudioModelManager.downloadStatus(for: model) {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {

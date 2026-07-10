@@ -4,7 +4,7 @@ import AppKit
 import UniformTypeIdentifiers
 
 enum ModelFilter: String, CaseIterable, Identifiable {
-    case recommended = "Recommended"
+    case recommended = "Top Rated"
     case local = "Local"
     case cloud = "Cloud"
     case custom = "Custom"
@@ -221,20 +221,6 @@ struct ModelManagementView: View {
                             warmupCoordinator.isWarming(modelNamed: whisperModel.name)
                         } ?? false
 
-                        // On the Recommended tab, prefix each row with a
-                        // small colour-coded badge explaining why the engine
-                        // picked it. Each category has its own gradient so
-                        // users can scan the column and immediately see what
-                        // each pick optimises for (speed = orange, accuracy
-                        // = green, multilingual = blue, etc).
-                        if selectedFilter == .recommended,
-                           let reason = recommendationReason(for: model) {
-                            ReasonBadge(reason: reason)
-                                .padding(.leading, 4)
-                                .padding(.top, 4)
-                                .padding(.bottom, -4)
-                        }
-
                         ModelCardView(
                             model: model,
                             fluidAudioModelManager: fluidAudioModelManager,
@@ -274,6 +260,7 @@ struct ModelManagementView: View {
                                     Task { await whisperModelManager.downloadModel(whisperModel) }
                                 }
                             },
+                            downloadError: whisperModelManager.downloadErrors[model.name],
                             editAction: model.provider == .custom ? { customModel in
                                 customModelToEdit = customModel
                             } : nil
@@ -397,30 +384,18 @@ struct ModelManagementView: View {
         .cornerRadius(8)
     }
 
-    /// Recommendations computed once per body render against the live
-    /// merged registry. Kept as a property so both `filteredModels` and
-    /// `recommendationReason(for:)` see the same ordering.
-    private var liveRecommendations: [RecommendationEngine.Recommendation] {
-        RecommendationEngine.recommendations(
-            from: transcriptionModelManager.allAvailableModels,
-            isAvailableOnCurrentOS: { transcriptionModelManager.isAvailableOnCurrentOS($0) }
-        )
-    }
-
-    /// Returns the "why" label for a given model on the Recommended tab,
-    /// or nil if the model isn't currently in the recommended set.
-    private func recommendationReason(for model: any TranscriptionModel) -> String? {
-        liveRecommendations.first(where: { $0.model.name == model.name })?.reason
-    }
 
     private var filteredModels: [any TranscriptionModel] {
         switch selectedFilter {
         case .recommended:
-            // Driven entirely by RecommendationEngine — no hard-coded model
-            // names. As new entries arrive via models.json with better
-            // speed/accuracy values, they automatically displace older
-            // picks here. See RecommendationEngine.score() for the formula.
-            return liveRecommendations.map { $0.model }
+            // "Top Rated": the whole field — local, cloud, custom — sorted
+            // by rating, highest first. No category winners; the ratings
+            // and trust chips on each card give users what they need to
+            // choose. See RecommendationEngine.score() for the formula.
+            return RecommendationEngine.ranked(
+                from: transcriptionModelManager.allAvailableModels,
+                isAvailableOnCurrentOS: { transcriptionModelManager.isAvailableOnCurrentOS($0) }
+            )
         case .local:
             // Hide superseded variants by default. If you've already
             // downloaded an older version (it's on disk), keep it visible
@@ -838,52 +813,3 @@ private struct TrustChip: View {
 
 // MARK: - Reason badge
 //
-// The coloured capsule we render above each row on the Recommended tab.
-// Each recommendation category gets its own gradient so the visual cue
-// matches the semantic — speed feels energetic (orange/amber), accuracy
-// feels solid and trustworthy (emerald/teal), multilingual feels global
-// (blue/indigo), cloud feels neutral (slate). "Best overall" keeps the
-// brand violet/magenta so it remains the visual anchor.
-private struct ReasonBadge: View {
-    let reason: String
-
-    var body: some View {
-        HStack(spacing: 0) {
-            Text(reason.uppercased())
-                .font(.system(size: 10, weight: .bold, design: .rounded))
-                .tracking(0.6)
-                .foregroundStyle(.white)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(
-                    Capsule().fill(gradient)
-                )
-            Spacer(minLength: 0)
-        }
-    }
-
-    private var gradient: LinearGradient {
-        let colors: [Color]
-        switch reason {
-        case "Best overall":
-            colors = [Color(red: 0.49, green: 0.23, blue: 0.93),   // violet
-                      Color(red: 0.75, green: 0.15, blue: 0.83)]   // magenta
-        case "Fastest":
-            colors = [Color(red: 0.98, green: 0.45, blue: 0.09),   // orange
-                      Color(red: 0.98, green: 0.75, blue: 0.14)]   // amber
-        case "Most accurate":
-            colors = [Color(red: 0.06, green: 0.72, blue: 0.50),   // emerald
-                      Color(red: 0.08, green: 0.72, blue: 0.66)]   // teal
-        case "Best for multilingual":
-            colors = [Color(red: 0.23, green: 0.51, blue: 0.96),   // sky blue
-                      Color(red: 0.39, green: 0.40, blue: 0.95)]   // indigo
-        case "Best cloud":
-            colors = [Color(red: 0.39, green: 0.45, blue: 0.55),   // slate
-                      Color(red: 0.58, green: 0.64, blue: 0.72)]   // slate-300
-        default:
-            colors = [Color(red: 0.49, green: 0.23, blue: 0.93),
-                      Color(red: 0.75, green: 0.15, blue: 0.83)]
-        }
-        return LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
-    }
-}

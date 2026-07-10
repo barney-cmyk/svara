@@ -11,6 +11,9 @@ struct FluidAudioDownloadStatus {
 @MainActor
 class FluidAudioModelManager: ObservableObject {
     @Published private var downloadStatuses: [String: FluidAudioDownloadStatus] = [:]
+    /// Model name -> user-facing message for the most recent failed
+    /// download. Cleared on retry. A failed download must never be silent.
+    @Published var downloadErrors: [String: String] = [:]
     private var activeDownloadIDs: [String: UUID] = [:]
 
     var onModelDeleted: ((String) -> Void)?
@@ -77,6 +80,7 @@ class FluidAudioModelManager: ObservableObject {
             }
         }
 
+        downloadErrors.removeValue(forKey: modelName)
         do {
             _ = try await AsrModels.downloadAndLoad(
                 version: version,
@@ -84,6 +88,7 @@ class FluidAudioModelManager: ObservableObject {
             )
         } catch {
             logger.error("❌ FluidAudio download failed for \(modelName, privacy: .public): \(error.localizedDescription, privacy: .public)")
+            downloadErrors[modelName] = "Download failed (\(error.localizedDescription)) - tap Download to retry."
         }
     }
 

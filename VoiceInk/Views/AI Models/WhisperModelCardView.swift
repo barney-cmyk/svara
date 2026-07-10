@@ -13,6 +13,7 @@ struct WhisperModelCardView: View {
     var deleteAction: () -> Void
     var setDefaultAction: () -> Void
     var downloadAction: () -> Void
+    var downloadError: String? = nil
     private var isDownloading: Bool {
         downloadProgress.keys.contains(model.name + "_main") || 
         downloadProgress.keys.contains(model.name + "_coreml")
@@ -94,6 +95,18 @@ struct WhisperModelCardView: View {
     
     private var progressSection: some View {
         Group {
+            if let downloadError, !isDownloading {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 11))
+                    Text(downloadError)
+                        .font(.system(size: 11, weight: .medium))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(Color(red: 0.75, green: 0.22, blue: 0.17))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+            }
             if isDownloading || isWarming {
                 DownloadProgressView(
                     modelName: model.name,

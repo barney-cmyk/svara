@@ -15,6 +15,7 @@ struct ModelCardView: View {
     var deleteAction: () -> Void
     var setDefaultAction: () -> Void
     var downloadAction: () -> Void
+    var downloadError: String? = nil
     var editAction: ((CustomCloudModel) -> Void)?
     var body: some View {
         Group {
@@ -30,7 +31,8 @@ struct ModelCardView: View {
                         isWarming: isWarming,
                         deleteAction: deleteAction,
                         setDefaultAction: setDefaultAction,
-                        downloadAction: downloadAction
+                        downloadAction: downloadAction,
+                        downloadError: downloadError
                     )
                 } else if let importedModel = model as? ImportedWhisperModel {
                     ImportedWhisperModelCardView(

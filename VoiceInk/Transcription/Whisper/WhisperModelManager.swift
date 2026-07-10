@@ -57,6 +57,10 @@ private class TaskDelegate: NSObject, URLSessionTaskDelegate {
 class WhisperModelManager: ObservableObject {
     @Published var availableModels: [WhisperModelFile] = []
     @Published var downloadProgress: [String: Double] = [:]
+    /// Model name -> user-facing message for the most recent failed download.
+    /// Cleared when a retry starts. Surfaced under the card's download
+    /// button - a failed download must NEVER look like nothing happened.
+    @Published var downloadErrors: [String: String] = [:]
     @Published var whisperContext: WhisperContext?
     @Published var isModelLoaded = false
     @Published var loadedWhisperModel: WhisperModelFile?
@@ -193,6 +197,7 @@ class WhisperModelManager: ObservableObject {
     }
 
     func downloadModel(_ model: WhisperModel) async {
+        downloadErrors.removeValue(forKey: model.name)
         guard let url = URL(string: model.downloadURL) else { return }
         await performModelDownload(model, url)
     }
@@ -290,6 +295,28 @@ class WhisperModelManager: ObservableObject {
     private func handleModelDownloadError(_ model: WhisperModel, _ error: Error) {
         self.downloadProgress.removeValue(forKey: model.name + "_main")
         self.downloadProgress.removeValue(forKey: model.name + "_coreml")
+        logger.error("Model download failed for \(model.name, privacy: .public): \(error.localizedDescription, privacy: .public)")
+        self.downloadErrors[model.name] = Self.friendlyDownloadError(error)
+    }
+
+    /// Translate raw URLSession/file errors into something a user can act
+    /// on. The full error is in the log; the card shows this short form.
+    private static func friendlyDownloadError(_ error: Error) -> String {
+        let ns = error as NSError
+        if ns.domain == NSURLErrorDomain {
+            switch ns.code {
+            case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost, NSURLErrorCannotFindHost, NSURLErrorCannotConnectToHost, NSURLErrorDNSLookupFailed:
+                return "Couldn't reach the model server - check your connection (or VPN) and tap Download to retry."
+            case NSURLErrorTimedOut:
+                return "The download timed out - tap Download to retry."
+            default:
+                break
+            }
+        }
+        if ns.domain == NSCocoaErrorDomain && ns.code == NSFileWriteOutOfSpaceError {
+            return "Not enough free disk space for this model."
+        }
+        return "Download failed (\(error.localizedDescription)) - tap Download to retry."
     }
 
     func deleteModel(_ model: WhisperModelFile) async {

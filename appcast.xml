@@ -6,7 +6,7 @@
         <description>Voice-to-text at the speed of thought. Free, on-device dictation for macOS.</description>
         <language>en</language>
         <item>
-            <title>1.94</title>
+            <title>1.95</title>
             <description><![CDATA[<h3>v1.90 — Bug fix: V3 was being hidden behind V2; new Country filter; always-on chips</h3>
 <ul>
     <li><strong>Critical fix.</strong> In v1.88–v1.89, the "supersededBy" logic was inverted — Parakeet V2 was being shown as Fastest in Recommended, and V3 was hidden. Now V3 wins the slot as it should. Whisper Large v3 Turbo correctly displaces v2 and v3 across the board.</li>
@@ -14,11 +14,11 @@
     <li><strong>Country filter</strong> joins Trust / Organisation / Family on the Local tab. Filter by where the model was built.</li>
     <li><strong>Filter chips always visible</strong> — dropped the expand/collapse interaction. You see the full set of available chips immediately when you land on Local. Chips wrap onto multiple lines when needed.</li>
 </ul>]]></description>
-            <pubDate>Fri, 10 Jul 2026 06:15:46 +0000</pubDate>
-            <sparkle:version>194</sparkle:version>
-            <sparkle:shortVersionString>1.94</sparkle:shortVersionString>
+            <pubDate>Fri, 10 Jul 2026 07:02:38 +0000</pubDate>
+            <sparkle:version>195</sparkle:version>
+            <sparkle:shortVersionString>1.95</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.4</sparkle:minimumSystemVersion>
-            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.94.dmg" sparkle:edSignature="bKW9sJQzwINdc/XYG8zkmWkXswADfWUIgnqfWxa6iemSjIyeapsv/MA0G3evTFwHs/2EzDOvuFmervbuU8TzAg==" length="16047924" type="application/octet-stream"/>
+            <enclosure url="https://neuronflame.com/downloads/Neuron%20Flame-1.95.dmg" sparkle:edSignature="ZAG0On2bKn6bZVL+9D89YqQ0qNAreAIMSrgA18ylUwU9lU4KiyejBhEJajEOUhRWc/OdcQACRkQN/4xKUk4+Bw==" length="16306675" type="application/octet-stream"/>
         </item>
     </channel>
 </rss>

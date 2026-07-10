@@ -91,6 +91,22 @@ enum RecommendationEngine {
         return picks
     }
 
+    /// Every available, non-superseded model — local, cloud, and custom
+    /// together — sorted by rating (score desc, recency tiebreak). Powers
+    /// the "Top Rated" tab: no category winners or "why" labels, just the
+    /// full field ranked so users can see the ratings and pick themselves.
+    static func ranked(
+        from models: [any TranscriptionModel],
+        isAvailableOnCurrentOS: (any TranscriptionModel) -> Bool
+    ) -> [any TranscriptionModel] {
+        models
+            .filter { model in
+                isAvailableOnCurrentOS(model)
+                    && ModelMetadata.info(for: model).supersededBy == nil
+            }
+            .sorted { scoreThenRecency($1, $0) }
+    }
+
     // MARK: - Comparators
     //
     // Each comparator returns "is $0 strictly less preferable than $1"
