@@ -162,6 +162,18 @@ enum ModelMetadata {
             introduced: date("2026-01-22"),
             supersededBy: nil
         ),
+        "parakeet-tdt_ctc-0.6b-ja": Info(
+            origin: "NVIDIA · United States · via FluidAudio",
+            trust: .verified,
+            introduced: date("2026-07-10"),
+            supersededBy: nil
+        ),
+        "parakeet-tdt-ctc-110m": Info(
+            origin: "NVIDIA · United States · via FluidAudio",
+            trust: .verified,
+            introduced: date("2026-07-10"),
+            supersededBy: nil
+        ),
 
         // OpenAI's Whisper family, ggerganov port.
         "ggml-tiny": Info(

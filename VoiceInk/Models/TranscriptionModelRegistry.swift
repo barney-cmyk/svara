@@ -75,6 +75,28 @@ enum TranscriptionModelRegistry {
                 supportsStreaming: true,
                 supportedLanguages: LanguageDictionary.forProvider(isMultilingual: true, provider: .fluidAudio)
             ),
+            FluidAudioModel(
+                name: "parakeet-tdt_ctc-0.6b-ja",
+                displayName: "Parakeet Japanese",
+                description: "NVIDIA's Parakeet tuned for Japanese — the first fast on-device Japanese option in Neuron Flame",
+                size: "500 MB",
+                speed: 0.85,
+                accuracy: 0.92,
+                ramUsage: 0.8,
+                supportsStreaming: true,
+                supportedLanguages: ["ja": "Japanese"]
+            ),
+            FluidAudioModel(
+                name: "parakeet-tdt-ctc-110m",
+                displayName: "Parakeet Nano",
+                description: "110M-parameter Parakeet — near-instant English transcription with a tiny memory footprint",
+                size: "160 MB",
+                speed: 0.99,
+                accuracy: 0.88,
+                ramUsage: 0.3,
+                supportsStreaming: true,
+                supportedLanguages: LanguageDictionary.forProvider(isMultilingual: false, provider: .fluidAudio)
+            ),
 
             // Local Models
             WhisperModel(
