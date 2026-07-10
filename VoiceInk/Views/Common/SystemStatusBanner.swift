@@ -7,6 +7,7 @@ import KeyboardShortcuts
 /// and on app activation. Click to expand and see per-item status + fix buttons.
 struct SystemStatusBanner: View {
     @StateObject private var permissions = PermissionManager()
+    @ObservedObject private var deviceManager = AudioDeviceManager.shared
     @EnvironmentObject private var aiService: AIService
     @State private var isExpanded = false
     @State private var refreshTimer: Timer?
@@ -43,6 +44,10 @@ struct SystemStatusBanner: View {
                     if isAIConnected { aiProviderPill }
                 }
             }
+            if let qualityWarning = deviceManager.inputQualityWarning {
+                qualityPill(qualityWarning)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
             if isExpanded {
                 detailRows
                     .transition(.opacity.combined(with: .move(edge: .top)))
@@ -50,9 +55,11 @@ struct SystemStatusBanner: View {
         }
         .onAppear {
             permissions.checkAllPermissions()
+            deviceManager.refreshInputQualityWarning()
             refreshTimer?.invalidate()
             refreshTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
                 permissions.checkAllPermissions()
+                AudioDeviceManager.shared.refreshInputQualityWarning()
             }
         }
         .onDisappear { refreshTimer?.invalidate() }
@@ -95,6 +102,37 @@ struct SystemStatusBanner: View {
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.2)) { isExpanded.toggle() }
         }
+    }
+
+    // MARK: - Input quality pill
+
+    /// Orange advisory shown when the active mic is a Bluetooth device stuck
+    /// in low-bandwidth call mode (e.g. AirPods at 16 kHz). Not counted as an
+    /// "issue" — recording still works, quality is just degraded.
+    private func qualityPill(_ message: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: "airpods")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Color(red: 0.85, green: 0.45, blue: 0.05))
+
+            Text(message)
+                .font(.system(size: compact ? 11 : 12, weight: .medium, design: .rounded))
+                .foregroundStyle(Color(red: 0.85, green: 0.45, blue: 0.05))
+                .lineLimit(compact ? 3 : 2)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color(red: 1.00, green: 0.94, blue: 0.84))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(Color(red: 0.85, green: 0.45, blue: 0.05).opacity(0.3), lineWidth: 1)
+        )
     }
 
     // MARK: - AI provider pill

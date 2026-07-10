@@ -22,6 +22,13 @@ class AudioDeviceManager: ObservableObject {
     @Published var inputMode: AudioInputMode = .custom
     @Published var prioritizedDevices: [PrioritizedDevice] = []
 
+    /// Non-nil when the effective input device is a Bluetooth mic running in
+    /// the low-bandwidth HFP "call mode" (nominal rate ≤ 24 kHz). AirPods
+    /// drop to 16 kHz whenever their mic is active, which audibly degrades
+    /// Whisper/Parakeet accuracy — the most common "transcription suddenly
+    /// got worse" complaint. The dashboard banner surfaces this.
+    @Published var inputQualityWarning: String? = nil
+
     var isRecordingActive: Bool = false
 
     static let shared = AudioDeviceManager()
@@ -522,5 +529,46 @@ class AudioDeviceManager: ObservableObject {
     
     private func notifyDeviceChange() {
         NotificationCenter.default.post(name: NSNotification.Name("AudioDeviceChanged"), object: nil)
+        refreshInputQualityWarning()
+    }
+
+    // MARK: - Input quality (Bluetooth HFP) detection
+
+    func getDeviceSampleRate(deviceID: AudioDeviceID) -> Double? {
+        return getDeviceProperty(deviceID: deviceID,
+                                 selector: kAudioDevicePropertyNominalSampleRate)
+    }
+
+    private func getDeviceTransportType(deviceID: AudioDeviceID) -> UInt32? {
+        return getDeviceProperty(deviceID: deviceID,
+                                 selector: kAudioDevicePropertyTransportType)
+    }
+
+    /// Re-evaluates whether the effective input device is a Bluetooth mic in
+    /// call-mode (HFP) quality, and publishes/clears `inputQualityWarning`.
+    /// Cheap (three CoreAudio property reads) — safe to call from the
+    /// dashboard's 3-second status poll as well as on device changes, which
+    /// also catches AirPods flipping profiles without a device-list change.
+    func refreshInputQualityWarning() {
+        let deviceID = getCurrentDevice()
+
+        var warning: String? = nil
+        if deviceID != 0,
+           let transport = getDeviceTransportType(deviceID: deviceID),
+           transport == kAudioDeviceTransportTypeBluetooth || transport == kAudioDeviceTransportTypeBluetoothLE,
+           let rate = getDeviceSampleRate(deviceID: deviceID),
+           rate <= 24_000 {
+            let name = getDeviceName(deviceID: deviceID) ?? "Bluetooth microphone"
+            warning = "\(name) is in call mode (\(Int(rate / 1000)) kHz) — transcription quality is reduced. The built-in mic will transcribe better."
+        }
+
+        if Thread.isMainThread {
+            if inputQualityWarning != warning { inputQualityWarning = warning }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if self.inputQualityWarning != warning { self.inputQualityWarning = warning }
+            }
+        }
     }
 } 

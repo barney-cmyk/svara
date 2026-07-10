@@ -19,6 +19,20 @@ class CursorPaster {
     @MainActor
     @discardableResult
     static func startPasteAtCursor(_ text: String) -> Task<Void, Never> {
+        // Secure input (password fields, some terminals with secure keyboard
+        // entry, unlock dialogs) swallows ALL synthetic keyboard events —
+        // both the Cmd+V CGEvents and unicode direct-typing. Attempting to
+        // insert would silently drop the transcription. Instead: park the
+        // text on the clipboard (non-transient, so it survives), play the
+        // esc cue, and let the user paste with a real ⌘V keypress — real
+        // keystrokes are exactly what secure input still allows.
+        if IsSecureEventInputEnabled() {
+            _ = ClipboardManager.setClipboard(text, transient: false)
+            SoundManager.shared.playEscSound()
+            logger.error("Secure input active — transcription parked on clipboard; press ⌘V to paste")
+            return Task { @MainActor in }
+        }
+
         // Resolve insertion mode BEFORE touching the clipboard. In "type" mode
         // we bypass the clipboard entirely — writing to it would be wasted
         // work and would needlessly stomp on the user's clipboard contents.
