@@ -2,9 +2,15 @@
 DEPS_DIR := $(HOME)/NeuronFlame-Dependencies
 WHISPER_CPP_DIR := $(DEPS_DIR)/whisper.cpp
 FRAMEWORK_PATH := $(WHISPER_CPP_DIR)/build-apple/whisper.xcframework
-LOCAL_DERIVED_DATA := $(CURDIR)/.local-build
-RELEASE_DERIVED_DATA := $(CURDIR)/.release-build
-RELEASE_DIST_DIR := $(CURDIR)/.dist
+# Build products MUST live outside iCloud Drive. The repo sits in
+# com~apple~CloudDocs, and the fileprovider daemon stamps files there with
+# extended attributes (FinderInfo/resource forks) asynchronously — codesign
+# then fails with "resource fork, Finder information, or similar detritus
+# not allowed". Building in $(HOME) keeps the bundle xattr-clean.
+BUILD_ROOT := $(HOME)/NeuronFlame-Build
+LOCAL_DERIVED_DATA := $(BUILD_ROOT)/local-derived
+RELEASE_DERIVED_DATA := $(BUILD_ROOT)/release-derived
+RELEASE_DIST_DIR := $(BUILD_ROOT)/dist
 
 # Apple Developer settings for notarised release builds.
 # TEAM_ID is public (Apple shows it on the Membership page).
@@ -74,7 +80,7 @@ local: check setup
 		CODE_SIGNING_REQUIRED=NO \
 		CODE_SIGNING_ALLOWED=YES \
 		DEVELOPMENT_TEAM="" \
-		CODE_SIGN_ENTITLEMENTS=$(CURDIR)/VoiceInk/VoiceInk.local.entitlements \
+		CODE_SIGN_ENTITLEMENTS="$(CURDIR)/VoiceInk/VoiceInk.local.entitlements" \
 		SWIFT_ACTIVE_COMPILATION_CONDITIONS='$$(inherited) LOCAL_BUILD' \
 		build
 	@APP_PATH="$(LOCAL_DERIVED_DATA)/Build/Products/Debug/VoiceInk.app" && \
@@ -137,7 +143,7 @@ release: check setup verify-release
 	xcodebuild -project VoiceInk.xcodeproj -scheme VoiceInk -configuration Release \
 		-derivedDataPath "$(RELEASE_DERIVED_DATA)" \
 		-xcconfig Release.xcconfig \
-		CODE_SIGN_ENTITLEMENTS=$(CURDIR)/VoiceInk/VoiceInk.release.entitlements \
+		CODE_SIGN_ENTITLEMENTS="$(CURDIR)/VoiceInk/VoiceInk.release.entitlements" \
 		OTHER_CODE_SIGN_FLAGS='--timestamp --options=runtime' \
 		SWIFT_ACTIVE_COMPILATION_CONDITIONS='$$(inherited) RELEASE_BUILD' \
 		build
